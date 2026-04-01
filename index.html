@@ -7,99 +7,125 @@
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --pink: #FF6B9D;
-    --yellow: #FFD93D;
-    --mint: #6BCFB0;
-    --coral: #FF8C69;
-    --purple: #C084FC;
-    --sky: #60C8F5;
-    --white: #FFFEF7;
-    --dark: #2D1B4E;
+    --pink: #FF6B9D; --yellow: #FFD93D; --mint: #6BCFB0;
+    --coral: #FF8C69; --purple: #C084FC; --sky: #60C8F5;
+    --white: #FFFEF7; --dark: #2D1B4E;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body { font-family: 'Noto Sans JP', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
 
-  .hero {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #FFE0EF 0%, #FFF8DC 40%, #E0F7FA 100%);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,247,0.88); backdrop-filter: blur(14px);
+    border-bottom: 2px solid rgba(255,107,157,0.13);
   }
-  .bubble { position: absolute; border-radius: 50%; opacity: 0.35; animation: float 6s ease-in-out infinite; }
-  .bubble-1 { width: 180px; height: 180px; background: var(--pink); top: 8%; left: 5%; animation-delay: 0s; }
-  .bubble-2 { width: 120px; height: 120px; background: var(--yellow); top: 60%; right: 8%; animation-delay: 1.5s; }
-  .bubble-3 { width: 90px; height: 90px; background: var(--mint); top: 20%; right: 15%; animation-delay: 0.8s; }
-  .bubble-4 { width: 60px; height: 60px; background: var(--purple); bottom: 15%; left: 20%; animation-delay: 2s; }
-  .bubble-5 { width: 140px; height: 140px; background: var(--sky); bottom: 5%; right: 30%; animation-delay: 1s; }
-  @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.04); } }
-
-  .music-notes { position: absolute; font-size: 2rem; opacity: 0.18; animation: spin-float 8s linear infinite; }
-  .n1 { top: 12%; left: 35%; animation-delay: 0s; font-size: 2.5rem; }
-  .n2 { top: 70%; left: 10%; animation-delay: 2s; }
-  .n3 { top: 40%; right: 5%; animation-delay: 4s; font-size: 1.5rem; }
-  .n4 { bottom: 20%; left: 50%; animation-delay: 1s; }
-  @keyframes spin-float { 0% { transform: translateY(0) rotate(0deg); opacity: 0.18; } 50% { transform: translateY(-30px) rotate(15deg); opacity: 0.3; } 100% { transform: translateY(0) rotate(0deg); opacity: 0.18; } }
-
-  .hero-inner { position: relative; z-index: 2; text-align: center; padding: 2rem; }
-  .avatar-ring {
-    width: 130px; height: 130px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--pink), var(--purple), var(--sky));
-    margin: 0 auto 1.5rem;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 3.5rem;
-    box-shadow: 0 8px 30px rgba(255,107,157,0.4);
-    animation: pulse-ring 3s ease-in-out infinite;
-  }
-  @keyframes pulse-ring { 0%, 100% { box-shadow: 0 8px 30px rgba(255,107,157,0.4); transform: scale(1); } 50% { box-shadow: 0 12px 40px rgba(192,132,252,0.5); transform: scale(1.03); } }
-
-  .tag { display: inline-block; background: var(--yellow); color: var(--dark); font-size: 0.75rem; font-weight: 900; padding: 4px 14px; border-radius: 20px; margin-bottom: 0.8rem; letter-spacing: 0.08em; box-shadow: 3px 3px 0 rgba(0,0,0,0.15); }
-  .hero h1 { font-family: 'Pacifico', cursive; font-size: clamp(2rem, 6vw, 3.5rem); color: var(--dark); line-height: 1.2; margin-bottom: 0.3rem; }
-  .hero h1 span { background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .hero-sub { font-size: clamp(0.9rem, 2vw, 1.15rem); color: #7B6FA0; margin-bottom: 2rem; font-weight: 700; }
-
-  .btn-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-  .btn { padding: 12px 28px; border-radius: 50px; font-weight: 900; font-size: 0.95rem; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; font-family: 'Noto Sans JP', sans-serif; }
-  .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-  .btn-primary { background: linear-gradient(135deg, var(--pink), var(--coral)); color: white; box-shadow: 4px 4px 0 rgba(0,0,0,0.12); }
-  .btn-secondary { background: white; color: var(--pink); border: 3px solid var(--pink); }
-
-  section { padding: 5rem 1.5rem; max-width: 900px; margin: 0 auto; }
-  .section-label { font-family: 'Pacifico', cursive; font-size: 1.8rem; margin-bottom: 0.3rem; }
-  .section-label span { color: var(--pink); }
-  .section-divider { height: 4px; width: 60px; border-radius: 4px; background: linear-gradient(90deg, var(--yellow), var(--coral)); margin-bottom: 2.5rem; }
-
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-  @media (max-width: 600px) { .about-grid { grid-template-columns: 1fr; } }
-  .about-card { background: white; border-radius: 20px; padding: 1.5rem; box-shadow: 6px 6px 0 rgba(0,0,0,0.07); border: 2px solid #F0E8FF; transition: transform 0.2s; }
-  .about-card:hover { transform: translateY(-4px); }
-  .about-card .icon { font-size: 2rem; margin-bottom: 0.6rem; }
-  .about-card h3 { font-size: 1rem; font-weight: 900; color: var(--pink); margin-bottom: 0.4rem; }
-  .about-card p { font-size: 0.9rem; color: #5E5E7E; line-height: 1.6; }
-
-  .works-bg { background: linear-gradient(135deg, #FFF0F8, #F0EFFE); border-radius: 30px; padding: 3rem 2rem; margin: 0 1rem; }
-  .works-card { background: white; border-radius: 20px; padding: 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 8px 8px 0 rgba(255,107,157,0.15); border: 2px solid #FFD0E8; max-width: 700px; margin: 0 auto; flex-wrap: wrap; }
-  .works-emoji { font-size: 4rem; }
-  .works-info h3 { font-size: 1.2rem; font-weight: 900; color: var(--dark); margin-bottom: 0.4rem; }
-  .works-info p { font-size: 0.9rem; color: #7B6FA0; line-height: 1.6; }
-  .badge-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
-  .badge { font-size: 0.72rem; font-weight: 700; padding: 3px 12px; border-radius: 20px; color: white; }
-  .badge-pink { background: var(--pink); } .badge-mint { background: var(--mint); } .badge-purple { background: var(--purple); } .badge-sky { background: var(--sky); }
-
-  .contact-box { text-align: center; background: linear-gradient(135deg, var(--pink), var(--purple)); border-radius: 30px; padding: 3rem 2rem; color: white; margin: 0 1rem; }
-  .contact-box h2 { font-family: 'Pacifico', cursive; font-size: 1.8rem; margin-bottom: 0.8rem; }
-  .contact-box p { font-size: 0.95rem; opacity: 0.9; margin-bottom: 1.5rem; }
-  .btn-white { background: white; color: var(--pink); padding: 12px 32px; border-radius: 50px; font-weight: 900; border: none; cursor: pointer; font-size: 1rem; transition: transform 0.2s; font-family: 'Noto Sans JP', sans-serif; }
-  .btn-white:hover { transform: scale(1.05); }
-
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,247,0.85); backdrop-filter: blur(12px); border-bottom: 2px solid rgba(255,107,157,0.15); }
   .nav-logo { font-family: 'Pacifico', cursive; font-size: 1.3rem; color: var(--pink); }
   .nav-links { display: flex; gap: 1.5rem; list-style: none; }
   .nav-links a { text-decoration: none; font-size: 0.85rem; font-weight: 700; color: var(--dark); transition: color 0.2s; }
   .nav-links a:hover { color: var(--pink); }
-  footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #AAA; }
+  @media(max-width:600px){ .nav-links { gap: 0.8rem; } .nav-links a { font-size: 0.75rem; } }
+
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #FFE0EF 0%, #FFF8DC 40%, #E0F7FA 100%);
+    position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .bubble { position: absolute; border-radius: 50%; opacity: 0.32; animation: float 6s ease-in-out infinite; }
+  .b1{width:180px;height:180px;background:var(--pink);top:8%;left:5%;animation-delay:0s;}
+  .b2{width:120px;height:120px;background:var(--yellow);top:60%;right:8%;animation-delay:1.5s;}
+  .b3{width:90px;height:90px;background:var(--mint);top:20%;right:15%;animation-delay:0.8s;}
+  .b4{width:60px;height:60px;background:var(--purple);bottom:15%;left:20%;animation-delay:2s;}
+  .b5{width:140px;height:140px;background:var(--sky);bottom:5%;right:30%;animation-delay:1s;}
+  @keyframes float{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-20px) scale(1.04);}}
+  .mnote{position:absolute;font-size:2rem;opacity:0.15;animation:nf 8s ease-in-out infinite;}
+  .n1{top:12%;left:35%;font-size:2.5rem;animation-delay:0s;}
+  .n2{top:70%;left:10%;animation-delay:2s;}
+  .n3{top:40%;right:5%;font-size:1.5rem;animation-delay:4s;}
+  .n4{bottom:20%;left:50%;animation-delay:1s;}
+  @keyframes nf{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-28px) rotate(12deg);}}
+  .hero-inner { position: relative; z-index: 2; text-align: center; padding: 2rem; }
+  .avatar-ring {
+    width: 130px; height: 130px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink), var(--purple), var(--sky));
+    margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem; box-shadow: 0 8px 30px rgba(255,107,157,0.4);
+    animation: pr 3s ease-in-out infinite;
+  }
+  @keyframes pr{0%,100%{box-shadow:0 8px 30px rgba(255,107,157,0.4);transform:scale(1);}50%{box-shadow:0 12px 40px rgba(192,132,252,0.5);transform:scale(1.03);}}
+  .tag{display:inline-block;background:var(--yellow);color:var(--dark);font-size:.75rem;font-weight:900;padding:4px 14px;border-radius:20px;margin-bottom:.8rem;letter-spacing:.08em;box-shadow:3px 3px 0 rgba(0,0,0,.12);}
+  .hero h1{font-family:'Pacifico',cursive;font-size:clamp(2rem,6vw,3.5rem);line-height:1.2;margin-bottom:.3rem;}
+  .hero h1 span{background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero-sub{font-size:clamp(.9rem,2vw,1.1rem);color:#7B6FA0;margin-bottom:2rem;font-weight:700;}
+  .btn-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+  .btn{padding:12px 28px;border-radius:50px;font-weight:900;font-size:.95rem;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'Noto Sans JP',sans-serif;}
+  .btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.14);}
+  .btn-p{background:linear-gradient(135deg,var(--pink),var(--coral));color:white;box-shadow:4px 4px 0 rgba(0,0,0,.1);}
+  .btn-s{background:white;color:var(--pink);border:3px solid var(--pink);}
+  a{text-decoration:none;}
+
+  .sw{padding:5rem 1.5rem;max-width:960px;margin:0 auto;}
+  .sl{font-family:'Pacifico',cursive;font-size:1.8rem;margin-bottom:.3rem;}
+  .sl span{color:var(--pink);}
+  .sd{height:4px;width:60px;border-radius:4px;background:linear-gradient(90deg,var(--yellow),var(--coral));margin-bottom:2.5rem;}
+
+  .ag{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+  @media(max-width:600px){.ag{grid-template-columns:1fr;}}
+  .ac{background:white;border-radius:20px;padding:1.5rem;box-shadow:6px 6px 0 rgba(0,0,0,.06);border:2px solid #F0E8FF;transition:transform .2s;}
+  .ac:hover{transform:translateY(-4px);}
+  .ac .ic{font-size:2rem;margin-bottom:.6rem;}
+  .ac h3{font-size:1rem;font-weight:900;color:var(--pink);margin-bottom:.4rem;}
+  .ac p{font-size:.9rem;color:#5E5E7E;line-height:1.65;}
+
+  .wb{background:linear-gradient(135deg,#FFF0F8,#F0EFFE);border-radius:30px;padding:3.5rem 0 3rem;margin:0 1rem;overflow:hidden;}
+  .wi{max-width:960px;margin:0 auto;padding:0 2rem;}
+  .sh{font-size:.78rem;color:#B09EC0;margin-bottom:1.2rem;}
+  .gt{overflow-x:auto;padding-bottom:1rem;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#F4C0D1 transparent;}
+  .gt::-webkit-scrollbar{height:4px;}
+  .gt::-webkit-scrollbar-thumb{background:#F4C0D1;border-radius:4px;}
+  .gtr{display:flex;gap:1.2rem;padding:.5rem .2rem;width:max-content;}
+
+  .wc{background:white;border-radius:22px;padding:1.8rem 1.6rem;width:290px;flex-shrink:0;
+    box-shadow:8px 8px 0 rgba(255,107,157,.13);border:2px solid #FFD0E8;
+    transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;gap:.8rem;}
+  .wc:hover{transform:translateY(-6px);box-shadow:10px 14px 0 rgba(255,107,157,.18);}
+  .wc.wct{border-color:#FFD0E8;}
+  .wc.wck{border-color:#C8F0E0;}
+  .wc.wcn{border-color:#D8C8FF;}
+  .wc-em{font-size:3rem;}
+  .wc h3{font-size:1.05rem;font-weight:900;color:var(--dark);line-height:1.35;}
+  .wc p{font-size:.85rem;color:#7B6FA0;line-height:1.65;flex:1;}
+  .br{display:flex;flex-wrap:wrap;gap:.35rem;}
+  .bd{font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:20px;color:white;}
+  .bpk{background:var(--pink);} .bmt{background:var(--mint);} .bpu{background:var(--purple);}
+  .bsk{background:var(--sky);} .bco{background:var(--coral);} .byl{background:#F0B800;}
+
+  .np{display:flex;flex-direction:column;gap:.6rem;margin-top:.3rem;}
+  .ni{background:#F8F4FF;border-radius:10px;padding:.7rem .9rem;border-left:4px solid var(--purple);}
+  .nt{font-size:.85rem;font-weight:900;color:var(--dark);margin-bottom:.2rem;}
+  .ns{font-size:.75rem;color:#9B8FC0;}
+
+  .co{background:linear-gradient(135deg,var(--pink),var(--purple));border-radius:30px;padding:3.5rem 2rem;margin:0 1rem;max-width:900px;}
+  .co-wrap{padding:5rem 1rem;display:flex;justify-content:center;}
+  .ct{font-family:'Pacifico',cursive;font-size:2rem;color:white;text-align:center;margin-bottom:.4rem;}
+  .cs{font-size:.93rem;color:rgba(255,255,255,.88);text-align:center;margin-bottom:2rem;line-height:1.7;}
+  .cf{background:white;border-radius:20px;padding:2rem;max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:1.1rem;}
+  .fg{display:flex;flex-direction:column;gap:.35rem;}
+  .fg label{font-size:.82rem;font-weight:900;color:var(--pink);}
+  .fg input,.fg select,.fg textarea{padding:10px 14px;border-radius:12px;border:2px solid #F0E0F0;font-family:'Noto Sans JP',sans-serif;font-size:.9rem;color:var(--dark);background:#FEFAFF;outline:none;transition:border-color .2s;width:100%;}
+  .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--pink);}
+  .fg textarea{resize:vertical;min-height:120px;}
+  .fsub{background:linear-gradient(135deg,var(--pink),var(--coral));color:white;border:none;border-radius:50px;padding:13px 32px;font-size:1rem;font-weight:900;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'Noto Sans JP',sans-serif;align-self:center;box-shadow:4px 4px 0 rgba(0,0,0,.1);}
+  .fsub:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(255,107,157,.35);}
+  .fn{font-size:.75rem;color:#B09EC0;text-align:center;}
+  .tb{display:none;text-align:center;padding:2rem;}
+  .tb.show{display:block;}
+  .tb .big{font-size:3rem;margin-bottom:.5rem;}
+  .tb p{color:var(--dark);font-weight:700;line-height:1.8;}
+
+  footer{text-align:center;padding:2.5rem 1rem;font-size:.8rem;color:#BBA;}
+  footer span{color:var(--pink);}
 </style>
 </head>
 <body>
@@ -108,73 +134,119 @@
   <div class="nav-logo">♪ Aya</div>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
-    <li><a href="#music">Music</a></li>
     <li><a href="#works">Works</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
 <div class="hero">
-  <div class="bubble bubble-1"></div>
-  <div class="bubble bubble-2"></div>
-  <div class="bubble bubble-3"></div>
-  <div class="bubble bubble-4"></div>
-  <div class="bubble bubble-5"></div>
-  <div class="music-notes n1">♪</div>
-  <div class="music-notes n2">♫</div>
-  <div class="music-notes n3">♬</div>
-  <div class="music-notes n4">♩</div>
+  <div class="bubble b1"></div><div class="bubble b2"></div>
+  <div class="bubble b3"></div><div class="bubble b4"></div><div class="bubble b5"></div>
+  <div class="mnote n1">♪</div><div class="mnote n2">♫</div>
+  <div class="mnote n3">♬</div><div class="mnote n4">♩</div>
   <div class="hero-inner">
     <div class="avatar-ring">🎤</div>
     <div class="tag">🌸 Vocalist & Creator</div>
     <h1>Hello, I'm <span>Aya</span>!</h1>
     <p class="hero-sub">声楽家 × アプリプロデューサー × クリエイター</p>
     <div class="btn-row">
-      <button class="btn btn-primary">🎵 音楽を聴く</button>
-      <button class="btn btn-secondary">✨ 作品を見る</button>
+      <a href="#works"><button class="btn btn-p">✨ 作品を見る</button></a>
+      <a href="#contact"><button class="btn btn-s">📩 お問い合わせ</button></a>
     </div>
   </div>
 </div>
 
-<section id="about">
-  <div class="section-label">About <span>Me</span> 🌷</div>
-  <div class="section-divider"></div>
-  <div class="about-grid">
-    <div class="about-card"><div class="icon">🎓</div><h3>声楽・クラシック</h3><p>大分芸術短期大学出身。クラシック声楽を専攻し、現在もレッスンを継続中。リューのアリアに挑戦中！</p></div>
-    <div class="about-card"><div class="icon">📱</div><h3>アプリプロデューサー</h3><p>長崎を舞台にした恋愛×タロット×ダイエットアプリを企画・開発中。世界観からキャラデザまで担当。</p></div>
-    <div class="about-card"><div class="icon">♨️</div><h3>温泉・花・スイーツ好き</h3><p>温泉でリフレッシュ、繊細なお花に癒され、メープルミニバンに目がない日々を送っています。</p></div>
-    <div class="about-card"><div class="icon">🎶</div><h3>BGM制作中</h3><p>アプリ用オリジナルBGMのボーカルを自ら担当予定。声楽の経験を創作活動に活かしています。</p></div>
+<!-- ABOUT -->
+<div id="about"><div class="sw">
+  <div class="sl">About <span>Me</span> 🌷</div>
+  <div class="sd"></div>
+  <div class="ag">
+    <div class="ac"><div class="ic">🎓</div><h3>声楽・クラシック</h3><p>大分芸術短期大学出身。クラシック声楽を専攻し、現在もレッスンを継続中。プッチーニのアリアに挑戦中！</p></div>
+    <div class="ac"><div class="ic">📱</div><h3>アプリプロデューサー</h3><p>長崎を舞台にした恋愛×タロット×ダイエットアプリを企画・開発中。世界観からキャラデザまで担当。</p></div>
+    <div class="ac"><div class="ic">♨️</div><h3>温泉・花・スイーツ好き</h3><p>温泉でリフレッシュ、繊細なお花に癒され、メープルミニバンに目がない日々を送っています。</p></div>
+    <div class="ac"><div class="ic">🎶</div><h3>BGM制作中</h3><p>アプリ用オリジナルBGMのボーカルを自ら担当予定。声楽の経験を創作活動に活かしています。</p></div>
   </div>
-</section>
+</div></div>
 
-<div class="works-bg" id="works">
-  <section style="padding: 2rem 1.5rem;">
-    <div class="section-label">Works <span>🎮</span></div>
-    <div class="section-divider"></div>
-    <div class="works-card">
-      <div class="works-emoji">💕</div>
-      <div class="works-info">
+<!-- WORKS -->
+<div id="works" class="wb">
+  <div class="wi">
+    <div class="sl">Works <span>🎨</span></div>
+    <div class="sd"></div>
+    <div class="sh">← 横にスクロールして見てね ✨</div>
+    <div class="gt"><div class="gtr">
+
+      <div class="wc wct">
+        <div class="wc-em">💕</div>
         <h3>長崎恋タロット♡ダイエット</h3>
         <p>長崎の街を舞台に、乙女ゲーム風イケメンキャラと一緒にダイエット＆タロット占いを楽しめるアプリ。BGMはオリジナル声楽録音予定！</p>
-        <div class="badge-row">
-          <span class="badge badge-pink">タロット</span>
-          <span class="badge badge-mint">長崎ウォーキング</span>
-          <span class="badge badge-purple">乙女ゲーム</span>
-          <span class="badge badge-sky">声楽BGM</span>
+        <div class="br">
+          <span class="bd bpk">タロット</span>
+          <span class="bd bmt">長崎ウォーキング</span>
+          <span class="bd bpu">乙女ゲーム</span>
+          <span class="bd bsk">声楽BGM</span>
         </div>
       </div>
-    </div>
-  </section>
+
+      <div class="wc wck">
+        <div class="wc-em">🤸‍♀️</div>
+        <h3>亜矢ちゃん体操</h3>
+        <p>長崎観光前のへんてこりんウォーミングアップアプリ。グラバー坂スキップ・出島クルクル回転など、イケメンキャラの掛け声つきで楽しく体を動かそう！</p>
+        <div class="br">
+          <span class="bd bmt">ウォーミングアップ</span>
+          <span class="bd bco">タイマー付き</span>
+          <span class="bd byl">BGMあり</span>
+        </div>
+      </div>
+
+      <div class="wc wcn">
+        <div class="wc-em">✍️</div>
+        <h3>恋愛タロット コラム on note</h3>
+        <p>長崎×タロット×恋愛をテーマにした読み物コラム。心に響くエッセイと実践ガイドをお届けします。</p>
+        <div class="np">
+          <div class="ni"><div class="nt">好きな人ができたとき、タロットに聞いてみた</div><div class="ns">共感系エッセイ ／ 浜っ子</div></div>
+          <div class="ni"><div class="nt">長崎の坂を登るたび、あの人を思い出す</div><div class="ns">長崎エッセイ ／ かずき</div></div>
+          <div class="ni"><div class="nt">ダイエット中に恋が生まれる理由</div><div class="ns">ライフスタイル ／ にっしー</div></div>
+        </div>
+        <div class="br" style="margin-top:.3rem;">
+          <span class="bd bpu">note</span>
+          <span class="bd bpk">恋愛コラム</span>
+          <span class="bd bsk">タロット</span>
+        </div>
+      </div>
+
+    </div></div>
+  </div>
 </div>
 
-<section id="contact">
-  <div class="contact-box">
-    <h2>Contact ✉️</h2>
-    <p>お仕事のご依頼・コラボのご相談など、お気軽にどうぞ！</p>
-    <button class="btn-white">🌸 メッセージを送る</button>
+<!-- CONTACT -->
+<div id="contact" class="co-wrap">
+  <div class="co">
+    <div class="ct">Contact ✉️</div>
+    <div class="cs">お仕事のご依頼・コラボのご相談など、お気軽にどうぞ！<br>通常2〜3営業日以内にご返信します🌸</div>
+    <form class="cf" id="contactForm" action="https://formspree.io/f/xjgpovkp" method="POST">
+      <div class="fg"><label>お名前 *</label><input type="text" name="name" placeholder="山田 花子" required></div>
+      <div class="fg"><label>メールアドレス *</label><input type="email" name="email" placeholder="example@email.com" required></div>
+      <div class="fg">
+        <label>お問い合わせの種類</label>
+        <select name="type">
+          <option value="">選択してください</option>
+          <option>コラボ・タイアップのご相談</option>
+          <option>声楽・音楽活動について</option>
+          <option>アプリについて</option>
+          <option>メディア・取材のご依頼</option>
+          <option>その他</option>
+        </select>
+      </div>
+      <div class="fg"><label>メッセージ *</label><textarea name="message" placeholder="お気軽にメッセージをどうぞ♪" required></textarea></div>
+      <div class="fn">※ ご入力いただいた情報は、お問い合わせへの返信以外には使用しません。</div>
+      <button class="fsub" type="submit">🌸 送信する</button>
+    </form>
   </div>
-</section>
+</div>
 
-<footer>© 2026 Aya — Vocalist & Creator 🎵</footer>
+<footer>© 2026 <span>Aya</span> — Vocalist & Creator 🎵</footer>
+
+
 </body>
 </html>
