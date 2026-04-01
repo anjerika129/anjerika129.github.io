@@ -214,7 +214,52 @@
           <span class="bd bsk">タロット</span>
         </div>
       </div>
-
+<!-- NOTE WIDGET -->
+<div style="max-width:720px;margin:2rem auto;padding:0 1rem;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+    <span style="color:#FFD93D;font-size:14px;">✦</span>
+    <h3 style="font-family:'Noto Serif JP',serif;font-size:1.1rem;font-weight:500;color:#2d1155;margin:0;letter-spacing:0.08em;">最新のnote</h3>
+    <div style="flex:1;height:1px;background:linear-gradient(to right,#FF6B9D,transparent);"></div>
+    <span style="color:#FFD93D;font-size:14px;">✦</span>
+  </div>
+  <div id="note-cards" style="display:grid;gap:1rem;">
+    <div style="text-align:center;color:#b09aba;font-size:0.85rem;padding:2rem;">記事を読み込み中...</div>
+  </div>
+  <div style="text-align:center;margin-top:1.5rem;">
+    <a href="https://note.com/anjerika129" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;color:#FF6B9D;text-decoration:none;border:0.5px solid #FF6B9D;border-radius:99px;padding:8px 20px;">✦ noteをもっと見る</a>
+  </div>
+</div>
+<script>
+(function(){
+  var NOTE_ID='anjerika129';
+  var container=document.getElementById('note-cards');
+  var url='https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://note.com/'+NOTE_ID+'/rss')+'&count=5';
+  fetch(url).then(function(r){return r.json();}).then(function(data){
+    if(!data.items||data.items.length===0){fallback();return;}
+    container.innerHTML=data.items.map(function(item){
+      var thumb=item.thumbnail||'';
+      var thumbEl=thumb
+        ?'<div style="width:72px;height:72px;border-radius:8px;flex-shrink:0;overflow:hidden;"><img src="'+esc(thumb)+'" style="width:100%;height:100%;object-fit:cover;" loading="lazy"></div>'
+        :'<div style="width:72px;height:72px;border-radius:8px;flex-shrink:0;background:#f5eefb;display:flex;align-items:center;justify-content:center;font-size:28px;">🎴</div>';
+      var desc=(item.description||'').replace(/<[^>]*>/g,'').slice(0,80);
+      var date=item.pubDate?new Date(item.pubDate).toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}):'';
+      return '<a href="'+esc(item.link)+'" target="_blank" rel="noopener" style="display:flex;gap:1rem;background:#fff;border:0.5px solid #e8d8f0;border-radius:14px;padding:1rem 1.25rem;text-decoration:none;color:inherit;align-items:flex-start;">'
+        +thumbEl
+        +'<div style="flex:1;min-width:0;">'
+        +'<p style="font-family:\'Noto Serif JP\',serif;font-size:0.95rem;font-weight:500;color:#2d1155;margin:0 0 6px;line-height:1.5;">'+esc(item.title)+'</p>'
+        +(desc?'<p style="font-size:0.8rem;color:#888;margin:0 0 8px;line-height:1.6;">'+esc(desc)+'…</p>':'')
+        +'<div style="font-size:0.75rem;color:#b09aba;display:flex;gap:10px;align-items:center;">'
+        +(date?'<span>'+date+'</span>':'')
+        +'<span style="background:#f5eefb;color:#7F77DD;padding:2px 8px;border-radius:99px;font-size:0.7rem;">note</span>'
+        +'</div></div></a>';
+    }).join('');
+  }).catch(fallback);
+  function fallback(){
+    container.innerHTML='<div style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;background:#fdf8ff;border-radius:12px;border:0.5px solid #e8d8f0;">🎴 <a href="https://note.com/'+NOTE_ID+'" target="_blank" style="color:#FF6B9D;">note.com/'+NOTE_ID+'</a> で記事を公開中！</div>';
+  }
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+})();
+</script>
     </div></div>
   </div>
 </div>
