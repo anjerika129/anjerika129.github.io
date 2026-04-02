@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>亜矢ちゃん体操</title>
+</head>
+<body>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif);color:var(--color-text-primary);background:transparent}
+.app{max-width:500px;margin:0 auto;padding:0.75rem}
+
+.header{text-align:center;padding:1rem 0 0.5rem}
+.app-title{font-size:22px;font-weight:500;color:#993556}
+.app-sub{font-size:13px;color:var(--color-text-secondary);margin-top:2px}
+
+.bgm-bar{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg,12px);padding:0.75rem 1rem;margin:0.75rem 0;display:flex;align-items:center;gap:10px}
+.bgm-track-info{flex:1;min-width:0}
+.bgm-title{font-size:13px;font-weight:500;color:#993556;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bgm-sub{font-size:11px;color:var(--color-text-secondary)}
+.wave-mini{display:flex;align-items:center;gap:2px;height:20px}
+.wbar{width:3px;border-radius:2px;background:#ED93B1;height:4px;transition:height 0.12s}
+.bgm-btn{width:34px;height:34px;border-radius:50%;background:#F4C0D1;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bgm-btn:hover{background:#ED93B1}
+.bgm-btn svg{width:16px;height:16px;fill:#993556}
+.bgm-prog-wrap{display:flex;align-items:center;gap:6px;margin-top:4px}
+.bgm-prog{flex:1;height:3px;background:var(--color-border-tertiary);border-radius:2px}
+.bgm-prog-fill{height:100%;background:#ED93B1;border-radius:2px;width:0%;transition:width 0.3s}
+.bgm-time{font-size:10px;color:var(--color-text-secondary);min-width:28px;text-align:right}
+
+.step-section{margin-top:0.5rem}
+.section-label{font-size:12px;color:var(--color-text-secondary);font-weight:500;margin-bottom:0.5rem;padding-left:2px}
+
+.step-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg,12px);padding:0.875rem 1rem;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s}
+.step-card:hover{border-color:#ED93B1}
+.step-card.active{border:1.5px solid #ED93B1;background:#FBEAF0}
+.step-card.done{background:var(--color-background-secondary);border-color:var(--color-border-tertiary)}
+.step-head{display:flex;align-items:center;gap:10px}
+.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.step-num.pink{background:#F4C0D1;color:#993556}
+.step-num.coral{background:#F5C4B3;color:#993C1D}
+.step-num.purple{background:#CECBF6;color:#3C3489}
+.step-num.teal{background:#9FE1CB;color:#085041}
+.step-num.done-num{background:#ddd;color:#999}
+.step-name{font-size:14px;font-weight:500;flex:1}
+.step-badge{font-size:11px;padding:2px 8px;border-radius:20px}
+.step-badge.pink{background:#F4C0D1;color:#993556}
+.step-badge.coral{background:#F5C4B3;color:#993C1D}
+.step-badge.purple{background:#CECBF6;color:#3C3489}
+.step-badge.teal{background:#9FE1CB;color:#085041}
+.step-detail{font-size:13px;color:#555;line-height:1.65;margin-top:8px;padding-top:8px;border-top:0.5px solid #ddd}
+.step-chara{font-size:12px;color:#D4537E;margin-top:6px;font-style:italic}
+
+.timer-panel{background:#fff;border:0.5px solid #ddd;border-radius:12px;padding:1rem;margin:0.75rem 0;text-align:center}
+.timer-big{font-size:36px;font-weight:500;color:#993556;letter-spacing:2px}
+.timer-label{font-size:12px;color:#888;margin-top:2px}
+.timer-prog{height:6px;background:#eee;border-radius:3px;margin:10px 0;overflow:hidden}
+.timer-prog-fill{height:100%;background:#ED93B1;border-radius:3px;width:0%;transition:width 0.5s}
+.timer-btns{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.tbtn{padding:8px 20px;border-radius:8px;border:0.5px solid #ccc;background:transparent;cursor:pointer;font-size:13px;color:#333}
+.tbtn:hover{background:#f5f5f5}
+.tbtn.primary{background:#F4C0D1;border-color:#ED93B1;color:#993556;font-weight:500}
+.tbtn.primary:hover{background:#ED93B1}
+
+body{background:#fff8f8;font-family:'Helvetica Neue',Arial,'Hiragino Sans',sans-serif;color:#333;}
+</style>
+
+<div class="app">
+  <div class="header">
+    <div class="app-title">亜矢ちゃん体操</div>
+    <div class="app-sub">長崎観光前のへんてこりんウォーミングアップ♪</div>
+  </div>
+
+  <div class="bgm-bar">
+    <div class="wave-mini" id="waveMini"></div>
+    <div class="bgm-track-info">
+      <div class="bgm-title" id="bgmTitle">亜矢ちゃん体操のテーマ</div>
+      <div class="bgm-prog-wrap">
+        <div class="bgm-prog"><div class="bgm-prog-fill" id="bgmProgFill"></div></div>
+        <span class="bgm-time" id="bgmTime">0:00</span>
+      </div>
+    </div>
+    <button class="bgm-btn" onclick="prevBgm()" title="前">
+      <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+    </button>
+    <button class="bgm-btn" id="bgmPlayBtn" onclick="toggleBgm()">
+      <svg id="bgmIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button class="bgm-btn" onclick="nextBgm()" title="次">
+      <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z"/></svg>
+    </button>
+  </div>
+
+  <div class="timer-panel">
+    <div class="timer-big" id="timerBig">4:00</div>
+    <div class="timer-label" id="timerLabel">体操スタートボタンを押してね♪</div>
+    <div class="timer-prog"><div class="timer-prog-fill" id="timerProgFill"></div></div>
+    <div class="timer-btns">
+      <button class="tbtn primary" id="mainTimerBtn" onclick="toggleTimer()">スタート</button>
+      <button class="tbtn" onclick="resetTimer()">リセット</button>
+    </div>
+  </div>
+
+  <div class="step-section">
+    <div class="section-label">今日の体操メニュー</div>
+    <div id="stepList"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+<script>
+const steps=[
+  {name:"グラバー坂スキップ",color:"pink",sec:30,detail:"その場でスキップ！膝を高く上げて足首ほぐし♪ 石畳を踏みしめるイメージで。",chara:"「ちゃんと膝あげてよ！サボらないで♡」 ─ カズキ"},
+  {name:"出島クルクル回転",color:"coral",sec:30,detail:"両腕を広げて飛行機ポーズ。右回り15秒→左回り15秒。くらくらしたら笑って止まろう！",chara:"「ふふ、目まわしてる顔かわいいね」 ─ 蓮"},
+  {name:"カステラぽよんぽよん",color:"purple",sec:45,detail:"両手を頭上でパーに広げてつま先立ち。ぽよんぽよん弾む！着地はやさしく。",chara:"「そのノリノリな感じ、好きだぞ♪」 ─ 海斗"},
+  {name:"ちゃんぽん麺のばし",color:"teal",sec:45,detail:"右手＋左足を前に伸ばして1秒キープ→反対側。体幹にじわじわ効くよ。",chara:"「ゆっくりでいいとよ、一緒に深呼吸しよう」 ─ 悠"},
+  {name:"軍艦島サバイバル",color:"pink",sec:45,detail:"膝を曲げて低い姿勢でサイドステップ2歩→2歩。太もも外側がじんじんするのが正解！",chara:"「もう少し！ほら、俺も一緒にやるから」 ─ カズキ"},
+  {name:"稲佐山ゆらゆら",color:"coral",sec:45,detail:"全身をゆっくりゆらゆら。鼻から4秒吸って、口から6秒吐く。今日もよくがんばった♡",chara:"「お疲れ様。夜景、きれいだね…君みたいに」 ─ 蓮"},
+];
+
+const TOTAL=240;
+let timerRunning=false,timerInterval=null,timerSec=TOTAL,activeStep=-1;
+
+const bgmTracks=[
+  {name:"亜矢ちゃん体操のテーマ",totalSec:200,notes:[
+    {t:0,n:"E4",d:"4n"},{t:0.5,n:"G4",d:"4n"},{t:1,n:"A4",d:"2n"},
+    {t:2,n:"G4",d:"4n"},{t:2.5,n:"E4",d:"4n"},{t:3,n:"D4",d:"2n"},
+    {t:4,n:"E4",d:"4n"},{t:4.5,n:"G4",d:"4n"},{t:5,n:"B4",d:"2n"},
+    {t:6,n:"A4",d:"4n"},{t:6.5,n:"G4",d:"4n"},{t:7,n:"E4",d:"1n"},
+    {t:8,n:"C5",d:"4n"},{t:8.5,n:"B4",d:"4n"},{t:9,n:"A4",d:"2n"},
+    {t:10,n:"G4",d:"4n"},{t:10.5,n:"A4",d:"4n"},{t:11,n:"B4",d:"2n"},
+    {t:12,n:"A4",d:"4n"},{t:12.5,n:"G4",d:"4n"},{t:13,n:"E4",d:"2n"},
+    {t:14,n:"D4",d:"4n"},{t:14.5,n:"E4",d:"4n"},{t:15,n:"G4",d:"1n"},
+    {t:16,n:"G4",d:"4n"},{t:16.5,n:"A4",d:"4n"},{t:17,n:"B4",d:"2n"},
+    {t:18,n:"C5",d:"4n"},{t:18.5,n:"B4",d:"4n"},{t:19,n:"A4",d:"2n"},
+    {t:20,n:"G4",d:"4n"},{t:20.5,n:"F4",d:"4n"},{t:21,n:"E4",d:"2n"},
+    {t:22,n:"D4",d:"4n"},{t:22.5,n:"E4",d:"4n"},{t:23,n:"G4",d:"1n"},
+  ]},
+  {name:"グラバー坂スキップ",totalSec:60,notes:[
+    {t:0,n:"C5",d:"8n"},{t:0.25,n:"E5",d:"8n"},{t:0.5,n:"G5",d:"4n"},
+    {t:1,n:"E5",d:"8n"},{t:1.25,n:"C5",d:"8n"},{t:1.5,n:"D5",d:"4n"},
+    {t:2,n:"C5",d:"8n"},{t:2.25,n:"E5",d:"8n"},{t:2.5,n:"G5",d:"2n"},
+    {t:4,n:"A5",d:"8n"},{t:4.25,n:"G5",d:"8n"},{t:4.5,n:"E5",d:"4n"},
+    {t:5,n:"G5",d:"8n"},{t:5.25,n:"F5",d:"8n"},{t:5.5,n:"E5",d:"4n"},
+    {t:6,n:"D5",d:"8n"},{t:6.25,n:"E5",d:"8n"},{t:6.5,n:"G5",d:"1n"},
+  ]},
+  {name:"稲佐山ゆらゆら",totalSec:90,notes:[
+    {t:0,n:"E3",d:"1n"},{t:2,n:"G3",d:"1n"},{t:4,n:"A3",d:"1n"},
+    {t:6,n:"G3",d:"2n"},{t:7,n:"E3",d:"2n"},{t:8,n:"D3",d:"1n"},
+    {t:10,n:"E3",d:"2n"},{t:11,n:"G3",d:"2n"},{t:12,n:"A3",d:"1n"},
+    {t:14,n:"B3",d:"2n"},{t:15,n:"A3",d:"2n"},{t:16,n:"G3",d:"1n"},
+  ]},
+];
+let bgmIdx=0,bgmPlaying=false,bgmSynth=null,bgmPart=null,bgmElapsed=0,bgmStart=0,bgmRaf=null;
+
+const N=12;
+const wm=document.getElementById('waveMini');
+for(let i=0;i<N;i++){const b=document.createElement('div');b.className='wbar';wm.appendChild(b);}
+const wbars=wm.querySelectorAll('.wbar');
+
+function animateWave(){
+  if(!bgmPlaying){wbars.forEach(b=>b.style.height='4px');return;}
+  wbars.forEach((b,i)=>{
+    const h=4+Math.abs(Math.sin(Date.now()/350+i*0.7))*14+Math.random()*4;
+    b.style.height=Math.round(h)+'px';
+  });
+  bgmRaf=requestAnimationFrame(animateWave);
+}
+
+function fmtTime(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
+
+function updateBgmProg(){
+  const tr=bgmTracks[bgmIdx];
+  const pct=Math.min(bgmElapsed/tr.totalSec*100,100);
+  document.getElementById('bgmProgFill').style.width=pct+'%';
+  document.getElementById('bgmTime').textContent=fmtTime(bgmElapsed);
+}
+
+function bgmTick(){
+  if(!bgmPlaying)return;
+  bgmElapsed=Math.min((Date.now()-bgmStart)/1000,bgmTracks[bgmIdx].totalSec);
+  updateBgmProg();
+  if(bgmElapsed>=bgmTracks[bgmIdx].totalSec){bgmElapsed=0;bgmStart=Date.now();}
+  setTimeout(bgmTick,250);
+}
+
+async function startBgm(){
+  await Tone.start();
+  if(bgmSynth){bgmSynth.disconnect();bgmSynth.dispose();}
+  if(bgmPart){bgmPart.dispose();}
+  bgmSynth=new Tone.Synth({
+    oscillator:{type:'triangle'},
+    envelope:{attack:0.05,decay:0.3,sustain:0.4,release:1.2},
+    volume:-8
+  }).toDestination();
+  const tr=bgmTracks[bgmIdx];
+  Tone.Transport.bpm.value=76;
+  const evts=tr.notes.map(n=>[n.t+'m',{note:n.n,dur:n.d}]);
+  bgmPart=new Tone.Part((time,val)=>{bgmSynth.triggerAttackRelease(val.note,val.dur,time);},evts);
+  bgmPart.start(0);bgmPart.loop=true;
+  bgmPart.loopEnd=(Math.max(...tr.notes.map(n=>n.t))+2)+'m';
+  Tone.Transport.start();
+  bgmPlaying=true;bgmStart=Date.now()-bgmElapsed*1000;
+  document.getElementById('bgmIcon').setAttribute('d','M6 19h4V5H6v14zm8-14v14h4V5h-4z');
+  animateWave();bgmTick();
+}
+
+function stopBgm(){
+  Tone.Transport.stop();
+  if(bgmPart){bgmPart.stop();bgmPart.dispose();bgmPart=null;}
+  bgmPlaying=false;cancelAnimationFrame(bgmRaf);
+  wbars.forEach(b=>b.style.height='4px');
+  document.getElementById('bgmIcon').setAttribute('d','M8 5v14l11-7z');
+}
+
+function toggleBgm(){if(bgmPlaying)stopBgm();else startBgm();}
+
+function prevBgm(){stopBgm();bgmIdx=(bgmIdx-1+bgmTracks.length)%bgmTracks.length;bgmElapsed=0;document.getElementById('bgmTitle').textContent=bgmTracks[bgmIdx].name;updateBgmProg();}
+function nextBgm(){stopBgm();bgmIdx=(bgmIdx+1)%bgmTracks.length;bgmElapsed=0;document.getElementById('bgmTitle').textContent=bgmTracks[bgmIdx].name;updateBgmProg();}
+
+function renderSteps(){
+  const list=document.getElementById('stepList');list.innerHTML='';
+  let elapsed=0;
+  steps.forEach((s,i)=>{
+    const stepStart=elapsed;const stepEnd=elapsed+s.sec;
+    const timerPos=TOTAL-timerSec;
+    const isDone=timerRunning&&timerPos>stepEnd;
+    const isActive=timerRunning&&timerPos>=stepStart&&timerPos<stepEnd;
+    const div=document.createElement('div');
+    div.className='step-card'+(isActive?' active':isDone?' done':'');
+    const numClass=isDone?'done-num':s.color;
+    div.innerHTML=`<div class="step-head">
+      <div class="step-num ${numClass}">${isDone?'✓':(i+1)}</div>
+      <div class="step-name" style="color:${isDone?'#999':'#333'}">${s.name}</div>
+      <span class="step-badge ${isDone?'':s.color}" style="${isDone?'background:#eee;color:#999':''}">${s.sec}秒</span>
+    </div>
+    ${isActive?`<div class="step-detail">${s.detail}<div class="step-chara">${s.chara}</div></div>`:''}`;
+    div.onclick=()=>{
+      if(activeStep===i){activeStep=-1;}else{activeStep=i;}
+      if(!timerRunning)renderSteps();
+    };
+    list.appendChild(div);
+    elapsed+=s.sec;
+  });
+}
+
+function updateTimerDisplay(){
+  document.getElementById('timerBig').textContent=fmtTime(timerSec);
+  const pct=((TOTAL-timerSec)/TOTAL)*100;
+  document.getElementById('timerProgFill').style.width=pct+'%';
+  const pos=TOTAL-timerSec;
+  let elapsed2=0;
+  for(let i=0;i<steps.length;i++){
+    if(pos>=elapsed2&&pos<elapsed2+steps[i].sec){
+      document.getElementById('timerLabel').textContent='今のステップ: '+steps[i].name;
+      break;
+    }
+    elapsed2+=steps[i].sec;
+    if(i===steps.length-1&&timerSec>0)document.getElementById('timerLabel').textContent='体操スタートボタンを押してね♪';
+  }
+  if(timerSec===0)document.getElementById('timerLabel').textContent='体操完了！お疲れさまでした♡';
+}
+
+function toggleTimer(){
+  if(timerSec===0){resetTimer();return;}
+  if(!timerRunning){
+    timerRunning=true;
+    document.getElementById('mainTimerBtn').textContent='一時停止';
+    timerInterval=setInterval(()=>{
+      if(timerSec<=0){clearInterval(timerInterval);timerRunning=false;document.getElementById('mainTimerBtn').textContent='もう一回';updateTimerDisplay();renderSteps();return;}
+      timerSec--;updateTimerDisplay();renderSteps();
+    },1000);
+  }else{
+    timerRunning=false;clearInterval(timerInterval);
+    document.getElementById('mainTimerBtn').textContent='再開';
+  }
+}
+
+function resetTimer(){
+  clearInterval(timerInterval);timerRunning=false;timerSec=TOTAL;
+  document.getElementById('mainTimerBtn').textContent='スタート';
+  updateTimerDisplay();renderSteps();
+}
+
+renderSteps();updateTimerDisplay();
+</script>
+</body>
+</html>
