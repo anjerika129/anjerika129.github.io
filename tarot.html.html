@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>長崎恋タロット♡ダイエット</title>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@700;800&family=Zen+Maru+Gothic:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rose:#e8718a;--rose-d:#c94d6b;
+  --petal:#fde8ee;--blush:#f7c5d0;
+  --lilac:#d9b8e8;--lilac-d:#b07ecf;
+  --cream:#fff8f2;--gold:#e8a84a;--gold-lt:#f9e0a8;
+  --ink:#3a2033;--ink-m:#6b4260;--ink-l:#9a7090;
+  --mint:#a8ddd0;--teal:#1d9e75;--teal-l:#e1f5ee;
+  --white:#ffffff;--sh:rgba(200,100,140,0.12);--sh2:rgba(200,100,140,0.22);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Zen Maru Gothic',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(220,140,160,0.055) 1px,transparent 1px);
+  background-size:14px 14px;}
+.petals{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.petal{position:absolute;top:-20px;opacity:0;font-size:var(--fs,12px);
+  animation:fp var(--d,9s) linear infinite;animation-delay:var(--dl,0s);}
+@keyframes fp{0%{opacity:0;transform:translateY(0) rotate(0deg);}10%{opacity:.55;}90%{opacity:.35;}
+  100%{opacity:0;transform:translateY(108vh) rotate(480deg) translateX(var(--dx,30px));}}
+.app{position:relative;z-index:1;max-width:430px;margin:0 auto;min-height:100vh;
+  background:rgba(255,248,242,0.93);box-shadow:0 0 50px rgba(200,100,140,0.1);display:flex;flex-direction:column;}
+
+/* スプラッシュ */
+#splash{position:fixed;inset:0;z-index:100;
+  background:linear-gradient(160deg,#fce8f0,#ede4f8,#fce8f0);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.8s ease,visibility 0.8s;}
+#splash.hide{opacity:0;visibility:hidden;}
+.sp-deco{font-size:48px;margin-bottom:16px;animation:spPop 1.2s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes spPop{from{opacity:0;transform:scale(0.5) rotate(-15deg);}to{opacity:1;transform:scale(1) rotate(0);}}
+.sp-title{font-family:'Kaisei Tokumin',serif;font-size:30px;font-weight:800;color:var(--rose-d);
+  text-align:center;line-height:1.3;letter-spacing:1px;margin-bottom:8px;animation:fuUp 1s .3s both;}
+.sp-sub{font-size:12px;color:var(--lilac-d);letter-spacing:3px;animation:fuUp 1s .5s both;}
+@keyframes fuUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.sp-dots{display:flex;gap:7px;margin-top:28px;animation:fuUp 1s .7s both;}
+.sd{width:9px;height:9px;border-radius:50%;animation:db .8s ease-in-out infinite alternate;}
+.sd:nth-child(1){background:var(--rose);}
+.sd:nth-child(2){background:var(--lilac-d);animation-delay:.15s;}
+.sd:nth-child(3){background:var(--gold);animation-delay:.3s;}
+@keyframes db{from{transform:translateY(0);}to{transform:translateY(-9px);}}
+
+/* ヘッダー */
+.hdr{padding:20px 18px 13px;text-align:center;
+  background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(253,232,238,.75));
+  border-bottom:2.5px solid var(--blush);position:sticky;top:0;z-index:10;}
+.hdr-tag{display:inline-block;font-size:10px;letter-spacing:3px;color:var(--rose-d);
+  background:var(--petal);border:1.5px solid var(--blush);border-radius:20px;
+  padding:2px 14px;margin-bottom:7px;font-family:'Kaisei Tokumin',serif;}
+.hdr-title{font-family:'Kaisei Tokumin',serif;font-size:22px;font-weight:800;
+  color:var(--rose-d);letter-spacing:1px;line-height:1.25;}
+.hdr-title .hrt{color:var(--gold);}
+.hdr-sub{font-size:10px;color:var(--ink-m);margin-top:3px;letter-spacing:1px;}
+
+/* 歩数バー */
+.sbar{display:flex;align-items:center;gap:10px;padding:8px 14px;
+  background:var(--petal);border-bottom:1.5px solid var(--blush);}
+.sbar-n{font-family:'Kaisei Tokumin',serif;font-size:16px;color:var(--rose-d);font-weight:700;}
+.sbar-l{font-size:9px;color:var(--ink-m);letter-spacing:1px;}
+.sbar-bar{flex:1;height:6px;background:rgba(200,100,130,0.12);border-radius:10px;overflow:hidden;}
+.sbar-fill{height:6px;border-radius:10px;background:linear-gradient(90deg,var(--blush),var(--rose));transition:width .8s;}
+.sbar-msg{font-size:9px;color:var(--rose-d);white-space:nowrap;}
+
+/* ナビ */
+.nav{display:flex;background:var(--white);border-bottom:2.5px solid var(--blush);
+  position:sticky;top:96px;z-index:9;}
+.nb{flex:1;padding:9px 2px 7px;font-size:10px;font-family:'Zen Maru Gothic',sans-serif;
+  background:none;border:none;cursor:pointer;color:var(--ink-m);
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  border-bottom:3px solid transparent;transition:all .2s;}
+.nb .ni{font-size:17px;}
+.nb.on{color:var(--rose-d);border-bottom-color:var(--rose);}
+.nb:hover{color:var(--rose);}
+
+/* セクション */
+.sec{display:none;padding:16px 14px 40px;animation:sfd .3s ease both;}
+.sec.on{display:block;}
+@keyframes sfd{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.stitle{font-family:'Kaisei Tokumin',serif;font-size:13px;color:var(--rose-d);
+  display:flex;align-items:center;gap:6px;margin-bottom:14px;}
+.stitle::before,.stitle::after{content:'';flex:1;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--blush),transparent);}
+
+/* ===== タロット ===== */
+.ctabs{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.ctabs::-webkit-scrollbar{display:none;}
+.ctab{flex-shrink:0;padding:6px 13px;border-radius:20px;border:2px solid var(--blush);
+  background:var(--white);font-size:11px;color:var(--ink-m);cursor:pointer;
+  font-family:'Kaisei Tokumin',serif;transition:all .2s;white-space:nowrap;}
+.ctab.on{background:linear-gradient(135deg,var(--petal),#fce4f0);border-color:var(--rose);color:var(--rose-d);}
+.cards-area{text-align:center;padding:6px 0 14px;}
+.cards-hint{font-size:11px;color:var(--lilac-d);letter-spacing:2px;margin-bottom:16px;}
+.cards-row{display:flex;gap:10px;justify-content:center;align-items:flex-end;margin-bottom:18px;}
+.tc{width:88px;height:140px;border-radius:13px;border:2.5px solid var(--blush);
+  background:linear-gradient(160deg,var(--petal),#fcd6e2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;position:relative;overflow:hidden;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;box-shadow:0 4px 14px var(--sh);}
+.tc::before{content:'';position:absolute;inset:5px;border:1.5px solid rgba(232,113,138,.28);border-radius:9px;}
+.tc::after{content:'✿ ✾ ✿';position:absolute;bottom:7px;left:0;right:0;
+  text-align:center;font-size:7px;color:rgba(200,100,130,.35);letter-spacing:2px;}
+.tc:hover{transform:translateY(-10px) rotate(-2deg);box-shadow:0 14px 28px var(--sh2);}
+.tc.big{width:104px;height:162px;}
+.tc.big:hover{transform:translateY(-12px) rotate(1deg);}
+.tc.fl{background:linear-gradient(160deg,#fff5f9,var(--petal));border-color:var(--rose);}
+.tcbg{position:absolute;inset:0;
+  background-image:repeating-linear-gradient(45deg,rgba(232,113,138,.05) 0,rgba(232,113,138,.05) 2px,transparent 2px,transparent 10px);}
+.tci{font-size:28px;margin-bottom:5px;position:relative;}
+.tcl{font-family:'Kaisei Tokumin',serif;font-size:11px;color:var(--rose-d);letter-spacing:1px;position:relative;}
+.rp{background:var(--white);border:2.5px solid var(--blush);border-radius:18px;
+  padding:18px 16px;margin-top:14px;box-shadow:0 4px 18px var(--sh);position:relative;display:none;}
+.rp::before{content:'❀';position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--white);padding:0 8px;color:var(--rose);font-size:16px;}
+.rpt{font-family:'Kaisei Tokumin',serif;font-size:15px;color:var(--rose-d);text-align:center;margin-bottom:13px;}
+.ren{margin-bottom:14px;}
+.rcn{font-size:11px;font-weight:700;color:var(--rose);background:var(--petal);
+  border-radius:20px;display:inline-block;padding:2px 11px;margin-bottom:5px;}
+.rtx{font-size:12.5px;color:var(--ink-m);line-height:1.85;}
+.rtx .hl{color:var(--rose-d);font-weight:700;}
+.dbtn{display:block;width:100%;padding:13px;margin-top:14px;
+  background:linear-gradient(135deg,var(--rose),var(--rose-d));
+  border:none;border-radius:30px;color:var(--white);
+  font-family:'Kaisei Tokumin',serif;font-size:14px;letter-spacing:2px;cursor:pointer;
+  box-shadow:0 4px 14px rgba(200,80,110,.3);transition:transform .2s,box-shadow .2s;}
+.dbtn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(200,80,110,.38);}
+
+/* ===== キャラ ===== */
+.cgrid{display:flex;flex-direction:column;gap:14px;}
+.ccard{background:var(--white);border:2.5px solid var(--blush);border-radius:20px;
+  padding:16px 14px;display:flex;gap:13px;align-items:flex-start;
+  box-shadow:0 3px 14px var(--sh);transition:transform .2s,box-shadow .2s;
+  cursor:pointer;position:relative;overflow:hidden;}
+.ccard::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;
+  background:radial-gradient(circle at top right,rgba(247,197,208,.38),transparent 70%);}
+.ccard:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(200,100,130,.2);}
+.cav{width:72px;height:72px;border-radius:50%;flex-shrink:0;border:3px solid var(--blush);
+  display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 3px 10px var(--sh);}
+.ci{flex:1;}
+.cn{font-family:'Kaisei Tokumin',serif;font-size:18px;color:var(--rose-d);font-weight:700;margin-bottom:1px;}
+.cr{font-size:10px;color:var(--lilac-d);letter-spacing:1.5px;margin-bottom:6px;}
+.cd{font-size:12px;color:var(--ink-m);line-height:1.72;}
+.cts{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}
+.ct{font-size:10px;padding:2px 10px;border-radius:20px;display:inline-block;}
+.ctr{background:#fce8ee;color:var(--rose-d);border:1.5px solid var(--blush);}
+.ctl{background:#f0e4f8;color:var(--lilac-d);border:1.5px solid var(--lilac);}
+.ctm{background:#e4f6f2;color:#3a9c8c;border:1.5px solid var(--mint);}
+.ctg{background:#fdf3d8;color:#a07020;border:1.5px solid var(--gold-lt);}
+.sp{background:var(--petal);border-radius:12px;padding:12px 14px;margin-top:10px;
+  border-left:3px solid var(--rose);font-size:12px;color:var(--ink-m);line-height:1.85;display:none;}
+.sp .nb{color:var(--rose-d);font-weight:700;}
+.sp .nt{font-size:10px;color:var(--ink-l);margin-top:4px;}
+
+/* ===== マップ ===== */
+.sbanner{background:linear-gradient(135deg,#fff0f5,var(--petal));
+  border:2.5px solid var(--blush);border-radius:18px;padding:14px;
+  margin-bottom:16px;text-align:center;box-shadow:0 3px 12px var(--sh);}
+.sn{font-family:'Kaisei Tokumin',serif;font-size:38px;font-weight:800;color:var(--rose-d);}
+.sl{font-size:10px;color:var(--ink-m);letter-spacing:2px;margin-bottom:9px;}
+.spb{background:rgba(200,100,130,.12);border-radius:20px;height:8px;overflow:hidden;}
+.spf{background:linear-gradient(90deg,var(--blush),var(--rose));height:8px;border-radius:20px;transition:width .8s;}
+.sm{font-size:10px;color:var(--rose);margin-top:6px;}
+.mapbox{border-radius:18px;overflow:hidden;border:2.5px solid var(--blush);margin-bottom:16px;box-shadow:0 4px 16px var(--sh);}
+.mapbox svg{width:100%;display:block;}
+.clist{display:flex;flex-direction:column;gap:10px;}
+.course{background:var(--white);border:2px solid var(--blush);border-radius:16px;
+  padding:12px 14px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:all .2s;box-shadow:0 2px 8px var(--sh);}
+.course:hover,.course.on{border-color:var(--rose);background:linear-gradient(135deg,rgba(255,240,246,.8),var(--white));}
+.co{font-size:22px;flex-shrink:0;}
+.cf{flex:1;}
+.cn2{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.cd2{font-size:10px;color:var(--ink-m);}
+.cb{font-size:10px;padding:3px 10px;border-radius:20px;white-space:nowrap;
+  background:linear-gradient(135deg,var(--petal),#fce4f0);color:var(--rose-d);
+  border:1.5px solid var(--blush);font-family:'Kaisei Tokumin',serif;}
+
+/* ===== BGM ===== */
+.player{background:linear-gradient(160deg,#fff5f9,var(--petal));
+  border:2.5px solid var(--blush);border-radius:22px;padding:20px 18px;
+  margin-bottom:16px;text-align:center;box-shadow:0 4px 18px var(--sh);position:relative;}
+.player::before{content:'♪';position:absolute;top:12px;left:14px;font-size:28px;color:rgba(232,113,138,.14);}
+.player::after{content:'♫';position:absolute;top:12px;right:14px;font-size:28px;color:rgba(232,113,138,.14);}
+.npl{font-size:10px;letter-spacing:3px;color:var(--lilac-d);margin-bottom:8px;}
+.npt{font-family:'Kaisei Tokumin',serif;font-size:18px;color:var(--rose-d);font-weight:700;margin-bottom:3px;}
+.nps{font-size:11px;color:var(--ink-m);margin-bottom:14px;}
+.wf{display:flex;align-items:flex-end;gap:3px;height:42px;justify-content:center;margin-bottom:12px;}
+.wb{width:5px;border-radius:3px;background:linear-gradient(180deg,var(--rose),var(--blush));opacity:.55;
+  animation:wv var(--wd,.8s) ease-in-out infinite alternate;animation-delay:var(--wdl,0s);}
+.wb.on{opacity:1;}
+@keyframes wv{from{height:var(--wn,5px);}to{height:var(--wx,28px);}}
+.pw{background:rgba(200,100,130,.12);border-radius:20px;height:5px;margin-bottom:5px;overflow:hidden;}
+.pf{background:linear-gradient(90deg,var(--blush),var(--rose));height:5px;border-radius:20px;transition:width .3s;}
+.tr2{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-m);margin-bottom:12px;}
+.cr2{display:flex;align-items:center;justify-content:center;gap:16px;}
+.cbtn{width:40px;height:40px;border-radius:50%;background:var(--white);
+  border:2px solid var(--blush);color:var(--rose);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 2px 6px var(--sh);}
+.cbtn:hover{background:var(--petal);}
+.cplay{width:54px;height:54px;font-size:20px;
+  background:linear-gradient(135deg,var(--rose),var(--rose-d));
+  border:none;color:var(--white);box-shadow:0 4px 12px rgba(200,80,110,.3);}
+.cplay:hover{transform:scale(1.06);}
+.mrow{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
+.mood{padding:6px 13px;border-radius:20px;border:1.5px solid var(--blush);
+  background:var(--white);font-size:11px;color:var(--ink-m);cursor:pointer;
+  transition:all .2s;font-family:'Kaisei Tokumin',serif;}
+.mood.on{background:linear-gradient(135deg,var(--petal),#fce4f0);border-color:var(--rose);color:var(--rose-d);}
+.pl{display:flex;flex-direction:column;gap:3px;margin-bottom:14px;}
+.trk{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;
+  cursor:pointer;transition:background .2s;border-bottom:1.5px solid rgba(232,197,208,.28);}
+.trk:hover{background:rgba(247,197,208,.2);}
+.trk.on{background:rgba(232,113,138,.08);}
+.tn{font-size:11px;color:rgba(200,100,130,.5);width:18px;text-align:center;}
+.ti{flex:1;}
+.tt{font-size:13px;color:var(--ink);}
+.ta{font-size:10px;color:var(--ink-m);margin-top:1px;}
+.trk.on .tt{color:var(--rose-d);font-weight:700;}
+.trk.on .tn{color:var(--rose);}
+.td{font-size:10px;color:var(--lilac-d);}
+.rg{background:var(--white);border:2px dashed var(--blush);border-radius:14px;padding:14px;margin-top:10px;}
+.rgt{font-family:'Kaisei Tokumin',serif;font-size:12px;color:var(--gold);margin-bottom:8px;}
+.rgi{font-size:11px;color:var(--ink-m);line-height:2;padding-left:16px;position:relative;}
+.rgi::before{content:'♩';position:absolute;left:0;color:var(--rose);}
+
+/* フッター */
+.footer{padding:14px;text-align:center;border-top:2.5px solid var(--blush);background:rgba(255,255,255,.75);}
+.footer p{font-size:10px;color:var(--rose);letter-spacing:2px;}
+</style>
+</head>
+<body>
+<div class="petals" id="pt"></div>
+
+<!-- スプラッシュ -->
+<div id="splash">
+  <div class="sp-deco">🌸</div>
+  <div class="sp-title">長崎恋タロット♡<br>ダイエット</div>
+  <div class="sp-sub">✿ Nagasaki Koi Tarot Diet ✿</div>
+  <div class="sp-dots"><div class="sd"></div><div class="sd"></div><div class="sd"></div></div>
+</div>
+
+<div class="app">
+  <header class="hdr">
+    <div class="hdr-tag">＊ Nagasaki Koi Tarot ＊</div>
+    <div class="hdr-title">長崎恋タロット<span class="hrt">♡</span><br>ダイエット</div>
+    <div class="hdr-sub">あなたの恋と美しさを、長崎が応援する</div>
+  </header>
+
+  <div class="sbar">
+    <div><div class="sbar-n" id="hSN">6,240</div><div class="sbar-l">今日の歩数</div></div>
+    <div class="sbar-bar"><div class="sbar-fill" id="hSB" style="width:78%"></div></div>
+    <div class="sbar-msg" id="hSM">目標まであと1,760歩♡</div>
+  </div>
+
+  <nav class="nav">
+    <button class="nb on" onclick="show('u',this)"><span class="ni">🃏</span>タロット</button>
+    <button class="nb" onclick="show('c',this)"><span class="ni">💕</span>キャラ</button>
+    <button class="nb" onclick="show('m',this)"><span class="ni">🗺️</span>マップ</button>
+    <button class="nb" onclick="show('b',this)"><span class="ni">🎵</span>BGM</button>
+  </nav>
+
+  <main>
+
+  <!-- タロット -->
+  <div class="sec on" id="sec-u">
+    <div class="stitle">今日の長崎恋タロット</div>
+    <div class="ctabs">
+      <button class="ctab on" onclick="selC('全員',this)">✿ 全員から</button>
+      <button class="ctab" onclick="selC('和樹',this)">🏛️ 和樹</button>
+      <button class="ctab" onclick="selC('海翔',this)">🌊 海翔</button>
+      <button class="ctab" onclick="selC('蓮',this)">🌙 蓮</button>
+      <button class="ctab" onclick="selC('悠',this)">🎻 悠</button>
+    </div>
+    <div class="cards-area">
+      <div class="cards-hint">✦ カードをタップして引いてみて ✦</div>
+      <div class="cards-row">
+        <div class="tc" id="tc0" onclick="flipC(0)"><div class="tcbg"></div><div class="tci">✿</div><div class="tcl">過去</div></div>
+        <div class="tc big" id="tc1" onclick="flipC(1)"><div class="tcbg"></div><div class="tci">✿</div><div class="tcl">現在</div></div>
+        <div class="tc" id="tc2" onclick="flipC(2)"><div class="tcbg"></div><div class="tci">✿</div><div class="tcl">未来</div></div>
+      </div>
+      <div class="rp" id="rp"></div>
+      <button class="dbtn" onclick="drawAll()">✿ 三枚引き ―― 今日の長崎恋占い ✿</button>
+    </div>
+  </div>
+
+  <!-- キャラ -->
+  <div class="sec" id="sec-c">
+    <div class="stitle">長崎のイケメンたち</div>
+    <div class="cgrid">
+
+      <div class="ccard" onclick="tog('sk')">
+        <div class="cav" style="background:linear-gradient(145deg,#e8f4f0,#c8e8df)">🏛️</div>
+        <div class="ci">
+          <div class="cn">白石 和樹</div><div class="cr">若手建築家 ／ 27歳</div>
+          <div class="cd">長崎の坂道と教会を愛するクールビューティ。グラバー邸の修復を夢見る眼鏡男子。</div>
+          <div class="cts"><span class="ct ctm">建築家</span><span class="ct ctr">眼鏡♡</span><span class="ct ctg">クール系</span></div>
+          <div class="sp" id="sk">
+            「この坂、あなたと歩くとちっとも<span class="nb">疲れんとよ</span>。」<br>
+            「<span class="nb">好いとる</span>、ずっと前から。」<br>
+            「<span class="nb">ばってん</span>、そんな顔されたら仕事手につかんくなるやろ…」
+            <div class="nt">💡 ばってん＝でも　好いとる＝好きだよ　疲れんとよ＝疲れないんだよ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ccard" onclick="tog('ska')">
+        <div class="cav" style="background:linear-gradient(145deg,#d6eef8,#b8ddf0)">🌊</div>
+        <div class="ci">
+          <div class="cn">速水 海翔</div><div class="cr">浜っ子スタッフ ／ 28歳</div>
+          <div class="cd">港育ちの爽やか体育会系。港の朝ランが日課で、さりげなく優しい言葉をくれる。</div>
+          <div class="cts"><span class="ct ctr">浜育ち</span><span class="ct ctm">ランナー</span><span class="ct ctg">爽やか♡</span></div>
+          <div class="sp" id="ska">
+            「<span class="nb">一緒に走らんね</span>。俺がペース合わせちゃるけん。」<br>
+            「<span class="nb">きゃーなえたね</span>。ちょっと休んでよかばい。」<br>
+            「<span class="nb">好いとるとよ</span>、ずっと言いたかったとよ。」
+            <div class="nt">💡 一緒に走らんね＝一緒に走らない？　きゃーなえた＝お疲れ様</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ccard" onclick="tog('sr')">
+        <div class="cav" style="background:linear-gradient(145deg,#ede4f8,#d9c4f0)">🌙</div>
+        <div class="ci">
+          <div class="cn">東 蓮</div><div class="cr">タロット師・古書店主 ／ 26歳</div>
+          <div class="cd">出島近くで古書店を営む謎めいた青年。カードを読む時だけ静かな瞳が輝く。</div>
+          <div class="cts"><span class="ct ctl">タロット</span><span class="ct ctr">神秘系</span><span class="ct ctl">出島♡</span></div>
+          <div class="sp" id="sr">
+            「<span class="nb">ちんちょかばい</span>、あなたは。俺のカードが初めてそう言いよる。」<br>
+            「カードは嘘をつかんとよ。<span class="nb">ずっと好いとったばい</span>。」<br>
+            「眼鏡橋の月が、あなたのことば<span class="nb">よう似合うとる</span>ね。」
+            <div class="nt">💡 ちんちょかばい＝珍しい・特別だよ　よう似合う＝よく似合う</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ccard" onclick="tog('sy')">
+        <div class="cav" style="background:linear-gradient(145deg,#fdf3d8,#f5e0a0)">🎻</div>
+        <div class="ci">
+          <div class="cn">五島 悠</div><div class="cr">若手音楽家 ／ 25歳</div>
+          <div class="cd">五島民謡とオペラを融合した楽曲で注目株。純粋で素直。亜矢ちゃんの歌声に憧れている。</div>
+          <div class="cts"><span class="ct ctg">音楽家</span><span class="ct ctr">五島♡</span><span class="ct ctl">純粋系</span></div>
+          <div class="sp" id="sy">
+            「あなたの声、五島の海と<span class="nb">おんなじくらいよかとよ</span>。」<br>
+            「一緒に曲、<span class="nb">作らんね</span>？あなたの声で歌ってほしか曲がいっぱいあっとよ。」<br>
+            「<span class="nb">好いとるよ</span>、ずっと前から、いっちょん変わらずに。」
+            <div class="nt">💡 おんなじくらいよか＝同じくらい素敵　いっちょん＝少しも（〜ない）</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- マップ -->
+  <div class="sec" id="sec-m">
+    <div class="sbanner">
+      <div class="sn" id="msn">6,240</div>
+      <div class="sl">今日の歩数 ✦ 目標 8,000歩</div>
+      <div class="spb"><div class="spf" id="msf" style="width:78%"></div></div>
+      <div class="sm" id="msm">あと 1,760歩 ♡ かずきに会えるかも！</div>
+    </div>
+    <div class="stitle">長崎ウォーキングマップ</div>
+    <div class="mapbox">
+      <svg viewBox="0 0 400 270" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="270" fill="#c0dced"/>
+        <path d="M65 0 L400 0 L400 270 L65 270 Q46 234 55 196 Q36 175 47 146 Q28 118 44 90 Q36 56 65 0Z" fill="#d4e8b8"/>
+        <path d="M65 196 Q94 208 134 204 Q163 199 183 214 Q203 224 222 210 L222 270 L65 270Z" fill="#b8d8ec"/>
+        <polygon points="90,75 114,26 138,75" fill="#a0c088" opacity="0.85"/>
+        <polygon points="96,75 114,38 132,75" fill="#90b078" opacity="0.7"/>
+        <path id="rk" d="M238 128 Q228 148 218 165 Q208 178 200 190" stroke="#3a9c8c" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="7 5" opacity="0"/>
+        <path id="rka" d="M142 210 Q122 220 100 227 Q84 233 72 238" stroke="#2a7aaa" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="7 5" opacity="0"/>
+        <path id="rr" d="M142 210 Q148 198 154 188 Q160 178 166 170" stroke="#8a4aba" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="7 5" opacity="0"/>
+        <path id="ry" d="M114 75 Q113 55 112 42 Q112 33 114 26" stroke="#c09030" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="7 5" opacity="0"/>
+        <circle cx="238" cy="124" r="11" fill="#fce8ee" stroke="#e8718a" stroke-width="2.2"/>
+        <text x="238" y="128.5" text-anchor="middle" font-size="10">⛪</text>
+        <circle cx="72" cy="238" r="11" fill="#d4eef8" stroke="#2a7aaa" stroke-width="2.2"/>
+        <text x="72" y="242.5" text-anchor="middle" font-size="10">🌅</text>
+        <circle cx="160" cy="166" r="11" fill="#eae4f8" stroke="#8a4aba" stroke-width="2.2"/>
+        <text x="160" y="170.5" text-anchor="middle" font-size="10">🕯️</text>
+        <circle cx="114" cy="24" r="11" fill="#fdf2d0" stroke="#c09030" stroke-width="2.2"/>
+        <text x="114" y="28.5" text-anchor="middle" font-size="10">🌄</text>
+        <ellipse cx="142" cy="210" rx="22" ry="10" fill="#e8d090" stroke="#c8a050" stroke-width="1.5"/>
+        <text x="142" y="213.5" text-anchor="middle" font-size="9" fill="#8a6010" font-family="sans-serif">出島</text>
+        <circle cx="196" cy="230" r="7" fill="#e8718a" opacity="0.9"/>
+        <circle cx="196" cy="230" r="13" fill="none" stroke="#e8718a" stroke-width="1.5" opacity="0.4"/>
+        <text x="250" y="118" font-size="9" fill="#6b4260" font-family="sans-serif">大浦天主堂</text>
+        <text x="114" y="16" text-anchor="middle" font-size="8" fill="#a07020" font-family="sans-serif">稲佐山</text>
+        <text x="160" y="158" text-anchor="middle" font-size="8" fill="#6a2a9a" font-family="sans-serif">眼鏡橋</text>
+        <text x="72" y="255" text-anchor="middle" font-size="8" fill="#1a5a8a" font-family="sans-serif">女神大橋</text>
+        <text x="196" y="248" text-anchor="middle" font-size="8" fill="#c94d6b" font-family="sans-serif">現在地</text>
+        <rect x="6" y="6" width="108" height="52" rx="7" fill="rgba(255,255,255,0.88)"/>
+        <line x1="12" y1="19" x2="28" y2="19" stroke="#3a9c8c" stroke-width="2.5" stroke-dasharray="5 3"/>
+        <text x="32" y="23" font-size="8" fill="#3a2033" font-family="sans-serif">グラバー坂</text>
+        <line x1="12" y1="32" x2="28" y2="32" stroke="#2a7aaa" stroke-width="2.5" stroke-dasharray="5 3"/>
+        <text x="32" y="36" font-size="8" fill="#3a2033" font-family="sans-serif">港朝ランコース</text>
+        <line x1="12" y1="46" x2="28" y2="46" stroke="#8a4aba" stroke-width="2.5" stroke-dasharray="5 3"/>
+        <text x="32" y="50" font-size="8" fill="#3a2033" font-family="sans-serif">眼鏡橋夜散歩</text>
+      </svg>
+    </div>
+    <div class="stitle">コースを選ぶ</div>
+    <div class="clist">
+      <div class="course" onclick="selR('k',this)"><div class="co">⛪</div><div class="cf"><div class="cn2">グラバー坂コース</div><div class="cd2">大浦天主堂 → グラバー園 → 南山手　約3.2km</div></div><div class="cb">和樹と♡</div></div>
+      <div class="course" onclick="selR('ka',this)"><div class="co">🌅</div><div class="cf"><div class="cn2">港 朝ランコース</div><div class="cd2">出島 → 水辺の森 → 女神大橋　約5.5km</div></div><div class="cb">海翔と♡</div></div>
+      <div class="course" onclick="selR('r',this)"><div class="co">🕯️</div><div class="cf"><div class="cn2">出島 夜散歩コース</div><div class="cd2">出島 → 眼鏡橋 → 思案橋　約2.8km</div></div><div class="cb">蓮と♡</div></div>
+      <div class="course" onclick="selR('y',this)"><div class="co">🌄</div><div class="cf"><div class="cn2">稲佐山 ハイクコース</div><div class="cd2">淵神社 → 稲佐山山頂　約4.1km・高低差220m</div></div><div class="cb">悠と♡</div></div>
+    </div>
+  </div>
+
+  <!-- BGM -->
+  <div class="sec" id="sec-b">
+    <div class="player">
+      <div class="npl">♩ NOW PLAYING</div>
+      <div class="npt" id="npt">グラバー坂のワルツ</div>
+      <div class="nps" id="nps">亜矢 ✦ ウォーキング向けBGM</div>
+      <div class="wf" id="wf"></div>
+      <div class="pw"><div class="pf" id="pf" style="width:38%"></div></div>
+      <div class="tr2"><span id="ct">1:32</span><span id="tt">4:06</span></div>
+      <div class="cr2">
+        <button class="cbtn" onclick="prevT()">◁◁</button>
+        <button class="cbtn cplay" id="pb" onclick="togPlay()">⏸</button>
+        <button class="cbtn" onclick="nextT()">▷▷</button>
+      </div>
+    </div>
+    <div class="stitle">ムードで選ぶ</div>
+    <div class="mrow">
+      <button class="mood on" onclick="selM('全部',this)">✿ 全部</button>
+      <button class="mood" onclick="selM('ウォーキング',this)">🚶 ウォーキング</button>
+      <button class="mood" onclick="selM('ランニング',this)">🏃 ランニング</button>
+      <button class="mood" onclick="selM('クールダウン',this)">🌙 クールダウン</button>
+      <button class="mood" onclick="selM('ストレッチ',this)">🌸 ストレッチ</button>
+    </div>
+    <div class="stitle">亜矢ちゃんBGMコレクション</div>
+    <div class="pl" id="pl"></div>
+    <div class="rg">
+      <div class="rgt">🎤 亜矢ちゃん 収録ガイド</div>
+      <div class="rgi">ウォーキング曲：テンポ 100〜110 BPM</div>
+      <div class="rgi">ランニング曲：テンポ 130〜142 BPM</div>
+      <div class="rgi">声域：リューのアリアの練習がそのまま活きる♡</div>
+      <div class="rgi">録音：スマホでOK！静かな部屋で</div>
+      <div class="rgi">収録後にアプリにアップロードで完成！</div>
+    </div>
+  </div>
+
+  </main>
+  <footer class="footer"><p>✿ NAGASAKI KOI TAROT DIET ✿ v1.0 Complete</p></footer>
+</div>
+
+<script>
+// 花びら
+const pt=document.getElementById('pt');
+['🌸','🌺','✿','❀','💮','🌷'].forEach(e=>{
+  for(let i=0;i<4;i++){
+    const d=document.createElement('div');d.className='petal';d.textContent=e;
+    const s=Math.random()*8+9;
+    d.style.cssText=`left:${Math.random()*100}%;--fs:${s}px;--d:${(Math.random()*8+7).toFixed(1)}s;--dl:${(Math.random()*14).toFixed(1)}s;--dx:${((Math.random()-.5)*130).toFixed(0)}px`;
+    pt.appendChild(d);
+  }
+});
+setTimeout(()=>document.getElementById('splash').classList.add('hide'),2300);
+
+// タブ
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('sec-'+id).classList.add('on');btn.classList.add('on');
+}
+
+// 占い
+let curC='全員',flp=[false,false,false];
+const CD={
+  '全員':[
+    {i:'⚓',l:'出島の記憶',n:'過去のカード「出島の記憶」',t:'過去に手放したものが今のあなたを<span class="hl">ぐっと強くしている</span>。出島のように閉ざしていた扉がそっと開こうとしているよ。体を動かすことが自分を解放する鍵！'},
+    {i:'🌙',l:'星月夜',n:'現在のカード「星月夜」',t:'今のあなたは変化の入り口に立っている。稲佐山の夜景のように、<span class="hl">あなたの美しさは高いところから見えてくる</span>。焦らず一歩ずつ坂を登って。'},
+    {i:'🌸',l:'春の恋',n:'未来のカード「春の恋」',t:'<span class="hl">大浦天主堂に桜が咲く頃、素敵な出会いが待っている</span>かも。運動で磨かれたあなた自身の輝きが、その恋を引き寄せる力になるよ♡'}
+  ],
+  '和樹':[
+    {i:'🏛️',l:'グラバー邸',n:'過去のカード「グラバー邸」',t:'丁寧に積み上げてきたものが今の土台。和樹は言う「<span class="hl">この坂を一緒に歩くと時間が止まる気がするとよ</span>」'},
+    {i:'📐',l:'設計図',n:'現在のカード「設計図」',t:'今はまさに自分という作品を設計する時期。<span class="hl">和樹のように細部にこだわれば</span>、必ず美しい未来が完成する。'},
+    {i:'⛪',l:'教会の鐘',n:'未来のカード「教会の鐘」',t:'鐘の音はあなたの新しいステージの始まり。「<span class="hl">ばってん、もう一段上に行けるばい</span>」'}
+  ],
+  '海翔':[
+    {i:'🌊',l:'港の夜明け',n:'過去のカード「港の夜明け」',t:'走り続けてきた日々が今のスタミナの源。「<span class="hl">きゃーなえたね、でも続けてきたあなたがかっこよかとよ</span>」'},
+    {i:'🏃',l:'朝のラン',n:'現在のカード「朝のラン」',t:'「<span class="hl">一緒に走らんね。俺がペース合わせちゃるけん</span>」'},
+    {i:'🌅',l:'女神大橋',n:'未来のカード「女神大橋」',t:'大きな橋を渡り切った先に、<span class="hl">もっと広い景色が広がっている</span>。海翔が手を差し伸べる。'}
+  ],
+  '蓮':[
+    {i:'📚',l:'古書の記憶',n:'過去のカード「古書の記憶」',t:'「<span class="hl">ちんちょかばい、あなたは</span>。俺のカードが初めてそう言いよる」'},
+    {i:'🌙',l:'月と水面',n:'現在のカード「月と水面」',t:'眼鏡橋に映る月のように、<span class="hl">あなたの二つの顔が今重なり始めている</span>。「カードは嘘をつかんとよ」'},
+    {i:'⭐',l:'夜の星座',n:'未来のカード「夜の星座」',t:'「<span class="hl">ずっと好いとったばい</span>」と蓮は告げる。'}
+  ],
+  '悠':[
+    {i:'🎻',l:'五島の調べ',n:'過去のカード「五島の調べ」',t:'「<span class="hl">あなたの声、五島の海とおんなじくらいよかとよ</span>」'},
+    {i:'🎵',l:'共鳴',n:'現在のカード「共鳴」',t:'「<span class="hl">一緒に曲、作らんね？あなたの声で歌ってほしか曲がいっぱいあっとよ</span>」'},
+    {i:'🌄',l:'夕焼け',n:'未来のカード「稲佐山の夕焼け」',t:'「<span class="hl">好いとるよ</span>」と悠は微笑む。'}
+  ]
+};
+function selC(n,btn){curC=n;document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');resetC();}
+function resetC(){
+  flp=[false,false,false];
+  ['過去','現在','未来'].forEach((lb,i)=>{
+    const el=document.getElementById('tc'+i);el.classList.remove('fl');
+    el.innerHTML=`<div class="tcbg"></div><div class="tci">✿</div><div class="tcl">${lb}</div>`;
+  });
+  document.getElementById('rp').style.display='none';
+}
+function flipC(i){
+  if(flp[i])return;flp[i]=true;
+  const d=(CD[curC]||CD['全員'])[i];
+  const el=document.getElementById('tc'+i);el.classList.add('fl');
+  el.innerHTML=`<div class="tci">${d.i}</div><div class="tcl">${d.l}</div>`;
+  if(flp.every(v=>v))showR();
+}
+function drawAll(){
+  resetC();const data=CD[curC]||CD['全員'];
+  data.forEach((d,i)=>setTimeout(()=>{flp[i]=true;const el=document.getElementById('tc'+i);
+    el.classList.add('fl');el.innerHTML=`<div class="tci">${d.i}</div><div class="tcl">${d.l}</div>`;},i*380));
+  setTimeout(showR,1500);
+}
+function showR(){
+  const data=CD[curC]||CD['全員'];const el=document.getElementById('rp');
+  el.style.display='block';
+  el.innerHTML=`<div class="rpt">✿ 今日の長崎恋占い ✿</div>`+
+    data.map(d=>`<div class="ren"><div class="rcn">${d.n}</div><div class="rtx">${d.t}</div></div>`).join('');
+}
+
+// キャラセリフ
+function tog(id){
+  const el=document.getElementById(id);const open=el.style.display==='block';
+  document.querySelectorAll('.sp').forEach(p=>p.style.display='none');
+  if(!open)el.style.display='block';
+}
+
+// マップ
+function selR(id,el){
+  document.querySelectorAll('.course').forEach(c=>c.classList.remove('on'));el.classList.add('on');
+  ['k','ka','r','y'].forEach(k=>document.getElementById('r'+k).setAttribute('opacity','0'));
+  document.getElementById('r'+id).setAttribute('opacity','1');
+  const d={k:{n:'7,240',p:'91',m:'グラバー坂！和樹と一緒♡あと少し！'},
+    ka:{n:'8,520',p:'100',m:'完走！海翔もニッコリ♡'},
+    r:{n:'5,840',p:'73',m:'眼鏡橋が見えてきた♡蓮が待ってる'},
+    y:{n:'6,820',p:'85',m:'稲佐山もうすぐ山頂！悠がエールを♡'}}[id];
+  ['msn','hSN'].forEach(x=>document.getElementById(x).textContent=d.n);
+  ['msf','hSB'].forEach(x=>document.getElementById(x).style.width=d.p+'%');
+  ['msm','hSM'].forEach(x=>document.getElementById(x).textContent=d.m);
+}
+
+// BGM
+const TK=[
+  {t:'グラバー坂のワルツ',s:'亜矢 ✦ ウォーキング向け',d:'4:06',m:'ウォーキング',b:105},
+  {t:'出島の夜明け ―― アリア',s:'亜矢 ✦ クールダウン向け',d:'5:48',m:'クールダウン',b:72},
+  {t:'稲佐山 ―― 登りのテーマ',s:'亜矢 ✦ ランニング向け',d:'3:21',m:'ランニング',b:138},
+  {t:'眼鏡橋の月夜',s:'亜矢 ✦ ストレッチ向け',d:'6:12',m:'ストレッチ',b:65},
+  {t:'五島海峡のバラード',s:'亜矢 × 悠 ✦ デュエット',d:'7:03',m:'クールダウン',b:75},
+  {t:'港の朝ラン',s:'亜矢 ✦ ランニング向け',d:'3:55',m:'ランニング',b:142},
+  {t:'かずきのテーマ',s:'亜矢 ✦ ウォーキング向け',d:'4:28',m:'ウォーキング',b:108},
+  {t:'蓮との夜散歩',s:'亜矢 ✦ ストレッチ向け',d:'5:15',m:'ストレッチ',b:63},
+];
+let curi=0,ply=true,cm='全部',pg=38,pi=null;
+const wf=document.getElementById('wf');
+for(let i=0;i<22;i++){
+  const b=document.createElement('div');b.className='wb on';
+  const mn=Math.random()*5+3,mx=Math.random()*24+10;
+  b.style.cssText=`--wn:${mn}px;--wx:${mx}px;--wd:${(Math.random()*.5+.5).toFixed(2)}s;--wdl:${(Math.random()*.4).toFixed(2)}s;height:${mn}px`;
+  wf.appendChild(b);
+}
+function rendPl(){
+  const f=TK.filter(t=>cm==='全部'||t.m===cm);
+  document.getElementById('pl').innerHTML=f.map((t,i)=>{
+    const oi=TK.indexOf(t);
+    return`<div class="trk${oi===curi?' on':''}" onclick="selT(${oi})">
+      <div class="tn">${oi===curi?'♩':(i+1)}</div>
+      <div class="ti"><div class="tt">${t.t}</div><div class="ta">${t.s} ／ ${t.b}BPM</div></div>
+      <div class="td">${t.d}</div></div>`;
+  }).join('');
+}
+function selT(i){
+  curi=i;const t=TK[i];
+  document.getElementById('npt').textContent=t.t;
+  document.getElementById('nps').textContent=t.s;
+  document.getElementById('tt').textContent=t.d;
+  pg=0;document.getElementById('pf').style.width='0%';
+  document.getElementById('ct').textContent='0:00';
+  ply=true;document.getElementById('pb').textContent='⏸';
+  stPg();rendPl();
+}
+function togPlay(){
+  ply=!ply;document.getElementById('pb').textContent=ply?'⏸':'▶';
+  document.querySelectorAll('.wb').forEach(b=>b.classList.toggle('on',ply));
+  ply?stPg():(clearInterval(pi),pi=null);
+}
+function stPg(){
+  clearInterval(pi);
+  pi=setInterval(()=>{
+    pg=Math.min(100,pg+.08);document.getElementById('pf').style.width=pg+'%';
+    const dur=TK[curi].d.split(':');
+    const tot=parseInt(dur[0])*60+parseInt(dur[1]);
+    const c=Math.floor(tot*pg/100);
+    document.getElementById('ct').textContent=`${Math.floor(c/60)}:${String(c%60).padStart(2,'0')}`;
+    if(pg>=100)nextT();
+  },350);
+}
+function nextT(){curi=(curi+1)%TK.length;selT(curi);}
+function prevT(){curi=(curi-1+TK.length)%TK.length;selT(curi);}
+function selM(m,btn){cm=m;document.querySelectorAll('.mood').forEach(b=>b.classList.remove('on'));btn.classList.add('on');rendPl();}
+rendPl();stPg();
+</script>
+</body>
+</html>
