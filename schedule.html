@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演奏家スケジュール 🎀</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink:#e8829a; --pink-l:#fde8ee; --pink-p:#fff5f8;
+  --gold:#c9a05a; --rose:#b05070; --text:#3a2535; --muted:#9a7a88;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Zen Kaku Gothic New',sans-serif;font-weight:300;color:var(--text);background:var(--pink-p);min-height:100vh;}
+
+.header{background:linear-gradient(135deg,#fce4ec,#ffd6e7,#ffe8d6);padding:1.4rem 1rem 1.1rem;text-align:center;border-bottom:2px solid #f9c0d0;position:relative;}
+.header::before{content:'🎀';position:absolute;top:14px;left:16px;font-size:22px;opacity:.7;}
+.header::after{content:'🎀';position:absolute;top:14px;right:16px;font-size:22px;opacity:.7;}
+.header h1{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--rose);letter-spacing:.08em;}
+.header p{font-size:11px;color:var(--pink);letter-spacing:.2em;margin-top:3px;}
+
+.tabs{display:flex;background:white;border-bottom:2px solid var(--pink-l);}
+.tab{flex:1;padding:10px 4px;border:none;background:transparent;font-family:'Zen Kaku Gothic New',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;}
+.tab.on{color:var(--rose);border-bottom-color:var(--pink);font-weight:700;}
+.tab span{display:block;font-size:16px;margin-bottom:2px;}
+
+.wrap{max-width:680px;margin:0 auto;}
+.page{display:none;padding:1rem;}
+.page.on{display:block;}
+
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
+.cal-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--rose);}
+.cal-nav{background:var(--pink-l);border:1.5px solid #f9c0d0;border-radius:20px;padding:5px 14px;font-size:12px;color:var(--rose);cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;}
+.cal-nav:hover{background:#fcd4e0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:1rem;}
+.cal-dow{text-align:center;font-size:10px;color:var(--muted);padding:4px 0;font-weight:700;}
+.cal-dow.sun{color:#e8829a;} .cal-dow.sat{color:#7ab8d4;}
+.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:50%;font-size:12px;cursor:pointer;position:relative;transition:background .15s;}
+.cal-day:hover{background:var(--pink-l);}
+.cal-day.today{background:linear-gradient(135deg,var(--pink),var(--gold));color:white;font-weight:700;}
+.cal-day.has-event::after{content:'♥';position:absolute;bottom:1px;font-size:7px;color:var(--pink);}
+.cal-day.today.has-event::after{color:white;}
+.cal-day.other{color:#ccc;}
+.cal-day.sun-col{color:#e8829a;} .cal-day.sat-col{color:#7ab8d4;}
+.cal-day.today.sun-col,.cal-day.today.sat-col{color:white;}
+
+.ev-section-title{font-size:11px;letter-spacing:.2em;color:var(--pink);font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;gap:6px;}
+.ev-section-title::before{content:'♥';font-size:10px;}
+.ev-item{background:white;border-radius:12px;padding:.8rem 1rem;margin-bottom:.6rem;border-left:4px solid var(--pink);display:flex;align-items:flex-start;gap:.8rem;position:relative;}
+.ev-item.lesson{border-left-color:#c9a05a;}
+.ev-item.practice{border-left-color:#7ab8d4;}
+.ev-item.other{border-left-color:#c084fc;}
+.ev-dot{width:8px;height:8px;border-radius:50%;background:var(--pink);flex-shrink:0;margin-top:4px;}
+.ev-item.lesson .ev-dot{background:#c9a05a;}
+.ev-item.practice .ev-dot{background:#7ab8d4;}
+.ev-item.other .ev-dot{background:#c084fc;}
+.ev-date-label{font-size:11px;color:var(--muted);}
+.ev-title{font-size:14px;font-weight:700;color:var(--text);}
+.ev-time{font-size:11px;color:var(--muted);margin-top:2px;}
+.ev-del{position:absolute;top:8px;right:8px;background:none;border:none;color:#ddd;cursor:pointer;font-size:14px;}
+.ev-del:hover{color:var(--pink);}
+.empty-msg{text-align:center;padding:2rem;color:var(--muted);font-size:13px;}
+.empty-msg .icon{font-size:2rem;margin-bottom:.4rem;}
+
+.form-card{background:white;border-radius:16px;padding:1.2rem;border:1.5px solid #f9c0d0;margin-bottom:1rem;}
+.form-row{margin-bottom:.8rem;}
+.form-label{font-size:11px;letter-spacing:.15em;color:var(--pink);font-weight:700;display:block;margin-bottom:4px;}
+input[type=text],input[type=date],input[type=time],select,textarea{width:100%;padding:8px 12px;border:1.5px solid #f9c0d0;border-radius:10px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:13px;color:var(--text);background:var(--pink-p);outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--pink);}
+textarea{min-height:60px;resize:vertical;}
+.type-row{display:flex;gap:6px;flex-wrap:wrap;}
+.type-btn{padding:5px 13px;border-radius:20px;border:1.5px solid #f9c0d0;background:var(--pink-l);color:var(--rose);font-size:12px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;transition:all .15s;}
+.type-btn.on,.type-btn:hover{background:var(--pink);color:white;border-color:var(--pink);}
+.submit-btn{width:100%;padding:12px;background:linear-gradient(90deg,var(--pink),var(--gold));color:white;border:none;border-radius:30px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;cursor:pointer;box-shadow:0 4px 15px rgba(232,130,154,.3);transition:opacity .2s;}
+.submit-btn:hover{opacity:.88;}
+
+.set-card{background:white;border-radius:14px;padding:1rem 1.2rem;margin-bottom:.7rem;border:1.5px solid #f9c0d0;}
+.set-title{font-size:14px;font-weight:700;color:var(--rose);margin-bottom:.5rem;display:flex;align-items:center;gap:6px;}
+.set-title::before{content:'🎵';font-size:12px;}
+.song-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--pink-l);}
+.song-row:last-child{border-bottom:none;}
+.song-num{font-size:11px;color:var(--muted);min-width:18px;}
+.song-name{font-size:13px;color:var(--text);flex:1;font-family:'Cormorant Garamond',serif;font-style:italic;}
+.song-del{background:none;border:none;color:#ddd;cursor:pointer;font-size:12px;}
+.song-del:hover{color:var(--pink);}
+.add-song-row{display:flex;gap:6px;margin-top:.6rem;}
+.add-song-row input{flex:1;}
+.add-song-btn{padding:6px 14px;background:var(--pink-l);border:1.5px solid #f9c0d0;border-radius:20px;color:var(--rose);font-size:12px;cursor:pointer;white-space:nowrap;font-family:'Zen Kaku Gothic New',sans-serif;}
+.add-song-btn:hover{background:#fcd4e0;}
+.new-set-btn{width:100%;padding:10px;background:white;border:1.5px dashed #f9c0d0;border-radius:14px;color:var(--pink);font-size:13px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;margin-top:.5rem;}
+.new-set-btn:hover{background:var(--pink-l);}
+
+.divider{text-align:center;font-size:12px;color:#f0a0b8;letter-spacing:.4em;margin:.6rem 0;}
+.toast{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:#fde8ee;padding:6px 18px;border-radius:20px;font-size:12px;transition:transform .3s;z-index:99;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+footer{text-align:center;padding:2rem 1rem 1rem;font-size:11px;color:#c9a0b0;letter-spacing:.15em;}
+footer a{color:var(--pink);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <h1>♪ 演奏家スケジュール</h1>
+  <p>✦ Performer's Planner ✦</p>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="switchTab('cal',this)"><span>📅</span>カレンダー</button>
+  <button class="tab" onclick="switchTab('add',this)"><span>🎀</span>登録</button>
+  <button class="tab" onclick="switchTab('set',this)"><span>🎵</span>セットリスト</button>
+</div>
+
+<div class="page on" id="pg-cal">
+  <div class="cal-header">
+    <button class="cal-nav" onclick="changeMonth(-1)">◀</button>
+    <div class="cal-title" id="calTitle"></div>
+    <button class="cal-nav" onclick="changeMonth(1)">▶</button>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div class="divider">❀ ❀ ❀</div>
+  <div class="ev-section-title">予定一覧</div>
+  <div id="evList"></div>
+</div>
+
+<div class="page" id="pg-add">
+  <div class="form-card">
+    <div class="form-row">
+      <label class="form-label">♥ 種類</label>
+      <div class="type-row" id="typeRow">
+        <button class="type-btn on" onclick="selectType(this,'concert')">🎤 演奏会</button>
+        <button class="type-btn" onclick="selectType(this,'lesson')">🎼 レッスン</button>
+        <button class="type-btn" onclick="selectType(this,'practice')">🎵 自主練</button>
+        <button class="type-btn" onclick="selectType(this,'other')">🌸 その他</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">♥ タイトル</label>
+      <input type="text" id="evTitle" placeholder="例：リューのアリア レッスン">
+    </div>
+    <div class="form-row">
+      <label class="form-label">♥ 日付</label>
+      <input type="date" id="evDate">
+    </div>
+    <div class="form-row" style="display:flex;gap:8px;">
+      <div style="flex:1;"><label class="form-label">♥ 開始</label><input type="time" id="evStart"></div>
+      <div style="flex:1;"><label class="form-label">♥ 終了</label><input type="time" id="evEnd"></div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">♥ 場所・メモ</label>
+      <textarea id="evMemo" placeholder="会場名や覚えておきたいこと..."></textarea>
+    </div>
+    <button class="submit-btn" onclick="addEvent()">🎀 登録する</button>
+  </div>
+</div>
+
+<div class="page" id="pg-set">
+  <div id="setList"></div>
+  <button class="new-set-btn" onclick="newSet()">🎀 新しいセットリストを作る</button>
+</div>
+
+<footer>
+  🎀 Performer's Planner by <a href="https://anjerika129.github.io" target="_blank">亜矢プロジェクト</a>
+</footer>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let events=[
+  {id:1,type:'lesson',title:'リューのアリア レッスン',date:'2026-04-16',start:'14:00',end:'15:00',memo:'高音部を意識'},
+  {id:2,type:'concert',title:'訪問演奏 長崎施設',date:'2026-04-20',start:'13:00',end:'14:30',memo:'アヴェマリア、カロミオベン'},
+];
+let sets=[
+  {id:1,title:'訪問演奏 定番セット',songs:['アヴェマリア（シューベルト）','カロ・ミオ・ベン','浜辺の歌','この道']},
+];
+let curType='concert';
+let curMonth=new Date(); curMonth.setDate(1);
+let nextId=10;
+
+function switchTab(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+name).classList.add('on');
+  btn.classList.add('on');
+  if(name==='cal')renderCal();
+  if(name==='set')renderSets();
+}
+
+function changeMonth(d){curMonth.setMonth(curMonth.getMonth()+d);renderCal();}
+
+function renderCal(){
+  const y=curMonth.getFullYear(),m=curMonth.getMonth();
+  document.getElementById('calTitle').textContent=`${y}年${m+1}月`;
+  const grid=document.getElementById('calGrid');
+  const dows=['日','月','火','水','木','金','土'];
+  const dc=['sun','','','','','','sat'];
+  grid.innerHTML=dows.map((d,i)=>`<div class="cal-dow ${dc[i]}">${d}</div>`).join('');
+  const first=new Date(y,m,1).getDay();
+  const last=new Date(y,m+1,0).getDate();
+  const today=new Date();
+  const evDates=events.map(e=>e.date);
+  for(let i=0;i<first;i++) grid.innerHTML+=`<div class="cal-day other"></div>`;
+  for(let d=1;d<=last;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isT=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d;
+    const hasE=evDates.includes(ds);
+    const dow=(first+d-1)%7;
+    const col=dow===0?'sun-col':dow===6?'sat-col':'';
+    grid.innerHTML+=`<div class="cal-day ${isT?'today':''} ${hasE?'has-event':''} ${col}" onclick="filterDate('${ds}')">${d}</div>`;
+  }
+  renderEvents();
+}
+
+function renderEvents(fd=null){
+  const list=document.getElementById('evList');
+  let evs=fd?events.filter(e=>e.date===fd):[...events].sort((a,b)=>a.date.localeCompare(b.date));
+  if(evs.length===0){list.innerHTML=`<div class="empty-msg"><div class="icon">🌸</div>予定がないよ♪</div>`;return;}
+  list.innerHTML=evs.map(e=>`
+    <div class="ev-item ${e.type}">
+      <div class="ev-dot"></div>
+      <div style="flex:1;">
+        <div class="ev-date-label">${fmtDate(e.date)}</div>
+        <div class="ev-title">${e.title}</div>
+        <div class="ev-time">${e.start||''}${e.end?'〜'+e.end:''}${e.memo?' ／ '+e.memo:''}</div>
+      </div>
+      <button class="ev-del" onclick="delEvent(${e.id})">✕</button>
+    </div>`).join('');
+}
+
+function filterDate(d){renderEvents(d);}
+function fmtDate(s){const d=new Date(s+'T00:00:00');return`${d.getMonth()+1}/${d.getDate()}(${['日','月','火','水','木','金','土'][d.getDay()]})`;}
+
+function selectType(btn,type){
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); curType=type;
+}
+
+function addEvent(){
+  const title=document.getElementById('evTitle').value.trim();
+  const date=document.getElementById('evDate').value;
+  if(!title||!date){showToast('タイトルと日付を入れてね💕');return;}
+  events.push({id:nextId++,type:curType,title,date,
+    start:document.getElementById('evStart').value,
+    end:document.getElementById('evEnd').value,
+    memo:document.getElementById('evMemo').value});
+  document.getElementById('evTitle').value='';
+  document.getElementById('evDate').value='';
+  document.getElementById('evStart').value='';
+  document.getElementById('evEnd').value='';
+  document.getElementById('evMemo').value='';
+  showToast('🎀 登録したよ！');
+  switchTab('cal',document.querySelectorAll('.tab')[0]);
+}
+
+function delEvent(id){events=events.filter(e=>e.id!==id);renderEvents();renderCal();showToast('削除したよ🌸');}
+
+function renderSets(){
+  const list=document.getElementById('setList');
+  if(sets.length===0){list.innerHTML=`<div class="empty-msg"><div class="icon">🎵</div>セットリストを作ってね♪</div>`;return;}
+  list.innerHTML=sets.map(s=>`
+    <div class="set-card">
+      <div class="set-title">${s.title}</div>
+      <div id="songs-${s.id}">
+        ${s.songs.map((song,i)=>`
+          <div class="song-row">
+            <span class="song-num">${i+1}</span>
+            <span class="song-name">${song}</span>
+            <button class="song-del" onclick="delSong(${s.id},${i})">✕</button>
+          </div>`).join('')}
+      </div>
+      <div class="add-song-row">
+        <input type="text" id="si-${s.id}" placeholder="曲名を追加...">
+        <button class="add-song-btn" onclick="addSong(${s.id})">♥ 追加</button>
+      </div>
+    </div>`).join('');
+}
+
+function addSong(sid){
+  const inp=document.getElementById('si-'+sid);
+  const v=inp.value.trim();
+  if(!v)return;
+  const s=sets.find(s=>s.id===sid);
+  if(s){s.songs.push(v);inp.value='';renderSets();showToast('🎵 追加したよ！');}
+}
+
+function delSong(sid,idx){const s=sets.find(s=>s.id===sid);if(s){s.songs.splice(idx,1);renderSets();}}
+
+function newSet(){
+  const name=prompt('セットリスト名を入れてね🎀');
+  if(!name)return;
+  sets.push({id:nextId++,title:name,songs:[]});
+  renderSets();
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+renderCal();
+</script>
+</body>
+</html>
