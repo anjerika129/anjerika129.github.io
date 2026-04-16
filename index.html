@@ -93,6 +93,7 @@
   .wc.wct{border-color:#FFD0E8;}
   .wc.wck{border-color:#C8F0E0;}
   .wc.wcn{border-color:#D8C8FF;}
+  .wc.wcs{border-color:#FFD0E8;background:linear-gradient(135deg,#fff5f8,#fff);}
   .wc-em{font-size:3rem;}
   .wc h3{font-size:1.05rem;font-weight:900;color:var(--dark);line-height:1.35;}
   .wc p{font-size:.85rem;color:#7B6FA0;line-height:1.65;flex:1;}
@@ -105,6 +106,9 @@
   .ni{background:#F8F4FF;border-radius:10px;padding:.7rem .9rem;border-left:4px solid var(--purple);}
   .nt{font-size:.85rem;font-weight:900;color:var(--dark);margin-bottom:.2rem;}
   .ns{font-size:.75rem;color:#9B8FC0;}
+
+  /* NEW バッジ */
+  .new-badge{display:inline-block;background:linear-gradient(135deg,var(--pink),var(--coral));color:white;font-size:.65rem;font-weight:900;padding:2px 10px;border-radius:20px;letter-spacing:.08em;margin-bottom:.3rem;}
 
   .co{background:linear-gradient(135deg,var(--pink),var(--purple));border-radius:30px;padding:3.5rem 2rem;margin:0 1rem;max-width:900px;}
   .co-wrap{padding:5rem 1rem;display:flex;justify-content:center;}
@@ -176,6 +180,20 @@
     <div class="sh">← 横にスクロールして見てね ✨</div>
     <div class="gt"><div class="gtr">
 
+      <!-- ★ NEW: Score Translator -->
+      <div class="wc wcs">
+        <div class="new-badge">🎀 NEW</div>
+        <div class="wc-em">🎼</div>
+        <h3><a href="score-translator.html">Score Translator</a></h3>
+        <p>イタリア語の声楽歌詞をペーストするだけ！日本語訳・単語の意味・ト書き解説をまとめて教えてもらえます。声楽仲間みんなで使ってね🌸</p>
+        <div class="br">
+          <span class="bd bpk">イタリア語</span>
+          <span class="bd bpu">声楽</span>
+          <span class="bd bsk">AI翻訳</span>
+          <span class="bd bco">オペラ</span>
+        </div>
+      </div>
+
       <div class="wc wct">
         <div class="wc-em">💕</div>
         <h3><a href="tarot.html">長崎恋タロット♡ダイエット</a></h3>
@@ -214,6 +232,9 @@
           <span class="bd bsk">タロット</span>
         </div>
       </div>
+
+    </div></div>
+
 <!-- NOTE WIDGET -->
 <div style="max-width:720px;margin:2rem auto;padding:0 1rem;">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
@@ -260,7 +281,7 @@
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 })();
 </script>
-    </div></div>
+
   </div>
 </div>
 
@@ -291,7 +312,6 @@
 </div>
 
 <footer>© 2026 <span>Aya</span> — Vocalist & Creator 🎵</footer>
-
 
 </body>
 </html>
