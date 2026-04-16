@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演奏会告知文ジェネレーター 🌟</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--yellow:#FFD93D;--yellow-l:#FFF8DC;--yellow-p:#FFFEF0;--gold:#c9a05a;--orange:#FF8C69;--text:#3a2d10;--muted:#9a8a5a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Zen Kaku Gothic New',sans-serif;font-weight:300;color:var(--text);background:var(--yellow-p);min-height:100vh;}
+.wrap{max-width:680px;margin:0 auto;}
+.header{background:linear-gradient(135deg,#FFF8DC,#FFD93D,#FFE8a0);padding:1.4rem 1rem 1.1rem;text-align:center;border-bottom:2px solid #FFD93D;position:relative;}
+.header::before{content:'🌟';position:absolute;top:14px;left:16px;font-size:22px;opacity:.8;}
+.header::after{content:'🌟';position:absolute;top:14px;right:16px;font-size:22px;opacity:.8;}
+.header h1{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:#8B6914;letter-spacing:.08em;}
+.header p{font-size:11px;color:var(--gold);letter-spacing:.2em;margin-top:3px;}
+.inner{padding:1rem;}
+.form-card{background:white;border-radius:18px;padding:1.2rem;border:2px solid var(--yellow);margin-bottom:.8rem;box-shadow:4px 4px 0 rgba(255,217,61,.2);}
+.form-label{font-size:11px;letter-spacing:.2em;color:var(--gold);font-weight:700;display:block;margin-bottom:4px;}
+.form-label::before{content:'★ ';}
+input[type=text],input[type=date],input[type=time],select,textarea{width:100%;padding:8px 12px;border:1.5px solid var(--yellow);border-radius:10px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:13px;color:var(--text);background:var(--yellow-p);outline:none;margin-bottom:.7rem;box-sizing:border-box;}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);}
+textarea{min-height:70px;resize:vertical;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.type-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.7rem;}
+.type-btn{padding:5px 12px;border-radius:20px;border:1.5px solid var(--yellow);background:var(--yellow-l);color:#8B6914;font-size:12px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;transition:all .15s;}
+.type-btn.on{background:var(--yellow);color:#3a2d10;border-color:var(--gold);font-weight:700;}
+.gen-btn{width:100%;padding:13px;background:linear-gradient(90deg,var(--yellow),var(--orange));color:white;border:none;border-radius:30px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;cursor:pointer;box-shadow:0 4px 15px rgba(255,217,61,.4);transition:opacity .2s;margin-bottom:1rem;}
+.gen-btn:hover{opacity:.88;}
+.result-area{display:none;}
+.result-area.show{display:block;}
+.result-tabs{display:flex;gap:6px;margin-bottom:.8rem;flex-wrap:wrap;}
+.r-tab{padding:5px 14px;border-radius:20px;border:1.5px solid var(--yellow);background:var(--yellow-l);color:#8B6914;font-size:12px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;transition:all .15s;}
+.r-tab.on{background:var(--yellow);color:#3a2d10;font-weight:700;}
+.result-card{background:white;border-radius:16px;padding:1.2rem;border:2px solid var(--yellow);box-shadow:4px 4px 0 rgba(255,217,61,.2);display:none;}
+.result-card.show{display:block;}
+.result-label{font-size:11px;letter-spacing:.2em;color:var(--gold);font-weight:700;margin-bottom:.6rem;}
+.result-text{font-size:13px;line-height:2;color:var(--text);white-space:pre-wrap;background:var(--yellow-p);border-radius:10px;padding:.8rem 1rem;margin-bottom:.8rem;}
+.copy-btn{width:100%;padding:10px;background:var(--yellow);color:#3a2d10;border:none;border-radius:20px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.1em;}
+.copy-btn:hover{background:#f0c800;}
+.divider{text-align:center;font-size:13px;color:#FFD93D;letter-spacing:.4em;margin:.5rem 0;}
+.toast{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%) translateY(80px);background:#3a2d10;color:#FFF8DC;padding:6px 18px;border-radius:20px;font-size:12px;transition:transform .3s;z-index:99;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+footer{text-align:center;padding:2rem 1rem 1rem;font-size:11px;color:#c9a05a;letter-spacing:.15em;}
+footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="header">
+  <h1>🎵 演奏会告知文ジェネレーター</h1>
+  <p>✦ かんたん告知文おまかせ ✦</p>
+</div>
+<div class="inner">
+  <div class="form-card">
+    <label class="form-label">SNSの種類</label>
+    <div class="type-row" id="snsType">
+      <button class="type-btn on" onclick="selSns(this,'instagram')">📸 Instagram</button>
+      <button class="type-btn" onclick="selSns(this,'twitter')">🐦 X(Twitter)</button>
+      <button class="type-btn" onclick="selSns(this,'line')">💚 LINE</button>
+      <button class="type-btn" onclick="selSns(this,'flyer')">📄 チラシ文</button>
+    </div>
+    <label class="form-label">演奏会の種類</label>
+    <div class="type-row" id="concertType">
+      <button class="type-btn on" onclick="selType(this,'recital')">🎤 リサイタル</button>
+      <button class="type-btn" onclick="selType(this,'ensemble')">🎼 アンサンブル</button>
+      <button class="type-btn" onclick="selType(this,'volunteer')">🌸 訪問演奏</button>
+      <button class="type-btn" onclick="selType(this,'student')">🎓 学生演奏会</button>
+    </div>
+    <label class="form-label">演奏会名・タイトル</label>
+    <input type="text" id="concertName" placeholder="例：春のソプラノリサイタル">
+    <div class="row2">
+      <div><label class="form-label">日付</label><input type="date" id="concertDate"></div>
+      <div><label class="form-label">開演時間</label><input type="time" id="concertTime"></div>
+    </div>
+    <label class="form-label">会場名</label>
+    <input type="text" id="concertVenue" placeholder="例：長崎市民会館 小ホール">
+    <label class="form-label">入場料</label>
+    <input type="text" id="concertFee" placeholder="例：無料・前売1,000円・500円">
+    <label class="form-label">プログラム（曲目・見どころ）</label>
+    <textarea id="concertProgram" placeholder="例：プッチーニ「リューのアリア」、シューベルト「アヴェマリア」など"></textarea>
+    <label class="form-label">ひとこと（想いや雰囲気）</label>
+    <textarea id="concertComment" placeholder="例：初めてのリサイタルです！ぜひ気軽に来てください🌸"></textarea>
+  </div>
+  <button class="gen-btn" onclick="generate()">🌟 告知文を生成する</button>
+  <div class="result-area" id="resultArea">
+    <div class="divider">★ ★ ★</div>
+    <div class="result-tabs" id="resultTabs"></div>
+    <div id="resultCards"></div>
+  </div>
+</div>
+<footer>🌟 演奏会告知文ジェネレーター by <a href="https://anjerika129.github.io" target="_blank">亜矢プロジェクト</a></footer>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+let curSns='instagram',curType='recital';
+function selSns(btn,v){document.querySelectorAll('#snsType .type-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');curSns=v;}
+function selType(btn,v){document.querySelectorAll('#concertType .type-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');curType=v;}
+function fmtDate(d){if(!d)return'';const dt=new Date(d+'T00:00:00');const days=['日','月','火','水','木','金','土'];return dt.getFullYear()+'年'+(dt.getMonth()+1)+'月'+dt.getDate()+'日（'+days[dt.getDay()]+'）';}
+function generate(){
+  const name=document.getElementById('concertName').value.trim()||'演奏会';
+  const date=fmtDate(document.getElementById('concertDate').value);
+  const time=document.getElementById('concertTime').value;
+  const venue=document.getElementById('concertVenue').value.trim();
+  const fee=document.getElementById('concertFee').value.trim();
+  const program=document.getElementById('concertProgram').value.trim();
+  const comment=document.getElementById('concertComment').value.trim();
+  const typeLabels={recital:'リサイタル',ensemble:'アンサンブル',volunteer:'訪問演奏',student:'学生演奏会'};
+  const tl=typeLabels[curType];
+  const info=[date?'📅 '+date+(time?' '+time+'〜':''):'',venue?'📍 '+venue:'',fee?'🎟 入場：'+fee:'',program?'🎵 '+program:''].filter(Boolean).join('\n');
+  const texts={
+    instagram:'🌟 '+name+' 開催のお知らせ 🌟\n\n'+(comment||'皆さまにお越しいただけることを楽しみにしています🌸')+'\n\n'+info+'\n\nぜひお気軽にいらしてください💛\n\n#声楽 #'+tl+' #クラシック音楽 #長崎 #演奏会',
+    twitter:'🎵【'+name+'】\n\n'+(comment||'ぜひ聴きにきてください🌸')+'\n\n'+info+'\n\n#声楽 #演奏会 #長崎',
+    line:'こんにちは！\n\n演奏会のご案内をさせてください🌟\n\n【'+name+'】\n\n'+info+'\n\n'+(comment||'ぜひお気軽にいらしてください🌸')+'\n\nお待ちしています💛',
+    flyer:'━━━━━━━━━━━━━━\n　　'+name+'\n━━━━━━━━━━━━━━\n\n'+info+'\n\n'+(comment||'皆さまのご来場を心よりお待ち申し上げます。')+'\n\n━━━━━━━━━━━━━━',
+  };
+  const labels={instagram:'📸 Instagram',twitter:'🐦 X(Twitter)',line:'💚 LINE',flyer:'📄 チラシ文'};
+  const allKeys=['instagram','twitter','line','flyer'];
+  document.getElementById('resultTabs').innerHTML=allKeys.map(k=>'<button class="r-tab '+(k===curSns?'on':'')+'" onclick="showCard(\''+k+'\',this)">'+labels[k]+'</button>').join('');
+  document.getElementById('resultCards').innerHTML=allKeys.map(k=>'<div class="result-card '+(k===curSns?'show':'')+'" id="card-'+k+'"><div class="result-label">★ '+labels[k]+' 用</div><div class="result-text">'+texts[k]+'</div><button class="copy-btn" onclick="copyText(\''+k+'\')">📋 コピーする</button></div>').join('');
+  window._texts=texts;
+  document.getElementById('resultArea').classList.add('show');
+  document.getElementById('resultArea').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function showCard(k,btn){document.querySelectorAll('.r-tab').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.result-card').forEach(c=>c.classList.remove('show'));btn.classList.add('on');document.getElementById('card-'+k).classList.add('show');}
+function copyText(k){const text=window._texts?window._texts[k]:'';navigator.clipboard.writeText(text).then(()=>showToast('📋 コピーしました！'));}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+</script>
+</body>
+</html>
