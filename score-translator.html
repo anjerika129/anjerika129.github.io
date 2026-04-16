@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Translator 🎀 楽譜イタリア語翻訳</title>
+<meta name="description" content="イタリア語の声楽歌詞を日本語訳・単語解説・ト書き解説つきで翻訳するアプリ">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap');
+
+:root {
+  --pink: #e8829a;
+  --pink-light: #fde8ee;
+  --pink-pale: #fff5f8;
+  --gold: #c9a05a;
+  --rose-dark: #b05070;
+  --text: #3a2535;
+  --text-muted: #9a7a88;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #fff5f8;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-weight: 300;
+  color: var(--text);
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
+}
+
+.wrap {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ヘッダー */
+.kw-header {
+  background: linear-gradient(135deg, #fce4ec 0%, #ffd6e7 50%, #ffe8d6 100%);
+  border-radius: 24px;
+  padding: 1.8rem 1.5rem 1.4rem;
+  text-align: center;
+  margin-bottom: 1.4rem;
+  border: 1.5px solid #f9c0d0;
+  position: relative;
+}
+.kw-header::before { content: '🎀'; position: absolute; top: 14px; left: 16px; font-size: 22px; opacity: 0.7; }
+.kw-header::after  { content: '🎀'; position: absolute; top: 14px; right: 16px; font-size: 22px; opacity: 0.7; }
+.kw-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--rose-dark); letter-spacing: 0.08em; }
+.kw-sub   { font-size: 12px; color: var(--pink); letter-spacing: 0.2em; margin-top: 4px; }
+
+.divider { text-align: center; font-size: 14px; color: #f0a0b8; letter-spacing: 0.4em; margin: 1rem 0; }
+
+/* 入力エリア */
+.kw-input-box {
+  background: white;
+  border: 1.5px solid #f9c0d0;
+  border-radius: 18px;
+  padding: 1.2rem;
+  margin-bottom: 0.9rem;
+}
+.kw-input-label {
+  font-size: 12px; letter-spacing: 0.2em; color: var(--pink);
+  font-weight: 700; margin-bottom: 8px;
+}
+textarea {
+  width: 100%; min-height: 140px; border: none; outline: none; resize: vertical;
+  font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic;
+  line-height: 2; color: var(--text); background: transparent;
+}
+textarea::placeholder { color: #d4a8b8; }
+
+/* サンプル */
+.ex-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+.ex-label { font-size: 12px; color: var(--text-muted); }
+.ex-pill {
+  font-size: 12px; padding: 5px 14px; border-radius: 20px;
+  border: 1.5px solid #f9c0d0; background: var(--pink-light);
+  color: var(--rose-dark); cursor: pointer;
+  font-family: 'Zen Kaku Gothic New', sans-serif; transition: background 0.15s;
+}
+.ex-pill:hover { background: #fcd4e0; }
+
+/* ボタン */
+.kw-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(90deg, #e8829a, #c9a05a);
+  color: white; border: none; border-radius: 30px;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 16px; font-weight: 700; letter-spacing: 0.15em;
+  cursor: pointer; margin-bottom: 1rem;
+  box-shadow: 0 4px 18px rgba(232,130,154,0.35);
+  transition: opacity 0.2s, transform 0.1s;
+}
+.kw-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.kw-btn:active { transform: scale(0.98); }
+
+/* ヒント */
+.hint-box {
+  background: white;
+  border: 1.5px solid #f9c0d0;
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.9;
+  margin-bottom: 1.2rem;
+}
+.hint-box strong { color: var(--rose-dark); font-weight: 700; }
+
+/* 使い方 */
+.how-box {
+  background: white;
+  border: 1.5px solid #f9c0d0;
+  border-radius: 18px;
+  padding: 1.2rem 1.4rem;
+}
+.how-title { font-size: 12px; letter-spacing: 0.2em; color: var(--pink); font-weight: 700; margin-bottom: 10px; }
+.how-step {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 8px; font-size: 13px; color: var(--text-muted); line-height: 1.7;
+}
+.how-num {
+  background: var(--pink-light); color: var(--rose-dark);
+  font-size: 11px; font-weight: 700; border-radius: 50%;
+  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+
+/* フッター */
+footer {
+  text-align: center;
+  margin-top: 2.5rem;
+  font-size: 11px;
+  color: #c9a0b0;
+  letter-spacing: 0.15em;
+}
+footer a { color: var(--pink); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kw-header">
+    <div class="kw-title">Score Translator</div>
+    <div class="kw-sub">✦ 楽譜イタリア語翻訳 ✦</div>
+  </div>
+
+  <div class="kw-input-box">
+    <div class="kw-input-label">♪ 歌詞をペーストしてね</div>
+    <textarea id="scoreInput" placeholder="Signore, ascolta! Ah, signore, ascolta!&#10;Liù non regge più!&#10;Si spezza il cuor!..."></textarea>
+  </div>
+
+  <div class="ex-row">
+    <span class="ex-label">サンプル →</span>
+    <button class="ex-pill" onclick="fillEx('nessun')">Nessun dorma</button>
+    <button class="ex-pill" onclick="fillEx('ryu')">リューのアリア</button>
+    <button class="ex-pill" onclick="fillEx('caro')">Caro mio ben</button>
+  </div>
+
+  <button class="kw-btn" onclick="sendToClaudeAI()">🎀 Claude.aiで翻訳する</button>
+
+  <div class="hint-box">
+    ボタンを押すと <strong>Claude.ai</strong> が開いて、歌詞が自動で送られます🌸<br>
+    <strong>①日本語訳　②単語の意味　③ト書き・感情解説</strong> の3つをまとめて教えてもらえます💕<br>
+    <span style="font-size:12px;">※ Claude.aiの無料アカウントが必要です</span>
+  </div>
+
+  <div class="divider">❀ ❀ ❀</div>
+
+  <div class="how-box">
+    <div class="how-title">🎀 使い方</div>
+    <div class="how-step"><span class="how-num">1</span><span>イタリア語の歌詞をテキストボックスにペーストする</span></div>
+    <div class="how-step"><span class="how-num">2</span><span>「Claude.aiで翻訳する」ボタンを押す</span></div>
+    <div class="how-step"><span class="how-num">3</span><span>Claude.aiが開いたら送信ボタンを押すだけ！</span></div>
+    <div class="how-step"><span class="how-num">4</span><span>日本語訳・単語の意味・ト書き解説が届きます🌸</span></div>
+  </div>
+
+  <footer>
+    Score Translator 🎀 by <a href="https://anjerika129.github.io" target="_blank">亜矢プロジェクト</a><br>
+    Nagasaki ✦ 声楽家のための小さなツール
+  </footer>
+
+</div>
+
+<script>
+const EX = {
+  nessun: `Nessun dorma! Nessun dorma!\nTu pure, o Principessa,\nnella tua fredda stanza,\nguardi le stelle\nche tremano d'amore e di speranza!`,
+  ryu: `Signore, ascolta! Ah, signore, ascolta!\nLiù non regge più!\nSi spezza il cuor!\nAhi, quanto cammino\ncol tuo nome nell'anima`,
+  caro: `Caro mio ben,\ncredimi almen,\nsenza di te\nlanguisce il cor.\nIl tuo fedel\nsospira ognor.`
+};
+
+function fillEx(k) {
+  document.getElementById('scoreInput').value = EX[k];
+}
+
+function sendToClaudeAI() {
+  const text = document.getElementById('scoreInput').value.trim();
+  if (!text) { alert('歌詞をペーストしてね💕'); return; }
+
+  const prompt = `以下のイタリア語声楽の歌詞を解析してください🎀
+
+【歌詞】
+${text}
+
+①日本語訳
+②重要単語の意味（イタリア語→日本語）
+③ト書き・場面・感情表現の解説
+
+の3つをまとめて教えてください！`;
+
+  const url = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
