@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本番メンタルケア 🌸 演奏家のこころの準備</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#e8829a;--pink-l:#fde8ee;--pink-p:#fff5f8;--gold:#c9a05a;--rose:#b05070;--text:#3a2535;--muted:#9a7a88;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Zen Kaku Gothic New',sans-serif;font-weight:300;color:var(--text);background:var(--pink-p);min-height:100vh;}
+.wrap{max-width:680px;margin:0 auto;}
+.header{background:linear-gradient(135deg,#fce4ec,#ffd6e7,#ffe8d6);padding:1.4rem 1rem 1.1rem;text-align:center;border-bottom:2px solid #f9c0d0;position:relative;}
+.header::before{content:'🎀';position:absolute;top:14px;left:16px;font-size:22px;opacity:.7;}
+.header::after{content:'🎀';position:absolute;top:14px;right:16px;font-size:22px;opacity:.7;}
+.header h1{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--rose);letter-spacing:.08em;}
+.header p{font-size:11px;color:var(--pink);letter-spacing:.2em;margin-top:3px;}
+.tabs{display:flex;background:white;border-bottom:2px solid var(--pink-l);}
+.tab{flex:1;padding:10px 4px;border:none;background:transparent;font-family:'Zen Kaku Gothic New',sans-serif;font-size:11px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;}
+.tab.on{color:var(--rose);border-bottom-color:var(--pink);font-weight:700;}
+.tab span{display:block;font-size:18px;margin-bottom:2px;}
+.page{display:none;padding:1rem;}
+.page.on{display:block;}
+.check-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--rose);text-align:center;margin-bottom:.3rem;}
+.check-sub{font-size:12px;color:var(--muted);text-align:center;margin-bottom:1.2rem;}
+.q-card{background:white;border-radius:16px;padding:1rem 1.2rem;margin-bottom:.8rem;border:1.5px solid #f9c0d0;}
+.q-text{font-size:13px;font-weight:700;color:var(--text);margin-bottom:.6rem;}
+.q-scale{display:flex;gap:6px;}
+.s-btn{flex:1;padding:8px 2px;border:1.5px solid #f9c0d0;border-radius:10px;background:var(--pink-l);color:var(--rose);font-size:13px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;transition:all .15s;text-align:center;}
+.s-btn.on{background:var(--pink);color:white;border-color:var(--pink);}
+.s-btn:hover{background:#fcd4e0;}
+.s-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:3px;}
+.result-box{background:white;border-radius:16px;padding:1.2rem;border:2px solid #f9c0d0;margin-top:1rem;display:none;}
+.result-box.show{display:block;}
+.result-level{font-size:2.5rem;text-align:center;margin-bottom:.4rem;}
+.result-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--rose);text-align:center;margin-bottom:.6rem;}
+.result-advice{font-size:13px;color:var(--text);line-height:1.9;background:var(--pink-p);border-radius:12px;padding:.8rem 1rem;margin-bottom:.8rem;}
+.result-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.r-tag{font-size:11px;padding:3px 12px;border-radius:20px;background:var(--pink-l);color:var(--rose);border:1px solid #f9c0d0;}
+.check-btn{width:100%;padding:12px;background:linear-gradient(90deg,var(--pink),var(--gold));color:white;border:none;border-radius:30px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(232,130,154,.3);margin-top:.5rem;}
+.breath-selector{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;}
+.b-sel{flex:1;min-width:80px;padding:8px 6px;border:1.5px solid #f9c0d0;border-radius:12px;background:var(--pink-l);color:var(--rose);font-size:11px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;text-align:center;transition:all .15s;}
+.b-sel.on{background:var(--pink);color:white;border-color:var(--pink);}
+.breath-area{background:white;border-radius:20px;padding:1.5rem 1rem;border:1.5px solid #f9c0d0;text-align:center;}
+.breath-circle{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#fde8ee,#ffd6e7);border:3px solid #f9c0d0;display:flex;align-items:center;justify-content:center;flex-direction:column;margin:0 auto 1rem;transition:transform .1s;}
+.breath-circle.expanding{animation:expand var(--in)s ease-in forwards;}
+.breath-circle.holding{transform:scale(1.3);}
+.breath-circle.shrinking{animation:shrink var(--out)s ease-out forwards;}
+@keyframes expand{from{transform:scale(1);}to{transform:scale(1.3);}}
+@keyframes shrink{from{transform:scale(1.3);}to{transform:scale(1);}}
+.breath-emoji{font-size:2.5rem;}
+.breath-phase{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--rose);font-weight:600;margin-top:.3rem;}
+.breath-count{font-size:2rem;font-weight:700;color:var(--pink);margin:.3rem 0;}
+.breath-guide{font-size:12px;color:var(--muted);margin-bottom:1rem;line-height:1.7;}
+.breath-start{padding:10px 28px;background:linear-gradient(90deg,var(--pink),var(--gold));color:white;border:none;border-radius:30px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.breath-stop{padding:10px 28px;background:white;color:var(--rose);border:1.5px solid #f9c0d0;border-radius:30px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:14px;cursor:pointer;margin-left:8px;}
+.cycle-count{font-size:12px;color:var(--muted);margin-top:.8rem;}
+.msg-timing{display:flex;gap:8px;margin-bottom:1rem;}
+.t-btn{flex:1;padding:8px;border:1.5px solid #f9c0d0;border-radius:12px;background:var(--pink-l);color:var(--rose);font-size:12px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;text-align:center;transition:all .15s;}
+.t-btn.on{background:var(--pink);color:white;border-color:var(--pink);}
+.msg-card{background:white;border-radius:20px;padding:1.5rem 1.2rem;border:2px solid #f9c0d0;text-align:center;margin-bottom:1rem;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;}
+.msg-emoji{font-size:2.5rem;}
+.msg-text{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--rose);line-height:1.7;font-style:italic;}
+.msg-sub{font-size:12px;color:var(--muted);line-height:1.7;}
+.msg-btn{width:100%;padding:12px;background:linear-gradient(90deg,var(--pink),var(--gold));color:white;border:none;border-radius:30px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(232,130,154,.3);}
+.divider{text-align:center;font-size:12px;color:#f0a0b8;letter-spacing:.4em;margin:.6rem 0;}
+footer{text-align:center;padding:2rem 1rem 1rem;font-size:11px;color:#c9a0b0;letter-spacing:.15em;}
+footer a{color:var(--pink);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="header">
+  <h1>🌸 本番メンタルケア</h1>
+  <p>✦ 演奏家のこころの準備 ✦</p>
+</div>
+<div class="tabs">
+  <button class="tab on" onclick="sw('check',this)"><span>💭</span>緊張チェック</button>
+  <button class="tab" onclick="sw('breath',this)"><span>🫧</span>呼吸法</button>
+  <button class="tab" onclick="sw('msg',this)"><span>💕</span>応援メッセージ</button>
+</div>
+<div class="page on" id="pg-check">
+  <div class="check-title">今の緊張レベルは？</div>
+  <div class="check-sub">正直に答えてね🌸 あなただけのアドバイスが届くよ</div>
+  <div class="q-card"><div class="q-text">① 心臓のドキドキ感</div><div class="q-scale" id="q1"><button class="s-btn" onclick="setQ('q1',1,this)">1</button><button class="s-btn" onclick="setQ('q1',2,this)">2</button><button class="s-btn" onclick="setQ('q1',3,this)">3</button><button class="s-btn" onclick="setQ('q1',4,this)">4</button><button class="s-btn" onclick="setQ('q1',5,this)">5</button></div><div class="s-label"><span>おだやか</span><span>ドキドキ</span></div></div>
+  <div class="q-card"><div class="q-text">② 手や体の震え・力み</div><div class="q-scale" id="q2"><button class="s-btn" onclick="setQ('q2',1,this)">1</button><button class="s-btn" onclick="setQ('q2',2,this)">2</button><button class="s-btn" onclick="setQ('q2',3,this)">3</button><button class="s-btn" onclick="setQ('q2',4,this)">4</button><button class="s-btn" onclick="setQ('q2',5,this)">5</button></div><div class="s-label"><span>リラックス</span><span>カチカチ</span></div></div>
+  <div class="q-card"><div class="q-text">③ 頭の中のざわざわ感</div><div class="q-scale" id="q3"><button class="s-btn" onclick="setQ('q3',1,this)">1</button><button class="s-btn" onclick="setQ('q3',2,this)">2</button><button class="s-btn" onclick="setQ('q3',3,this)">3</button><button class="s-btn" onclick="setQ('q3',4,this)">4</button><button class="s-btn" onclick="setQ('q3',5,this)">5</button></div><div class="s-label"><span>集中できてる</span><span>ざわざわ</span></div></div>
+  <div class="q-card"><div class="q-text">④ 自信のなさ・不安感</div><div class="q-scale" id="q4"><button class="s-btn" onclick="setQ('q4',1,this)">1</button><button class="s-btn" onclick="setQ('q4',2,this)">2</button><button class="s-btn" onclick="setQ('q4',3,this)">3</button><button class="s-btn" onclick="setQ('q4',4,this)">4</button><button class="s-btn" onclick="setQ('q4',5,this)">5</button></div><div class="s-label"><span>自信あり</span><span>不安いっぱい</span></div></div>
+  <button class="check-btn" onclick="calcResult()">🎀 診断する</button>
+  <div class="result-box" id="resultBox"><div class="result-level" id="rEmoji"></div><div class="result-title" id="rTitle"></div><div class="result-advice" id="rAdvice"></div><div class="result-tags" id="rTags"></div></div>
+</div>
+<div class="page" id="pg-breath">
+  <div class="breath-selector">
+    <button class="b-sel on" onclick="selectBreath(this,4,4,4,'4拍吸う・4拍止める・4拍吐く')">🟦 ボックス呼吸<br><small>本番直前</small></button>
+    <button class="b-sel" onclick="selectBreath(this,4,7,8,'4拍吸う・7拍止める・8拍吐く')">🌙 478呼吸<br><small>深くリラックス</small></button>
+    <button class="b-sel" onclick="selectBreath(this,3,0,5,'3拍吸う・5拍吐く')">🌸 シンプル<br><small>練習前に</small></button>
+  </div>
+  <div class="breath-area">
+    <div class="breath-guide" id="breathGuide">4拍吸う → 4拍止める → 4拍吐く<br>これを繰り返して心を落ち着けよう🌸</div>
+    <div class="breath-circle" id="breathCircle"><div class="breath-emoji">🌸</div><div class="breath-phase" id="bPhase">準備OK？</div></div>
+    <div class="breath-count" id="bCount">♥</div>
+    <div>
+      <button class="breath-start" id="bStartBtn" onclick="startBreath()">🎀 スタート</button>
+      <button class="breath-stop" id="bStopBtn" onclick="stopBreath()" style="display:none;">止める</button>
+    </div>
+    <div class="cycle-count" id="cycleCount"></div>
+  </div>
+</div>
+<div class="page" id="pg-msg">
+  <div class="msg-timing">
+    <button class="t-btn on" onclick="selTiming(this,'before')">🌅 本番前</button>
+    <button class="t-btn" onclick="selTiming(this,'routine')">🎼 練習前</button>
+    <button class="t-btn" onclick="selTiming(this,'nervous')">💦 超緊張中</button>
+  </div>
+  <div class="divider">❀ ❀ ❀</div>
+  <div class="msg-card" id="msgCard"><div class="msg-emoji" id="msgEmoji">🌸</div><div class="msg-text" id="msgText">ボタンを押してメッセージを受け取ってね</div><div class="msg-sub" id="msgSub"></div></div>
+  <button class="msg-btn" onclick="showMsg()">💕 メッセージをもらう</button>
+</div>
+<footer>🌸 本番メンタルケア by <a href="https://anjerika129.github.io" target="_blank">亜矢プロジェクト</a></footer>
+</div>
+<script>
+const scores={q1:0,q2:0,q3:0,q4:0};
+function sw(name,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));document.getElementById('pg-'+name).classList.add('on');btn.classList.add('on');}
+function setQ(q,v,btn){scores[q]=v;document.querySelectorAll('#'+q+' .s-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function calcResult(){
+  const total=Object.values(scores).reduce((a,b)=>a+b,0);
+  const levels=[
+    {max:6,emoji:'😊',title:'リラックスモード♪',advice:'いい緊張感ね！この落ち着きを本番でそのまま出せるよ。ゆっくり深呼吸して、声を温めて。あなたならきっと大丈夫🌸',tags:['深呼吸×3回','軽くハミング','笑顔で入場']},
+    {max:12,emoji:'🌸',title:'ちょうどいい緊張！',advice:'この緊張感、実はパフォーマンスを高めてくれるよ！体が「本番だ！」って準備してる証拠。呼吸を整えて、練習した自分を信じて💕',tags:['ボックス呼吸','肩を下げる','「練習通り」と唱える']},
+    {max:16,emoji:'💦',title:'緊張してるね、大丈夫！',advice:'緊張してる自分を責めないで。みんな緊張するの。まず手のひらをグーパーして血流を戻して。「緊張してる＝それだけ本気」ってこと。呼吸タブで478呼吸を試してみて🎀',tags:['478呼吸','手をグーパー','「本気の証拠」と思う']},
+    {max:20,emoji:'🆘',title:'かなりドキドキ中！',advice:'深呼吸！まず息を全部吐いてみて。次にゆっくり吸う。これを3回。今まで積み重ねてきた練習は消えない。舞台に立てる自分はすごい💪',tags:['まず全部息を吐く','3回深呼吸','「練習は消えない」']},
+  ];
+  const lv=levels.find(l=>total<=l.max)||levels[3];
+  document.getElementById('rEmoji').textContent=lv.emoji;
+  document.getElementById('rTitle').textContent=lv.title;
+  document.getElementById('rAdvice').textContent=lv.advice;
+  document.getElementById('rTags').innerHTML=lv.tags.map(t=>'<span class="r-tag">'+t+'</span>').join('');
+  document.getElementById('resultBox').classList.add('show');
+  document.getElementById('resultBox').scrollIntoView({behavior:'smooth',block:'start'});
+}
+let bIn=4,bHold=4,bOut=4,bTimer=null,bPhaseIdx=0,bCount=0,bCycles=0;
+function selectBreath(btn,i,h,o,guide){document.querySelectorAll('.b-sel').forEach(b=>b.classList.remove('on'));btn.classList.add('on');bIn=i;bHold=h;bOut=o;document.getElementById('breathGuide').innerHTML=guide+'<br>これを繰り返して心を落ち着けよう🌸';stopBreath();}
+function startBreath(){document.getElementById('bStartBtn').style.display='none';document.getElementById('bStopBtn').style.display='inline-block';bCycles=0;bPhaseIdx=0;runPhase();}
+function runPhase(){
+  const phases=[{label:'吸って',emoji:'🌸',dur:bIn,scale:'expanding'}];
+  if(bHold>0)phases.push({label:'止めて',emoji:'💕',dur:bHold,scale:'holding'});
+  phases.push({label:'吐いて',emoji:'🫧',dur:bOut,scale:'shrinking'});
+  const ph=phases[bPhaseIdx%phases.length];
+  const circle=document.getElementById('breathCircle');
+  circle.style.setProperty('--in',bIn);circle.style.setProperty('--out',bOut);
+  circle.className='breath-circle '+ph.scale;
+  circle.querySelector('.breath-emoji').textContent=ph.emoji;
+  document.getElementById('bPhase').textContent=ph.label;
+  bCount=ph.dur;document.getElementById('bCount').textContent=bCount;
+  const tick=setInterval(()=>{bCount--;document.getElementById('bCount').textContent=bCount>0?bCount:'♥';if(bCount<=0){clearInterval(tick);bPhaseIdx++;if(bPhaseIdx%phases.length===0){bCycles++;document.getElementById('cycleCount').textContent=bCycles+'サイクル完了 🎀';}if(bTimer!==null)bTimer=setTimeout(runPhase,300);}},1000);
+  bTimer=tick;
+}
+function stopBreath(){clearInterval(bTimer);clearTimeout(bTimer);bTimer=null;const c=document.getElementById('breathCircle');c.className='breath-circle';c.querySelector('.breath-emoji').textContent='🌸';document.getElementById('bPhase').textContent='準備OK？';document.getElementById('bCount').textContent='♥';document.getElementById('bStartBtn').style.display='inline-block';document.getElementById('bStopBtn').style.display='none';}
+let msgTiming='before';
+const msgs={
+  before:[{e:'🌸',t:'今日のあなたは最高にきれい。',s:'緊張した顔も、真剣な顔も、全部輝いてるよ。'},{e:'🎀',t:'練習してきた時間は、絶対に裏切らない。',s:'あなたが積み上げてきたものを、信じて。'},{e:'💕',t:'舞台に立てること自体、すごいことだよ。',s:'怖くても立てるあなたは、もう勇者🌸'},{e:'✨',t:'深呼吸して、笑顔で。',s:'あなたの声を待ってる人がいる。'},{e:'🎵',t:'完璧じゃなくていい。あなたらしく歌えばいい。',s:'その声が、誰かの心に届くから。'}],
+  routine:[{e:'🌅',t:'今日の練習が、明日の自信になる。',s:'焦らず、丁寧に。一音一音と向き合って。'},{e:'🎼',t:'うまくいかない日も、成長してる。',s:'できなかったことに気づけるのは、耳が育った証拠。'},{e:'🌸',t:'好きな気持ちを忘れずに。',s:'音楽を愛するあなたの気持ちが、一番の才能だよ。'},{e:'💪',t:'昨日よりちょっとだけ、前へ。',s:'毎日の積み重ねが、必ず花開く。'},{e:'🎀',t:'声を出せること、それだけで素晴らしい。',s:'今日も一緒に頑張ろう♪'}],
+  nervous:[{e:'💦',t:'大丈夫、緊張してるのはあなただけじゃない。',s:'プロだって緊張する。緊張は本気の証拠だよ。'},{e:'🫂',t:'まず、息を全部吐いて。',s:'吐いたら、自然に吸える。それだけでいい。'},{e:'💕',t:'震えてる手が、あなたの真剣さを語ってる。',s:'その震えごと、舞台に持っていって。'},{e:'🌸',t:'今まで練習してきた自分を信じて。',s:'記憶は消えない。体が覚えてる。'},{e:'⭐',t:'失敗しても、世界は終わらない。',s:'でも、挑戦した自分は一生残る。行っておいで🎀'}],
+};
+function selTiming(btn,t){document.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');msgTiming=t;}
+function showMsg(){const list=msgs[msgTiming];const m=list[Math.floor(Math.random()*list.length)];document.getElementById('msgEmoji').textContent=m.e;document.getElementById('msgText').textContent=m.t;document.getElementById('msgSub').textContent=m.s;}
+showMsg();
+</script>
+</body>
+</html>
