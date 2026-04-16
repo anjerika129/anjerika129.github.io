@@ -1,0 +1,167 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap');
+:root{--washi:#faf7f0;--ink:#2a2018;--red:#9b3a3a;--red-l:#f5e8e8;--gold:#b8965a;--gold-l:#f5ead5;--sage:#6b8c7a;--muted:#8a7a6a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Zen Kaku Gothic New',sans-serif;font-weight:300;color:var(--ink);background:var(--washi);}
+
+.header{background:var(--ink);padding:1.4rem 1rem 1.2rem;text-align:center;position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--sage));}
+.header::after{content:'✿ ✿ ✿';position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:8px;color:rgba(255,255,255,.2);letter-spacing:.5em;}
+.header h1{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:600;color:var(--washi);letter-spacing:.2em;}
+.header p{font-size:10px;color:var(--gold);letter-spacing:.3em;margin-top:4px;}
+
+.inner{padding:1rem;}
+
+.scene-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:.8rem;}
+.scene-btn{padding:10px 6px;border:1px solid #ddd5c0;border-radius:10px;background:white;color:var(--muted);font-size:11px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;text-align:center;transition:all .15s;}
+.scene-btn.on{background:var(--ink);color:var(--washi);border-color:var(--ink);}
+.scene-btn span{display:block;font-size:18px;margin-bottom:3px;}
+
+.form-card{background:white;border-radius:14px;padding:1.2rem;border:1px solid #ddd5c0;margin-bottom:.8rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.f-label{font-size:10px;letter-spacing:.2em;color:var(--gold);font-weight:700;display:block;margin-bottom:4px;}
+input[type=text],select,textarea{width:100%;padding:8px 12px;border:1px solid #ddd5c0;border-radius:8px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:13px;color:var(--ink);background:var(--washi);outline:none;margin-bottom:.7rem;box-sizing:border-box;}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);}
+textarea{min-height:60px;resize:vertical;}
+
+.tone-row{display:flex;gap:6px;margin-bottom:.7rem;flex-wrap:wrap;}
+.tone-btn{padding:5px 12px;border-radius:20px;border:1px solid #ddd5c0;background:var(--washi);color:var(--muted);font-size:11px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;transition:all .15s;}
+.tone-btn.on{background:var(--gold);color:white;border-color:var(--gold);}
+
+.gen-btn{width:100%;padding:12px;background:var(--ink);color:var(--washi);border:none;border-radius:10px;font-family:'Noto Serif JP',serif;font-size:15px;font-weight:400;letter-spacing:.2em;cursor:pointer;transition:background .2s;margin-bottom:1rem;}
+.gen-btn:hover{background:var(--red);}
+
+.result-area{display:none;}
+.result-area.show{display:block;}
+
+.r-tabs{display:flex;gap:6px;margin-bottom:.8rem;flex-wrap:wrap;}
+.r-tab{padding:5px 14px;border-radius:20px;border:1px solid #ddd5c0;background:var(--washi);color:var(--muted);font-size:11px;cursor:pointer;font-family:'Zen Kaku Gothic New',sans-serif;transition:all .15s;}
+.r-tab.on{background:var(--red);color:white;border-color:var(--red);}
+
+.result-card{background:white;border-radius:14px;padding:1.2rem;border:1px solid #ddd5c0;display:none;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.result-card.show{display:block;}
+.r-label{font-size:10px;letter-spacing:.2em;color:var(--gold);font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;gap:6px;}
+.r-label::before{content:'✿';font-size:8px;}
+.r-text{font-family:'Noto Serif JP',serif;font-size:14px;line-height:2.2;color:var(--ink);white-space:pre-wrap;background:var(--washi);border-radius:8px;padding:1rem 1.2rem;margin-bottom:.8rem;border-left:3px solid var(--gold);}
+.copy-btn{width:100%;padding:10px;background:var(--washi);color:var(--ink);border:1px solid #ddd5c0;border-radius:8px;font-family:'Zen Kaku Gothic New',sans-serif;font-size:13px;cursor:pointer;letter-spacing:.1em;transition:background .15s;}
+.copy-btn:hover{background:var(--gold-l);}
+
+.divider{text-align:center;font-size:11px;color:#c8b89a;letter-spacing:.5em;margin:.6rem 0;}
+.toast{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--washi);padding:6px 18px;border-radius:20px;font-size:12px;transition:transform .3s;z-index:99;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+
+<div class="header">
+  <h1>お礼文ジェネレーター</h1>
+  <p>✦ 演奏家のための感謝の言葉 ✦</p>
+</div>
+
+<div class="inner">
+
+  <div class="form-card">
+    <label class="f-label">シーンを選んで</label>
+    <div class="scene-row" id="sceneRow">
+      <button class="scene-btn on" onclick="selScene(this,'concert')"><span>🎤</span>演奏会後</button>
+      <button class="scene-btn" onclick="selScene(this,'lesson')"><span>🎼</span>レッスンのお礼</button>
+      <button class="scene-btn" onclick="selScene(this,'volunteer')"><span>🌸</span>訪問演奏後</button>
+      <button class="scene-btn" onclick="selScene(this,'support')"><span>💛</span>サポートへのお礼</button>
+    </div>
+
+    <label class="f-label">お相手の名前（任意）</label>
+    <input type="text" id="toName" placeholder="例：田中先生・皆さま・○○さん">
+
+    <label class="f-label">ひとこと（特別なエピソードなど）</label>
+    <textarea id="episode" placeholder="例：アンコールで盛り上がりました / 先生のご指導のおかげで本番を迎えられました"></textarea>
+
+    <label class="f-label">文体・トーン</label>
+    <div class="tone-row" id="toneRow">
+      <button class="tone-btn on" onclick="selTone(this,'formal')">🪷 丁寧・格式</button>
+      <button class="tone-btn" onclick="selTone(this,'warm')">🌸 温かみ重視</button>
+      <button class="tone-btn" onclick="selTone(this,'casual')">☕ カジュアル</button>
+    </div>
+  </div>
+
+  <button class="gen-btn" onclick="generate()">✿ お礼文を生成する</button>
+
+  <div class="result-area" id="resultArea">
+    <div class="divider">✿ ✿ ✿</div>
+    <div class="r-tabs" id="rTabs"></div>
+    <div id="rCards"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let curScene='concert', curTone='formal';
+function selScene(btn,v){document.querySelectorAll('#sceneRow .scene-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');curScene=v;}
+function selTone(btn,v){document.querySelectorAll('#toneRow .tone-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');curTone=v;}
+
+const templates={
+  concert:{
+    formal:(to,ep)=>`${to?to+'、':''}この度は演奏会にお越しいただき、誠にありがとうございました。\n\n皆さまのご臨席を賜り、心より感謝申し上げます。${ep?'\n\n'+ep:''}\n\n今後とも変わらぬご支援のほど、どうぞよろしくお願い申し上げます。`,
+    warm:(to,ep)=>`${to?to+'、'+''}先日は演奏会にお越しいただき、本当にありがとうございました🌸\n\n皆さまのあたたかい拍手に、演奏中も心が満たされました。${ep?'\n\n'+ep:''}\n\nまたいつかお会いできることを楽しみにしております。`,
+    casual:(to,ep)=>`${to||'みなさん'}、先日はありがとうございました！\n\n会場に来てくださって、すごく嬉しかったです☺️${ep?'\n\n'+ep:''}\n\nまたぜひ聴きに来てください🎵`,
+  },
+  lesson:{
+    formal:(to,ep)=>`${to||'先生'}、いつも丁寧なご指導をいただき、誠にありがとうございます。\n\n先生のご指導のおかげで、少しずつ成長を感じることができております。${ep?'\n\n'+ep:''}\n\n引き続き、どうぞよろしくお願いいたします。`,
+    warm:(to,ep)=>`${to||'先生'}、いつも温かくご指導いただき、ありがとうございます🌸\n\nレッスンのたびに新しい発見があり、声楽がますます好きになっています。${ep?'\n\n'+ep:''}\n\nこれからもよろしくお願いします。`,
+    casual:(to,ep)=>`${to||'先生'}、今日もありがとうございました！\n\nすごく勉強になりました😊${ep?'\n\n'+ep:''}\n\nまた次回もよろしくお願いします🎵`,
+  },
+  volunteer:{
+    formal:(to,ep)=>`${to?to+'の皆さま、':''}この度は訪問演奏の機会をいただき、誠にありがとうございました。\n\n皆さまのあたたかいお心遣いに、心より感謝申し上げます。${ep?'\n\n'+ep:''}\n\nまたお会いできる日を楽しみにしております。`,
+    warm:(to,ep)=>`${to?to+'の皆さま、':\'\'}先日は素敵な時間をありがとうございました🌸\n\n皆さまの笑顔に、私の方こそ元気をいただきました。${ep?'\n\n'+ep:''}\n\nまたいつかお伺いできることを願っております。`,
+    casual:(to,ep)=>`${to||'皆さん'}、先日はありがとうございました！\n\n笑顔で聴いてくださって、とっても嬉しかったです☺️${ep?'\n\n'+ep:''}\n\nまたぜひ伺います🎵`,
+  },
+  support:{
+    formal:(to,ep)=>`${to?to+'、':''}この度はご支援いただき、誠にありがとうございました。\n\n皆さまのお力添えのおかげで、無事に活動を続けることができております。${ep?'\n\n'+ep:''}\n\n今後とも何卒よろしくお願い申し上げます。`,
+    warm:(to,ep)=>`${to?to+'、':\'\'}いつも応援してくださり、本当にありがとうございます🌸\n\n皆さまの存在が、私の大きな励みになっています。${ep?'\n\n'+ep:''}\n\nこれからも頑張っていきますので、どうぞよろしくお願いします。`,
+    casual:(to,ep)=>`${to||'みなさん'}、いつもありがとう！\n\n応援してもらえてとっても嬉しいです😊${ep?'\n\n'+ep:''}\n\nこれからもよろしくね🎵`,
+  },
+};
+
+const toneLabels={formal:'🪷 丁寧・格式',warm:'🌸 温かみ重視',casual:'☕ カジュアル'};
+const sceneLabels={concert:'🎤 演奏会後',lesson:'🎼 レッスンのお礼',volunteer:'🌸 訪問演奏後',support:'💛 サポートへのお礼'};
+
+function generate(){
+  const to=document.getElementById('toName').value.trim();
+  const ep=document.getElementById('episode').value.trim();
+  const tones=['formal','warm','casual'];
+  const tmpl=templates[curScene];
+
+  window._texts={};
+  tones.forEach(t=>{window._texts[t]=tmpl[t](to,ep);});
+
+  document.getElementById('rTabs').innerHTML=tones.map(t=>
+    `<button class="r-tab ${t===curTone?'on':''}" onclick="showCard('${t}',this)">${toneLabels[t]}</button>`
+  ).join('');
+
+  document.getElementById('rCards').innerHTML=tones.map(t=>
+    `<div class="result-card ${t===curTone?'show':''}" id="rcard-${t}">
+      <div class="r-label">${toneLabels[t]}</div>
+      <div class="r-text">${window._texts[t]}</div>
+      <button class="copy-btn" onclick="copyText('${t}')">📋 コピーする</button>
+    </div>`
+  ).join('');
+
+  document.getElementById('resultArea').classList.add('show');
+  document.getElementById('resultArea').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function showCard(k,btn){
+  document.querySelectorAll('.r-tab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.result-card').forEach(c=>c.classList.remove('show'));
+  btn.classList.add('on');
+  document.getElementById('rcard-'+k).classList.add('show');
+}
+
+function copyText(k){
+  navigator.clipboard.writeText(window._texts[k]).then(()=>showToast('📋 コピーしました'));
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+</script>
