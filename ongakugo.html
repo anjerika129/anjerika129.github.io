@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>おんがくっち 🎵 | 亜矢プロジェクト</title>
 <meta name="description" content="演奏家育成ゲーム「おんがくっち」。練習してレッスンを受けて、本番で輝こう！亜矢プロジェクトのオリジナルゲームです。">
+
+<!-- PWA設定 -->
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="おんがくっち">
+<meta name="theme-color" content="#1a0a2e">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Shippori+Mincho:wght@400;600&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap');
 
@@ -677,6 +685,13 @@ function doCommand(cmd){
   updateBars();setMood();checkRewards();
 }
 updateBars();setMood();
+
+// PWA: Service Worker登録
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js')
+    .then(function(){ console.log('おんがくっち SW OK'); })
+    .catch(function(e){ console.log('SW error:', e); });
+}
 </script>
 </body>
 </html>
