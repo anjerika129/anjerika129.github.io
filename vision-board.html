@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>わたし流ビジョンボード</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Klee+One&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FEF9F0;
+    --cream2: #FDF3E3;
+    --ink: #2C2416;
+    --ink2: #5A4F3F;
+    --ink3: #9A8E7E;
+    --accent: #E85D3A;
+    --accent2: #F2A65A;
+    --purple: #8B6BBE;
+    --mint: #5BBFAA;
+    --blush: #E8778A;
+    --star: #F5C842;
+    --border: #DDD0BC;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* dotted background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #C9B99A 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* ===== HEADER ===== */
+  .header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 4px 16px;
+    border-radius: 99px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .title-wrap { position: relative; display: inline-block; }
+  .title-input {
+    font-family: 'Klee One', serif;
+    font-size: clamp(28px, 6vw, 44px);
+    font-weight: 400;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    border-bottom: 2px dashed var(--border);
+    text-align: center;
+    width: 100%;
+    min-width: 260px;
+    padding: 4px 8px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .title-input:focus { border-color: var(--accent); }
+  .title-hint { font-size: 11px; color: var(--ink3); margin-top: 4px; }
+  .subtitle { font-size: 14px; color: var(--ink2); margin-top: 10px; line-height: 1.6; }
+
+  /* deco stars */
+  .deco { position: absolute; pointer-events: none; }
+
+  /* ===== PROGRESS ===== */
+  .progress-wrap { margin: 1.5rem 0 0.5rem; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink3); margin-bottom: 6px; }
+  .progress-track {
+    height: 8px;
+    background: var(--cream2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  /* ===== BOARD ===== */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 1.5rem 0;
+  }
+
+  @media (max-width: 500px) {
+    .board { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 16px 12px 14px;
+    cursor: pointer;
+    position: relative;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    user-select: none;
+  }
+  .card:hover {
+    transform: translateY(-3px) rotate(-0.5deg);
+    box-shadow: 4px 6px 0 var(--border);
+    border-color: var(--accent2);
+  }
+  .card:active { transform: scale(0.97); box-shadow: none; }
+
+  /* color variants */
+  .card[data-cat="仕事"] { --c: #FFF4E6; --cb: #F9C891; }
+  .card[data-cat="愛"]   { --c: #FFF0F3; --cb: #F4B8C5; }
+  .card[data-cat="お金"] { --c: #F0FAF0; --cb: #9ED8A0; }
+  .card[data-cat="健康"] { --c: #F0F8FF; --cb: #90C8F0; }
+  .card[data-cat="趣味"] { --c: #F5F0FF; --cb: #C0A8F0; }
+  .card[data-cat="旅"]   { --c: #EFFCFA; --cb: #86D9CC; }
+  .card[data-cat="自己"] { --c: #FFFFF0; --cb: #E8D86C; }
+
+  .card.filled { background: var(--c, #fff); border-color: var(--cb, var(--border)); }
+
+  .card-emoji { font-size: 32px; margin-bottom: 6px; line-height: 1; }
+  .card-label { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; line-height: 1.3; }
+  .card-gag { font-size: 11px; color: var(--ink2); line-height: 1.4; font-style: italic; }
+  .card-cat-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    background: var(--cb, #eee);
+    color: var(--ink);
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin-top: 6px;
+    opacity: 0.9;
+  }
+
+  .card-delete {
+    position: absolute; top: 7px; right: 7px;
+    width: 20px; height: 20px;
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 50%; cursor: pointer;
+    font-size: 10px; line-height: 20px; text-align: center;
+    color: var(--ink3); display: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .card:hover .card-delete { display: block; }
+  .card-delete:hover { background: #fee; color: var(--accent); border-color: var(--accent); }
+
+  /* empty card */
+  .card-empty {
+    border-style: dashed;
+    border-color: var(--border);
+    background: transparent;
+  }
+  .card-empty .card-plus {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--cream2);
+    border: 1.5px dashed var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: var(--ink3); margin-bottom: 6px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .card-empty:hover .card-plus { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+  .card-empty .card-label { color: var(--ink3); font-weight: 400; font-size: 12px; }
+
+  /* ===== CONGRATS ===== */
+  .congrats-banner {
+    display: none;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    border-radius: 14px;
+    padding: 14px 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 8px 0 0;
+    animation: pop 0.4s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  /* ===== BUTTONS ===== */
+  .btn-row {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 1.2rem 0;
+  }
+  .btn {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 13px; font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 99px;
+    border: 1.5px solid var(--ink);
+    cursor: pointer;
+    background: #fff;
+    color: var(--ink);
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+  }
+  .btn:hover { background: var(--ink); color: #fff; transform: translateY(-1px); }
+  .btn:active { transform: scale(0.97); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.primary:hover { background: #c94020; border-color: #c94020; color: #fff; }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(44,36,22,0.45);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--cream);
+    border: 2px solid var(--border);
+    border-radius: 22px;
+    padding: 28px 24px 24px;
+    width: 100%; max-width: 360px;
+    animation: pop 0.3s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+  }
+  .modal-title {
+    font-family: 'Klee One', serif;
+    font-size: 20px; font-weight: 400;
+    color: var(--ink); margin-bottom: 18px;
+    text-align: center;
+  }
+  .form-group { margin-bottom: 14px; }
+  .form-label { font-size: 11px; font-weight: 700; color: var(--ink3); letter-spacing: 0.08em; display: block; margin-bottom: 4px; }
+  .form-input, .form-select {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid var(--border); border-radius: 12px;
+    background: #fff; color: var(--ink);
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 14px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--accent); }
+  .emoji-picker { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .emoji-opt {
+    font-size: 22px; cursor: pointer; padding: 4px 6px;
+    border-radius: 8px; border: 1.5px solid transparent;
+    transition: border-color 0.1s, background 0.1s;
+  }
+  .emoji-opt:hover, .emoji-opt.selected { border-color: var(--accent); background: #fff5f0; }
+  .modal-btns { display: flex; gap: 10px; margin-top: 18px; }
+  .modal-btns .btn { flex: 1; }
+  .modal-close {
+    position: absolute; top: 14px; right: 16px;
+    background: none; border: none; font-size: 20px;
+    cursor: pointer; color: var(--ink3); line-height: 1;
+  }
+  .modal-close:hover { color: var(--accent); }
+
+  /* ===== FOOTER ===== */
+  .footer { text-align: center; margin-top: 2rem; font-size: 12px; color: var(--ink3); }
+
+  /* ===== DECO ELEMENTS ===== */
+  .floating-star {
+    position: fixed; pointer-events: none; font-size: 18px;
+    animation: float linear infinite;
+    opacity: 0.35; z-index: 0;
+  }
+  @keyframes float {
+    0%   { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+    50%  { opacity: 0.5; }
+    100% { transform: translateY(-30px) rotate(20deg); opacity: 0.3; }
+  }
+</style>
+</head>
+<body>
+
+<!-- floating stars deco -->
+<div class="floating-star" style="left:5%; top:15%; animation-duration:4s; animation-delay:0s;">✦</div>
+<div class="floating-star" style="left:88%; top:8%; animation-duration:5s; animation-delay:1s; font-size:12px;">★</div>
+<div class="floating-star" style="left:92%; top:55%; animation-duration:6s; animation-delay:0.5s;">✦</div>
+<div class="floating-star" style="left:3%; top:70%; animation-duration:4.5s; animation-delay:2s; font-size:12px;">✿</div>
+
+<div class="container">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">✦ My Vision Board ✦</div>
+    <div class="title-wrap">
+      <input class="title-input" id="boardTitle" value="わたしのビジョンボード" maxlength="24" />
+      <div class="title-hint">← クリックでタイトル変えられるよ</div>
+    </div>
+    <p class="subtitle" id="subText">夢を並べるだけで叶うらしい。<br><span style="color:var(--accent);font-weight:700;">しらんけど。</span></p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>夢の充填率</span>
+      <span id="progressText">0 / 9</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- CONGRATS -->
+  <div class="congrats-banner" id="congratsBanner">🎉 全部埋まった！あとは宇宙に任せる！</div>
+
+  <!-- BOARD -->
+  <div class="board" id="board"></div>
+
+  <!-- BUTTONS -->
+  <div class="btn-row">
+    <button class="btn" onclick="shuffleBoard()">🔀 シャッフル</button>
+    <button class="btn primary" onclick="openModal(-1)">＋ 夢を追加</button>
+    <button class="btn" onclick="clearAll()">🗑 全部消す</button>
+  </div>
+
+  <div class="footer">クリックで夢を編集 / ホバーで×ボタン / ドキドキしながら使ってね</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitleText">夢を追加する</div>
+
+    <div class="form-group">
+      <label class="form-label">絵文字を選ぶ</label>
+      <div class="emoji-picker" id="emojiPicker">
+        <!-- filled by JS -->
+      </div>
+      <input class="form-input" id="mIcon" style="margin-top:8px; font-size:18px;" maxlength="4" placeholder="直接入力もOK" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">夢のタイトル ✦</label>
+      <input class="form-input" id="mLabel" placeholder="例: 世界一かわいいデザイナーになる" maxlength="30" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">ギャグコメント（空欄で自動生成）</label>
+      <input class="form-input" id="mGag" placeholder="例: でも毎日カップ麺" maxlength="40" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">カテゴリ</label>
+      <select class="form-select" id="mCat">
+        <option value="仕事">💼 仕事・キャリア</option>
+        <option value="愛">💖 恋愛・人間関係</option>
+        <option value="お金">💰 お金・豊かさ</option>
+        <option value="健康">💪 健康・美容</option>
+        <option value="趣味">🎨 趣味・スキル</option>
+        <option value="旅">✈️ 旅・冒険</option>
+        <option value="自己">🌸 自己成長</option>
+      </select>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn" onclick="closeModal()">キャンセル</button>
+      <button class="btn primary" onclick="saveCard()">保存する ✦</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const EMOJIS = ['🌟','💫','✨','🎯','💼','💰','💖','✈️','🏡','🎨','💪','🌸','🍀','🏆','🎵','📚','🌈','🦋','🔥','🚀','🍓','🎀','🪄','🌙','💎'];
+
+const catGags = {
+  "仕事": ["…ってGPTに頼む","まずポートフォリオの写真から","名刺は100枚刷った","Linkedinプロフは完璧"],
+  "愛": ["運命の人、早く来い","とりあえずドラマで予習","プロフ写真1000枚撮る","理想が高すぎて2D検討中"],
+  "お金": ["宝くじ、5枚買う予定","節約のためスタバ毎日行く","財布はレシートでパンパン","仮想通貨ウォレット開設した"],
+  "健康": ["宣言だけは本気","ジム、入会はした","サラダに一口チャレンジ","ヨガマット、部屋の主役"],
+  "趣味": ["道具だけ揃えた","YouTubeで3時間リサーチ済","センスだけは天才"," pinterest、2000枚保存"],
+  "旅": ["Googleマップで1時間旅","スーツケース、押入れで待機中","パスポート写真は完璧","パリのカフェ脳内訪問済み"],
+  "自己": ["本、Amazonカートに入ってる","朝5時起き…設定だけ","ノート買ってやる気UP","アファメーション、声出し1回だけ"],
+};
+
+const congrats = [
+  "🎉 全部埋まった！あとは宇宙に任せる！",
+  "✨ ビジョンボード100点！実行力はこれから！",
+  "🌟 完璧！…夢リストは。",
+  "🔥 全マス埋まった！運命よ来い！",
+];
+
+const defaults = [
+  { icon:"💼", label:"クリエイターとして活躍", gag:"でも今日もNetflixで研究", cat:"仕事" },
+  { icon:"💰", label:"収入5倍にする", gag:"5円×5倍=25円ではない", cat:"お金" },
+  { icon:"✈️", label:"世界一周の旅", gag:"まずパスポート更新する", cat:"旅" },
+  { icon:"💪", label:"理想のカラダを手に入れる", gag:"チョコは筋肉のもとらしい", cat:"健康" },
+  { icon:"🎨", label:"WEBデザインで稼ぐ", gag:"Figmaのショートカット3つ覚えた", cat:"趣味" },
+  { icon:"💖", label:"最高のパートナーと出会う", gag:"理想が高すぎて2D検討中", cat:"愛" },
+  { icon:"🏡", label:"憧れの部屋に住む", gag:"IKEAのカタログは既読", cat:"自己" },
+  { icon:"📚", label:"毎月1冊本を読む", gag:"積読は宝の山", cat:"自己" },
+  { icon:"🌸", label:"毎日幸せを感じる", gag:"今日も推しのおかげでOK", cat:"自己" },
+];
+
+let cards = [];
+let editIdx = -1;
+let selectedEmoji = '🌟';
+
+function loadData() {
+  try {
+    const d = localStorage.getItem('vb_cards_v2');
+    if (d) cards = JSON.parse(d);
+    else cards = [...defaults];
+  } catch(e) { cards = [...defaults]; }
+  const t = localStorage.getItem('vb_title');
+  if (t) document.getElementById('boardTitle').value = t;
+}
+
+function saveData() {
+  try {
+    localStorage.setItem('vb_cards_v2', JSON.stringify(cards));
+    localStorage.setItem('vb_title', document.getElementById('boardTitle').value);
+  } catch(e) {}
+}
+
+function render() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  const slots = 9;
+  const filled = cards.filter(Boolean).length;
+
+  for (let i = 0; i < slots; i++) {
+    const c = cards[i];
+    const div = document.createElement('div');
+    div.className = 'card' + (c ? ' filled' : ' card-empty');
+    if (c) div.setAttribute('data-cat', c.cat);
+
+    if (c) {
+      div.innerHTML = `
+        <button class="card-delete" onclick="deleteCard(${i},event)">✕</button>
+        <div class="card-emoji">${c.icon}</div>
+        <div class="card-label">${escHtml(c.label)}</div>
+        <div class="card-gag">${escHtml(c.gag)}</div>
+        <span class="card-cat-badge">${c.cat}</span>
+      `;
+      div.addEventListener('click', () => openModal(i));
+    } else {
+      div.innerHTML = `<div class="card-plus">＋</div><div class="card-label">夢を追加</div>`;
+      div.addEventListener('click', () => openModal(i));
+    }
+    board.appendChild(div);
+  }
+
+  const pct = Math.round((filled / slots) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = filled + ' / ' + slots;
+
+  const banner = document.getElementById('congratsBanner');
+  if (filled === slots) {
+    banner.style.display = 'block';
+    banner.textContent = congrats[Math.floor(Math.random() * congrats.length)];
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function openModal(idx) {
+  editIdx = idx;
+  const c = idx >= 0 && cards[idx] ? cards[idx] : null;
+  document.getElementById('modalTitleText').textContent = c ? '夢を編集する' : '夢を追加する';
+  document.getElementById('mLabel').value = c ? c.label : '';
+  document.getElementById('mGag').value = c ? c.gag : '';
+  document.getElementById('mCat').value = c ? c.cat : '仕事';
+  selectedEmoji = c ? c.icon : '🌟';
+  document.getElementById('mIcon').value = selectedEmoji;
+  buildEmojiPicker();
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('mLabel').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function buildEmojiPicker() {
+  const p = document.getElementById('emojiPicker');
+  p.innerHTML = '';
+  EMOJIS.forEach(e => {
+    const span = document.createElement('span');
+    span.className = 'emoji-opt' + (e === selectedEmoji ? ' selected' : '');
+    span.textContent = e;
+    span.addEventListener('click', () => {
+      selectedEmoji = e;
+      document.getElementById('mIcon').value = e;
+      p.querySelectorAll('.emoji-opt').forEach(s => s.classList.remove('selected'));
+      span.classList.add('selected');
+    });
+    p.appendChild(span);
+  });
+}
+
+document.getElementById('mIcon').addEventListener('input', function() {
+  selectedEmoji = this.value;
+  document.getElementById('emojiPicker').querySelectorAll('.emoji-opt').forEach(s => {
+    s.classList.toggle('selected', s.textContent === selectedEmoji);
+  });
+});
+
+function saveCard() {
+  const icon = (document.getElementById('mIcon').value.trim() || selectedEmoji || '🌟');
+  const label = document.getElementById('mLabel').value.trim();
+  const cat = document.getElementById('mCat').value;
+  let gag = document.getElementById('mGag').value.trim();
+
+  if (!label) { document.getElementById('mLabel').focus(); return; }
+  if (!gag) {
+    const opts = catGags[cat] || ["しらんけど"];
+    gag = opts[Math.floor(Math.random() * opts.length)];
+  }
+
+  const card = { icon, label, gag, cat };
+  if (editIdx === -1 || !cards[editIdx]) {
+    const empty = cards.findIndex(c => !c);
+    if (empty === -1) { alert('スロットが満杯！まず夢を叶えてw'); return; }
+    cards[empty] = card;
+  } else {
+    cards[editIdx] = card;
+  }
+  saveData(); closeModal(); render();
+}
+
+function deleteCard(i, e) {
+  e.stopPropagation();
+  cards[i] = null;
+  saveData(); render();
+}
+
+function shuffleBoard() {
+  const filled = cards.filter(Boolean);
+  for (let i = filled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filled[i], filled[j]] = [filled[j], filled[i]];
+  }
+  cards = [...filled, ...Array(9 - filled.length).fill(null)];
+  saveData(); render();
+}
+
+function clearAll() {
+  if (confirm('全部消しちゃうよ？本当に？夢、大丈夫？')) {
+    cards = Array(9).fill(null);
+    saveData(); render();
+  }
+}
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.getElementById('boardTitle').addEventListener('input', saveData);
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+loadData();
+render();
+</script>
+</body>
+</html>
