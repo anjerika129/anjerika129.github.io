@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日もがんばったで賞</title>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;700&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#FDF6EE;
+  --ink:#2A1F14;
+  --ink2:#6B5744;
+  --ink3:#A8927D;
+  --cream:#FFF8F0;
+  --accent:#D4541A;
+  --accent2:#F2A04A;
+  --blush:#F5D5C0;
+  --gold:#C8922A;
+  --border:#E8D5C0;
+  --card:#FFFCF8;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(200,146,42,0.06) 40px),
+    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(200,146,42,0.06) 40px);
+  pointer-events:none;z-index:0;
+}
+
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 20px 80px;}
+
+/* HEADER */
+.header{text-align:center;padding:3.5rem 0 2rem;animation:fadeUp 0.6s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.header-seal{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:72px;height:72px;border-radius:50%;
+  border:2.5px solid var(--gold);
+  background:var(--cream);
+  font-size:30px;
+  margin-bottom:1rem;
+  animation:spin 20s linear infinite;
+  position:relative;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.header-seal::before{
+  content:'がんばったで賞 ✦ がんばったで賞 ✦ ';
+  position:absolute;
+  font-size:7px;
+  font-family:'Kaisei Tokumin',serif;
+  color:var(--gold);
+  width:100%;height:100%;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  letter-spacing:0.05em;
+  white-space:nowrap;
+  overflow:hidden;
+}
+.h1{font-family:'Kaisei Tokumin',serif;font-size:clamp(26px,5vw,38px);font-weight:700;color:var(--ink);letter-spacing:0.04em;margin-bottom:8px;}
+.h1 em{color:var(--accent);font-style:normal;}
+.hsub{font-size:13px;color:var(--ink3);letter-spacing:0.06em;}
+
+/* FORM CARD */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:1.8rem 1.6rem;
+  margin-bottom:1.2rem;
+  animation:fadeUp 0.6s ease both;
+}
+.card:nth-child(2){animation-delay:0.1s;}
+.card:nth-child(3){animation-delay:0.2s;}
+.card:nth-child(4){animation-delay:0.3s;}
+
+.section-label{
+  font-family:'Kaisei Tokumin',serif;
+  font-size:13px;font-weight:700;
+  color:var(--ink2);
+  letter-spacing:0.1em;
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-label::before{
+  content:'';display:block;
+  width:3px;height:16px;
+  background:var(--accent);
+  border-radius:2px;
+}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  font-size:12px;
+  padding:7px 16px;
+  border-radius:99px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--ink2);
+  cursor:pointer;
+  transition:all 0.15s;
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  letter-spacing:0.03em;
+}
+.chip:hover{border-color:var(--accent2);color:var(--accent);}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+.free-input{
+  width:100%;margin-top:12px;
+  padding:10px 16px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:13px;outline:none;
+  transition:border-color 0.2s;
+}
+.free-input:focus{border-color:var(--accent2);}
+.free-input::placeholder{color:var(--ink3);}
+
+/* GEN BUTTON */
+.gen-btn{
+  width:100%;padding:16px;
+  border-radius:14px;
+  background:var(--accent);
+  color:#fff;
+  font-family:'Kaisei Tokumin',serif;
+  font-size:17px;font-weight:700;
+  border:none;cursor:pointer;
+  letter-spacing:0.08em;
+  transition:transform 0.15s,background 0.15s;
+  margin-bottom:1.5rem;
+  position:relative;overflow:hidden;
+}
+.gen-btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);
+}
+.gen-btn:hover{transform:translateY(-2px);background:#B8431A;}
+.gen-btn:active{transform:scale(0.98);}
+
+/* RESULT */
+.result{display:none;animation:fadeUp 0.5s ease both;}
+.result.show{display:block;}
+
+.award-plate{
+  background:var(--card);
+  border:1.5px solid var(--gold);
+  border-radius:20px;
+  padding:2rem 1.8rem;
+  text-align:center;
+  margin-bottom:1rem;
+  position:relative;
+  overflow:hidden;
+}
+.award-plate::before{
+  content:'';position:absolute;
+  top:-40px;right:-40px;
+  width:120px;height:120px;
+  border-radius:50%;
+  background:rgba(200,146,42,0.06);
+}
+.award-plate::after{
+  content:'';position:absolute;
+  bottom:-30px;left:-30px;
+  width:80px;height:80px;
+  border-radius:50%;
+  background:rgba(212,84,26,0.05);
+}
+.award-em{font-size:48px;margin-bottom:8px;display:block;}
+.award-name{
+  font-family:'Kaisei Tokumin',serif;
+  font-size:20px;font-weight:700;
+  color:var(--gold);
+  letter-spacing:0.1em;
+  margin-bottom:4px;
+}
+.award-date{font-size:11px;color:var(--ink3);letter-spacing:0.08em;}
+
+.result-block{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.4rem 1.6rem;
+  margin-bottom:10px;
+}
+.result-block-label{
+  font-size:10px;font-weight:700;
+  color:var(--ink3);
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.result-block-label span{font-size:14px;}
+.result-text{
+  font-size:14px;color:var(--ink);
+  line-height:1.8;
+}
+.result-block.excuse{background:#FFF5EE;border-color:#F0C8A0;}
+.result-block.excuse .result-text{color:var(--ink2);}
+.result-block.cheer{background:#FEF0F0;border-color:#F0C0C0;text-align:center;}
+.result-block.cheer .result-text{font-family:'Kaisei Tokumin',serif;font-size:15px;color:var(--accent);font-weight:700;letter-spacing:0.04em;}
+
+.btn-row{display:flex;gap:10px;margin-top:12px;}
+.sub-btn{
+  flex:1;padding:11px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--ink2);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:13px;cursor:pointer;
+  transition:all 0.15s;
+  letter-spacing:0.03em;
+}
+.sub-btn:hover{border-color:var(--accent2);color:var(--accent);}
+.copied-msg{font-size:11px;color:var(--accent);text-align:center;margin-top:6px;height:16px;}
+
+/* DECO */
+.deco-line{
+  display:flex;align-items:center;gap:12px;
+  margin:1.5rem 0;color:var(--ink3);font-size:11px;letter-spacing:0.1em;
+}
+.deco-line::before,.deco-line::after{content:'';flex:1;height:1px;background:var(--border);}
+
+@media(max-width:480px){
+  .card{padding:1.4rem 1.2rem;}
+  .award-plate{padding:1.6rem 1.2rem;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-seal">😇</div>
+    <h1 class="h1">今日も<em>がんばった</em>で賞</h1>
+    <p class="hsub">サボった日も、ちゃんとがんばった。たぶん。</p>
+  </div>
+
+  <div class="card">
+    <div class="section-label">今日サボったのは？（複数OK）</div>
+    <div class="chips" id="reasonChips">
+      <span class="chip" data-v="眠かった">眠かった</span>
+      <span class="chip" data-v="天気が悪かった">天気が悪かった</span>
+      <span class="chip" data-v="推しのせい">推しのせい</span>
+      <span class="chip" data-v="やる気がでなかった">やる気がでなかった</span>
+      <span class="chip" data-v="体調が微妙だった">体調が微妙だった</span>
+      <span class="chip" data-v="スマホが止まらなかった">スマホが止まらなかった</span>
+      <span class="chip" data-v="急用があった">急用があった</span>
+      <span class="chip" data-v="なんとなく">なんとなく</span>
+    </div>
+    <input class="free-input" id="freeReason" placeholder="その他…（例：猫が膝から離れなかった）" maxlength="40" />
+  </div>
+
+  <div class="card">
+    <div class="section-label">サボり時間はどのくらい？</div>
+    <div class="chips" id="timeChips">
+      <span class="chip" data-v="30分">30分</span>
+      <span class="chip" data-v="1時間">1時間</span>
+      <span class="chip" data-v="半日">半日</span>
+      <span class="chip" data-v="まるまる1日">まるまる1日</span>
+      <span class="chip" data-v="3日以上">3日以上…</span>
+      <span class="chip" data-v="数えたくない">数えたくない</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">言い訳のトーンは？</div>
+    <div class="chips" id="toneChips">
+      <span class="chip" data-v="真剣風">真剣風</span>
+      <span class="chip" data-v="詩的">詩的・文学的</span>
+      <span class="chip" data-v="開き直り">開き直り</span>
+      <span class="chip" data-v="科学的">科学的っぽい</span>
+      <span class="chip" data-v="ギャル">ギャル風</span>
+    </div>
+  </div>
+
+  <button class="gen-btn" onclick="generate()">😇 がんばったで賞を発行する</button>
+
+  <div class="result" id="result">
+    <div class="award-plate">
+      <span class="award-em" id="awardEm">🏅</span>
+      <div class="award-name" id="awardName">今日もがんばったで賞</div>
+      <div class="award-date" id="awardDate"></div>
+    </div>
+
+    <div class="result-block">
+      <div class="result-block-label"><span>📓</span> 今日の練習日記（ふり）</div>
+      <div class="result-text" id="diaryText"></div>
+    </div>
+
+    <div class="result-block excuse">
+      <div class="result-block-label"><span>🗣</span> 言い訳文</div>
+      <div class="result-text" id="excuseText"></div>
+    </div>
+
+    <div class="result-block cheer">
+      <div class="result-text" id="cheerText"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="sub-btn" onclick="generate()">🔀 別バージョン</button>
+      <button class="sub-btn" onclick="copyAll()">📋 全部コピー</button>
+    </div>
+    <div class="copied-msg" id="copiedMsg"></div>
+
+    <div class="deco-line">✦ また明日 ✦</div>
+  </div>
+
+</div>
+<script>
+const D={
+  "真剣風":[
+    "本日は全身で休息の重要性を体感した。心身のリカバリーなくして本番の成功はない。",
+    "今日は精神的なアプローチから音楽を見つめ直す時間とした。内なる音楽性を養った。",
+    "練習とは、しないことで必要性を再認識する作業でもある。今日はその日だった。",
+    "今日は「聴く耳を育てる日」と位置付けた。能動的な休息により感受性を磨いた。",
+  ],
+  "詩的":[
+    "今日、わたしは音楽を空白の中に見つけた。沈黙もまた、音楽である。",
+    "休むことは、次の音符への助走だ。今日という空白が、明日の旋律を育てている。",
+    "練習とは、していない瞬間にも心の中で続くものだ。今日も魂は歌っていた。",
+    "葉が木から離れるとき、それは死ではなく次の春への準備だ。今日はそういう日。",
+  ],
+  "開き直り":[
+    "今日はやらなかった。以上。でも明日やるからトータルプラマイゼロ理論で行く。",
+    "サボった。でも罪悪感は感じた。感情的にはフル稼働した。",
+    "休んだことで体力温存できた。明日100%出せる。長期的に見てプラス。完璧な判断。",
+    "今日の分は明日2倍やる（言ったもん勝ち）。",
+  ],
+  "科学的":[
+    "海馬の記憶定着には休息が不可欠であり、本日は神経回路の最適化フェーズに充てた。",
+    "筋肉と同様、技術も休息中に定着する。今日はシナプス強化のためのオフ日と判断した。",
+    "コルチゾール値の上昇を防ぐため、今日は意図的にストレス因子を排除した。医学的判断。",
+    "REM睡眠中の記憶統合を優先した。昨日までの練習内容が今夜、脳に刻まれている。",
+  ],
+  "ギャル":[
+    "今日マジ無理だったんだけど〜！でも逆に休んだほうが伸びるって聞いたし？てかそれ本当。",
+    "サボったけどメンタル最強に整えたから結果オーライじゃん？うち天才かも笑",
+    "ていうかさ、やる気ない日に無理してもクオリティ低くない？計画的休息ってやつ。",
+    "今日はインプット多めでアウトプット少なめのバランス日！推しの動画めっちゃ見た！",
+  ],
+};
+const E={
+  "真剣風":["本日は心身の調整を優先いたしました。万全の状態でお応えできるよう準備しております。","今日は内省の時間に充てました。質の高いアウトプットのための大切な充電期間です。","体調管理も実力のうちと師に教わりました。今日はその実践でございます。"],
+  "詩的":["今日は音のない音楽を奏でておりました。どうかご理解いただければ幸いです。","休息とは、次の高みへ飛ぶための翼を畳む時間。今日はその翼を休めました。","沈黙の中にも成長はある。今日という日が明日の私を作っています。"],
+  "開き直り":["サボりました。でも正直に言ったので誠実さという点では100点です。","今日はオフです。人間だもの（みつを風）。","やらなかったことは認めます。でも明日やります。これが全てです。"],
+  "科学的":["本日は神経可塑性の観点から意図的な休息フェーズを設けました。ご了承ください。","過負荷によるパフォーマンス低下を防ぐため、今日は回復プロトコルを実施しました。","脳科学的に見て今日の休息は明日のパフォーマンスを23%向上させると推定されます。"],
+  "ギャル":["今日ちょっと無理だったんだよね〜でも明日ほんとやる！ほんとに！！","マジごめんでも体が資本じゃん？うちまだまだやれるから見てて！","サボったとは言いたくない、戦略的休息ってことで！よろ！"],
+};
+const C=["休んだことを責めないで。今日も生きてたじゃん。それで十分。知らんけど。","やらなかった日も、明日やろうと思ってる日。それはもう、やってる。","100点じゃなくていい。今日の自分に、がんばったで賞。","完璧な人間より、転んでも起き上がる人間のほうがかっこいい。（たぶん）","サボった自分を責めるエネルギー、明日の練習に使って。それが最適解。","今日サボったあなたへ。明日の朝、また始めればいい。それだけでいい。","人生、毎日100%じゃなくていい。今日は30%の日。それも人生。"];
+const A=[{e:"🏅",n:"今日もがんばったで賞"},{e:"😴",n:"戦略的休息マスター賞"},{e:"🌙",n:"明日こそやる宣言賞"},{e:"🧠",n:"脳内練習完遂賞"},{e:"💪",n:"サボり正直申告賞"},{e:"🌸",n:"休むことも実力賞"}];
+function rand(a){return a[Math.floor(Math.random()*a.length)];}
+function getSelected(id){return[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.dataset.v);}
+function generate(){
+  const rs=getSelected('reasonChips');
+  const fr=document.getElementById('freeReason').value.trim();
+  const ts=getSelected('timeChips');
+  const tc=document.querySelector('#toneChips .chip.on');
+  const tone=tc?tc.dataset.v:'開き直り';
+  let d=rand(D[tone]||D['開き直り']);
+  let ex=rand(E[tone]||E['開き直り']);
+  const r=fr||(rs.length?rs.join('・'):null);
+  if(r)d=`「${r}」という不可抗力により、`+d;
+  if(ts.length)ex=ex+`（${ts.join('・')}のロスは明日で回収予定）`;
+  const aw=rand(A);
+  document.getElementById('awardEm').textContent=aw.e;
+  document.getElementById('awardName').textContent=aw.n;
+  const now=new Date();
+  document.getElementById('awardDate').textContent=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 授与`;
+  document.getElementById('diaryText').textContent=d;
+  document.getElementById('excuseText').textContent=ex;
+  document.getElementById('cheerText').textContent=rand(C);
+  const el=document.getElementById('result');
+  el.classList.add('show');
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function copyAll(){
+  const d=document.getElementById('diaryText').textContent;
+  const ex=document.getElementById('excuseText').textContent;
+  const ch=document.getElementById('cheerText').textContent;
+  navigator.clipboard.writeText(`【今日の練習日記】\n${d}\n\n【言い訳文】\n${ex}\n\n${ch}`).then(()=>{
+    const m=document.getElementById('copiedMsg');
+    m.textContent='コピーしました！';
+    setTimeout(()=>m.textContent='',2000);
+  });
+}
+document.querySelectorAll('#reasonChips .chip').forEach(c=>{
+  c.addEventListener('click',()=>c.classList.toggle('on'));
+});
+['timeChips','toneChips'].forEach(id=>{
+  document.querySelectorAll(`#${id} .chip`).forEach(c=>{
+    c.addEventListener('click',()=>{
+      document.querySelectorAll(`#${id} .chip`).forEach(x=>x.classList.remove('on'));
+      c.classList.add('on');
+    });
+  });
+});
+</script>
+</body>
+</html>
