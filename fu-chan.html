@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ふーちゃんアプリ 🎵</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Zen Kaku Gothic New','Hiragino Kaku Gothic ProN',sans-serif;
+  background:linear-gradient(160deg,#e8f4ff 0%,#f0f0ff 50%,#e8fff5 100%);
+  min-height:100vh;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:1.5rem 1rem 4rem;
+  color:#1a1a2e;
+}
+.app{
+  max-width:440px;width:100%;
+  background:#ffffff;
+  border-radius:28px;
+  padding:1.5rem 1.25rem 2.5rem;
+  box-shadow:0 12px 48px rgba(80,60,180,0.12),0 2px 8px rgba(0,0,0,0.06);
+  position:relative;overflow:hidden;
+}
+.app::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(93,202,165,0.07);pointer-events:none;
+}
+.header{text-align:center;padding:0.5rem 0 0.25rem;position:relative;}
+.name-tag{font-size:11px;letter-spacing:0.14em;color:#888;margin-top:4px;text-transform:uppercase;}
+
+/* 吹き出し */
+.bubble{
+  background:#fff;border:1px solid #e0dff8;border-radius:18px;
+  padding:1rem 1.25rem;margin:0.75rem 0;min-height:82px;
+  font-size:14px;line-height:1.85;color:#1a1a2e;position:relative;
+  transition:all 0.2s;
+}
+.bubble::after{content:'';position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#e0dff8;}
+.bubble::before{content:'';position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);z-index:1;border:5px solid transparent;border-top-color:#fff;}
+.sub{font-size:12.5px;color:#888;}
+
+/* ひとこと */
+.kotoba-badge{
+  background:linear-gradient(135deg,#eeedfe,#e1f5ee);
+  border:1px solid #afa9ec;border-radius:12px;
+  padding:8px 14px;margin:0 0 10px;
+  font-size:12px;color:#534ab7;line-height:1.6;
+  text-align:center;cursor:pointer;transition:opacity 0.15s;
+}
+.kotoba-badge:hover{opacity:0.8;}
+.kotoba-sub{font-size:10px;color:#888;display:block;margin-top:2px;}
+
+/* タブ */
+.mode-tabs{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin:0.85rem 0 0.5rem;}
+.tab-btn{
+  border:1px solid #ddd;background:#f8f8f8;border-radius:20px;
+  padding:6px 13px;font-size:12px;cursor:pointer;color:#666;
+  transition:all 0.15s;font-family:inherit;
+}
+.tab-btn:hover{background:#efefef;}
+.tab-btn.active{background:#e1f5ee;border-color:#5dcaa5;color:#0f6e56;font-weight:700;}
+.tab-btn.tarot-tab.active{background:#eeedfe;border-color:#afa9ec;color:#3c3489;}
+.tab-btn.shindan-tab.active{background:#fff0f5;border-color:#f4b8c5;color:#72243e;}
+.tab-btn.kotoba-tab.active{background:#fffbe6;border-color:#fac775;color:#633806;}
+
+/* グリッド */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0.5rem 0;}
+.act-btn{
+  border:1px solid #e8e8e8;background:#fff;border-radius:14px;
+  padding:12px 10px;font-size:13px;cursor:pointer;color:#1a1a2e;
+  text-align:center;transition:all 0.15s;font-family:inherit;
+}
+.act-btn:hover{background:#f8f8f8;transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.07);}
+.act-btn:active{transform:scale(0.97);}
+.btn-icon{font-size:22px;display:block;margin-bottom:5px;}
+
+/* クイズ */
+.answer-area{margin-top:0.5rem;}
+.answer-input{
+  width:100%;border:1px solid #ddd;border-radius:10px;
+  padding:9px 13px;font-size:14px;font-family:inherit;
+  background:#fff;color:#1a1a2e;margin-bottom:7px;
+  outline:none;transition:border-color 0.15s;
+}
+.answer-input:focus{border-color:#5dcaa5;}
+.submit-btn{
+  width:100%;background:#e1f5ee;border:1px solid #5dcaa5;border-radius:10px;
+  padding:10px;font-size:14px;color:#0f6e56;cursor:pointer;font-weight:700;
+  font-family:inherit;transition:background 0.15s;
+}
+.submit-btn:hover{background:#c0eedc;}
+.next-btn{
+  width:100%;background:#f8f8f8;border:1px solid #ddd;border-radius:10px;
+  padding:9px;font-size:13px;color:#666;cursor:pointer;margin-top:7px;font-family:inherit;
+}
+.next-btn:hover{background:#efefef;}
+.result-badge{display:inline-block;padding:3px 12px;border-radius:10px;font-size:12px;font-weight:700;margin-top:6px;}
+.badge-ok{background:#eaf3de;color:#3b6d11;border:1px solid #97c459;}
+.badge-ng{background:#fcebeb;color:#a32d2d;border:1px solid #f09595;}
+
+/* タロット */
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.theme-btn{
+  border:1px solid #ddd;background:#fff;border-radius:14px;
+  padding:11px 8px;font-size:13px;cursor:pointer;color:#1a1a2e;
+  text-align:center;transition:all 0.15s;font-family:inherit;
+}
+.theme-btn:hover{background:#f5f5ff;transform:translateY(-1px);}
+.theme-btn.selected{background:#eeedfe;border-color:#afa9ec;color:#3c3489;font-weight:700;}
+.draw-btn{
+  width:100%;background:linear-gradient(135deg,#534ab7,#7f77dd);border:none;border-radius:12px;
+  padding:13px;font-size:15px;color:white;cursor:pointer;font-weight:700;
+  letter-spacing:0.05em;margin-top:4px;font-family:inherit;transition:opacity 0.15s,transform 0.1s;
+}
+.draw-btn:hover{opacity:0.88;transform:translateY(-1px);}
+.draw-btn:active{transform:scale(0.98);}
+.draw-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.card-scene{perspective:600px;display:flex;justify-content:center;margin:14px 0;}
+.tarot-card{
+  width:94px;height:148px;border-radius:12px;
+  transform-style:preserve-3d;transition:transform 0.7s cubic-bezier(.4,0,.2,1);position:relative;
+}
+.tarot-card.flipped{transform:rotateY(180deg);}
+.card-face{
+  position:absolute;width:100%;height:100%;border-radius:11px;
+  backface-visibility:hidden;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:8px;
+}
+.card-back{background:linear-gradient(135deg,#1a1040,#2d1b69);border:2px solid #534ab7;}
+.card-front{background:#fdfbff;border:2px solid #afa9ec;transform:rotateY(180deg);}
+.card-emoji{font-size:30px;}
+.card-name{font-size:10px;color:#534ab7;font-weight:700;text-align:center;line-height:1.3;margin-top:5px;}
+.card-rev{font-size:9px;color:#a32d2d;margin-top:2px;font-weight:700;}
+.result-box{
+  background:#fff;border:1px solid #d0ceee;border-radius:16px;
+  padding:1rem 1.2rem;width:100%;margin-top:4px;
+}
+.result-label{font-size:12px;color:#534ab7;font-weight:700;margin-bottom:7px;letter-spacing:0.04em;}
+.result-text{font-size:13.5px;line-height:1.85;color:#1a1a2e;}
+.star-deco{color:#afa9ec;font-size:14px;letter-spacing:4px;text-align:center;margin:4px 0;}
+.again-btn{
+  width:100%;background:#eeedfe;border:1px solid #afa9ec;border-radius:10px;
+  padding:10px;font-size:14px;color:#3c3489;cursor:pointer;font-weight:700;
+  margin-top:10px;font-family:inherit;transition:background 0.15s;
+}
+.again-btn:hover{background:#cecbf6;}
+
+/* 診断 */
+.shindan-q{
+  background:#fff0f5;border:1px solid #f4b8c5;border-radius:14px;
+  padding:12px 14px;margin-bottom:10px;font-size:14px;line-height:1.7;
+  color:#1a1a2e;
+}
+.shindan-opts{display:flex;flex-direction:column;gap:7px;margin-bottom:8px;}
+.shindan-opt{
+  border:1px solid #f4b8c5;background:#fff;border-radius:10px;
+  padding:10px 14px;font-size:13px;cursor:pointer;color:#1a1a2e;
+  text-align:left;font-family:inherit;transition:all 0.15s;
+}
+.shindan-opt:hover{background:#fff0f5;transform:translateX(3px);}
+.shindan-result{
+  background:#fff0f5;border:1px solid #f4b8c5;border-radius:14px;
+  padding:14px;text-align:center;
+}
+.shindan-score{font-size:28px;font-weight:700;color:#d4537e;margin:8px 0 4px;}
+.shindan-comment{font-size:13px;line-height:1.7;color:#1a1a2e;}
+
+/* 今日のひとこと専用 */
+.kotoba-card{
+  background:linear-gradient(135deg,#fdfbff,#f5f5ff);
+  border:1px solid #d0ceee;border-radius:18px;
+  padding:1.4rem 1.2rem;text-align:center;margin-bottom:10px;
+}
+.kotoba-main{font-size:15px;line-height:1.9;color:#1a1a2e;margin-bottom:8px;}
+.kotoba-from{font-size:11px;color:#888;letter-spacing:0.08em;}
+.kotoba-refresh{
+  width:100%;background:#eeedfe;border:1px solid #afa9ec;border-radius:10px;
+  padding:9px;font-size:13px;color:#3c3489;cursor:pointer;font-weight:700;
+  font-family:inherit;transition:background 0.15s;
+}
+.kotoba-refresh:hover{background:#cecbf6;}
+
+@media(max-width:480px){
+  body{padding:0.5rem 0.25rem 2rem;}
+  .app{border-radius:16px;padding:1rem 0.9rem 2rem;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <svg width="130" height="140" viewBox="0 0 140 148" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="sk" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#FFE8D5"/>
+          <stop offset="100%" stop-color="#FFCCA8"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="68" cy="52" rx="35" ry="37" fill="#1A3A5C"/>
+      <ellipse cx="68" cy="60" rx="30" ry="32" fill="url(#sk)"/>
+      <ellipse cx="68" cy="36" rx="33" ry="16" fill="#1E4A72"/>
+      <path d="M36 50 Q40 28 68 26 Q96 28 100 50" fill="#1E4A72"/>
+      <path d="M38 54 Q34 38 40 34 Q36 48 38 58" fill="#2A5A8A"/>
+      <path d="M98 54 Q102 38 96 34 Q100 48 98 58" fill="#2A5A8A"/>
+      <ellipse cx="38" cy="62" rx="4.5" ry="5.5" fill="#FFCCA8"/>
+      <ellipse cx="98" cy="62" rx="4.5" ry="5.5" fill="#FFCCA8"/>
+      <ellipse cx="54" cy="59" rx="6" ry="6.5" fill="white"/>
+      <ellipse cx="82" cy="59" rx="6" ry="6.5" fill="white"/>
+      <circle cx="54" cy="60" r="4.2" fill="#1A3A5C" id="eL"/>
+      <circle cx="82" cy="60" r="4.2" fill="#1A3A5C" id="eR"/>
+      <circle cx="55.4" cy="58.5" r="1.5" fill="white"/>
+      <circle cx="83.4" cy="58.5" r="1.5" fill="white"/>
+      <path d="M48 51 Q54 48 60 50" stroke="#1E4A72" stroke-width="1.5" fill="none" stroke-linecap="round" id="bL"/>
+      <path d="M76 51 Q82 48 88 50" stroke="#1E4A72" stroke-width="1.5" fill="none" stroke-linecap="round" id="bR"/>
+      <path d="M65 68 Q68 72 71 68" stroke="#D4956A" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <ellipse cx="44" cy="72" rx="6" ry="3.5" fill="#A8D8EA" opacity="0.5"/>
+      <ellipse cx="92" cy="72" rx="6" ry="3.5" fill="#A8D8EA" opacity="0.5"/>
+      <path d="M 57 75 Q 68 82 79 75" stroke="#CC6655" stroke-width="2" fill="none" stroke-linecap="round" id="mo"/>
+      <rect x="60" y="89" width="16" height="12" rx="2" fill="#FFCCA8"/>
+      <path d="M32 148 Q34 107 47 102 L60 99 L68 104 L76 99 L89 102 Q102 107 104 148Z" fill="#5DCAA5"/>
+      <path d="M56 99 Q68 109 80 99" fill="#3DAA85"/>
+      <path d="M47 102 Q34 114 28 124" stroke="#FFCCA8" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <path d="M89 102 Q106 112 118 118" stroke="#FFCCA8" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <g transform="translate(20,118) rotate(-8)">
+        <rect x="0" y="-4" width="105" height="8" rx="4" fill="#C8D8E8"/>
+        <rect x="2" y="-2" width="101" height="2" rx="1" fill="#E8F4FF" opacity="0.7"/>
+        <rect x="0" y="-4.5" width="18" height="9" rx="4.5" fill="#B8C8D8"/>
+        <ellipse cx="9" cy="0" rx="5" ry="2.5" fill="#90A8B8"/>
+        <ellipse cx="9" cy="0" rx="3" ry="1.5" fill="#607080"/>
+        <circle cx="28" cy="0" r="3" fill="#A0B0C0"/>
+        <circle cx="44" cy="0" r="3" fill="#A0B0C0"/>
+        <circle cx="60" cy="0" r="3" fill="#A0B0C0"/>
+        <circle cx="76" cy="0" r="3" fill="#A0B0C0"/>
+        <rect x="92" y="-4" width="13" height="8" rx="3" fill="#B8C8D8"/>
+      </g>
+      <text x="108" y="108" font-size="12" fill="#3DAA85" opacity="0.7">♪</text>
+    </svg>
+    <p class="name-tag">🎵 Fu-chan · フルーティスト</p>
+  </div>
+
+  <div class="kotoba-badge" id="kotobaBadge" onclick="refreshKotoba()">
+    <span id="kotobaBadgeText">読み込み中...</span>
+    <span class="kotoba-sub">💭 タップで変わります</span>
+  </div>
+
+  <div class="bubble" id="bubble">
+    どうも〜！ふーちゃんです。<br>
+    フルーティストです。<br>
+    <span class="sub">（横向きの楽器を持ってる人です）</span>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="tab-btn active" onclick="setMode('hello')">あいさつ</button>
+    <button class="tab-btn" onclick="setMode('walk')">さんぽ</button>
+    <button class="tab-btn" onclick="setMode('quiz')">なぞなぞ</button>
+    <button class="tab-btn" onclick="setMode('joke')">ふふっ</button>
+    <button class="tab-btn tarot-tab" onclick="setMode('tarot')">✨タロット</button>
+    <button class="tab-btn shindan-tab" onclick="setMode('shindan')">🎯診断</button>
+    <button class="tab-btn kotoba-tab" onclick="setMode('kotoba')">💭ひとこと</button>
+  </div>
+
+  <div id="action-area"></div>
+</div>
+
+<script>
+const bubble = document.getElementById('bubble');
+const actionArea = document.getElementById('action-area');
+
+const moods = {
+  happy:    { mouth:"M 57 75 Q 68 82 79 75", bl:"M48 51 Q54 48 60 50", br:"M76 51 Q82 48 88 50" },
+  laugh:    { mouth:"M 55 74 Q 68 85 81 74", bl:"M48 50 Q54 47 60 49", br:"M76 50 Q82 47 88 49" },
+  think:    { mouth:"M 60 77 Q 68 79 76 77", bl:"M48 50 Q54 49 60 51", br:"M76 50 Q82 49 88 51" },
+  surprise: { mouth:"M 63 75 Q 68 80 73 75", bl:"M47 50 Q54 45 60 48", br:"M76 50 Q82 45 88 48" },
+  mystical: { mouth:"M 59 76 Q 68 81 77 76", bl:"M47 49 Q54 46 60 49", br:"M75 49 Q82 46 88 49" },
+  proud:    { mouth:"M 58 74 Q 68 80 78 74", bl:"M47 48 Q54 45 61 48", br:"M75 48 Q82 45 89 48" },
+};
+function setMood(m) {
+  const mo = moods[m] || moods.happy;
+  document.getElementById('mo').setAttribute('d', mo.mouth);
+  document.getElementById('bL').setAttribute('d', mo.bl);
+  document.getElementById('bR').setAttribute('d', mo.br);
+}
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// ===== 今日のひとこと（バッジ用） =====
+const kotobaMini = [
+  "フルートは横向き。人生も横から見ると違う景色がある。知らんけど。",
+  "音が出ない日は、息の日。（意味は自分で考えて）",
+  "練習しない日も、フルートは待っている。けなげだと思う。",
+  "アンブシュアを制する者は、フルートを制する。たぶん。",
+  "休符も音楽。サボりも…ちょっと違う。",
+  "今日吹かなかった分は、明日の感動になる。（なるといいね）",
+  "フルートは3つに分解できる。人間は分解できない。フルートの方が便利。",
+  "高い音は難しい。でも難しいから面白い。（面白くない日もある）",
+  "笛と言われても、もう怒らない。（ちょっと怒ってる）",
+  "ピッチが合う瞬間は、宇宙と同期している感じがする。大げさかもしれない。",
+  "フルートのケースを持って歩くと、なんかプロっぽい。中身は関係ない。",
+  "息が大事。生きるのも息が大事。フルートと人間、意外と同じ。",
+];
+let kotobaMiniIdx = Math.floor(Math.random() * kotobaMini.length);
+function refreshKotoba() {
+  kotobaMiniIdx = (kotobaMiniIdx + 1) % kotobaMini.length;
+  document.getElementById('kotobaBadgeText').textContent = kotobaMini[kotobaMiniIdx];
+}
+document.getElementById('kotobaBadgeText').textContent = kotobaMini[kotobaMiniIdx];
+
+// ===== データ =====
+const helloData = [
+  { label:"おはよう", icon:"☀️", text:'おはようございます。<br>朝から口の形の練習してたら<br>家族に「なに？」って言われました。<br><span class="sub">（アンブシュア練習です、説明難しい）</span>', mood:"think" },
+  { label:"こんにちは", icon:"🌤️", text:'こんにちは〜！<br>今日もフルート吹きました。<br>音が出るまで3分かかりました。<br><span class="sub">（毎日やってるのに毎日かかる）</span>', mood:"happy" },
+  { label:"こんばんは", icon:"🌙", text:'こんばんは。<br>夜に吹いたら隣の方に<br>「笛の音がする」と言われました。<br><span class="sub">フルートです。笛ではない。（笛です）</span>', mood:"think" },
+  { label:"またね！", icon:"👋", text:'またね〜！<br>次来るときも吹いてます。<br>上手くなってるかも。<br><span class="sub">（なってない可能性もある）</span>', mood:"laugh" },
+  { label:"元気？", icon:"💚", text:'元気です！<br>フルートのせいで元気です。<br>フルートがなくても元気です。<br><span class="sub">（でもフルートがあった方が元気です）</span>', mood:"happy" },
+  { label:"ありがとう", icon:"🙏", text:'ありがとうございます。<br>その言葉、フルートに伝えておきます。<br>フルートも喜ぶと思います。<br><span class="sub">（喜ぶかどうかは不明）</span>', mood:"laugh" },
+];
+
+const walkData = [
+  { label:"公園へ", icon:"🌳", text:'公園に来ました。<br>風が気持ちいい〜。<br>フルートが勝手に鳴りそう。<br><span class="sub">（鳴りません、ちゃんと吹かないと）</span>', mood:"think" },
+  { label:"海沿い", icon:"🌊", text:'海沿いを歩いてます。<br>潮風でフルートが塩辛くなりそう。<br>大事な楽器なので想像だけにした。<br><span class="sub">（持ってきてない。正解）</span>', mood:"laugh" },
+  { label:"商店街", icon:"🏮", text:'商店街でクレープ食べました。<br>美味しかった。<br>でも口のまわりがベタベタになって<br><span class="sub">アンブシュアが崩れた（本末転倒）</span>', mood:"surprise" },
+  { label:"帰り道", icon:"🏠", text:'ただいま〜。<br>たくさん歩いた。息が上がった。<br>でもフルートは息が大事。<br><span class="sub">（つまりいい練習になった、と思う）</span>', mood:"happy" },
+  { label:"坂道", icon:"⛰️", text:'坂道を登りました。<br>息が切れました。<br>フルートは息が命なのに。<br><span class="sub">（完全に逆効果。でも景色は良かった）</span>', mood:"think" },
+  { label:"カフェ", icon:"☕", text:'カフェに入りました。<br>BGMがクラシックでした。<br>フルートの音が聞こえた気がしました。<br><span class="sub">（気のせいでした。ピアノでした）</span>', mood:"laugh" },
+  { label:"図書館", icon:"📚", text:'図書館に来ました。<br>フルートの楽譜を探しました。<br>たくさんありました。<br><span class="sub">（全部難しそうでした。そっと棚に戻した）</span>', mood:"surprise" },
+  { label:"夜の散歩", icon:"🌟", text:'星が綺麗です。<br>フルートの音みたいに澄んでる。<br>…と言いたいところですが<br><span class="sub">今の自分の音は曇ってます。正直に言います。</span>', mood:"think" },
+];
+
+const quizData = [
+  { q:'フルートはどうやって音を出す？<br><span class="sub">ヒント：ふーちゃんの得意なこと</span>', a:["吹く","息","ふく","息を吹く","blow"], ok:'正解〜！！<br>息を吹き込んで音を出します。<br>ただし正しい角度で。<br><span class="sub">最初は音が出なくて泣きました（本当）</span>', ng:'不正解〜！<br>息を吹き込みます。<br>ちなみに弦はないし弓も使わない。<br><span class="sub">それはバイオリンです。全然違う。</span>' },
+  { q:'フルートを横向きに構えるのはなぜ？<br>① 見た目がかっこいいから<br>② 音孔に息を当てやすいから<br>③ 作った人の気まぐれ', a:["②","2","音孔","息"], ok:'正解！！<br>音孔に息を正確に当てるためです。<br>でも①も否定はできない。<br><span class="sub">横向きはたしかにかっこいい。</span>', ng:'残念！<br>正解は②音孔に息を当てやすいから。<br>③の「気まぐれ」を選んだ人、<br><span class="sub">ちょっと好きです。</span>' },
+  { q:'フルートは何族の楽器？<br>① 弦楽器　② 木管楽器　③ 金管楽器', a:["木管","②","2","もっかん"], ok:'正解！！<br>木管楽器です。<br>金属なのに木管。<br><span class="sub">ふーちゃんも最初「え？」ってなった。</span>', ng:'不正解！<br>木管楽器です。<br>金属なのに木管って変ですよね。<br><span class="sub">音の出し方で決まるらしい。奥深い。</span>' },
+  { q:'フルートで一番難しいのは？<br>① 最初の音を出すこと<br>② 指を動かすこと<br>③ 楽譜を読むこと', a:["①","1","最初","音を出す"], ok:'正解！！<br>最初の一音、本当に難しい。<br>ふーちゃんも泣きました（2回目）。<br><span class="sub">でも出た時の感動もひとしおです。</span>', ng:'不正解！<br>正解は①最初の音を出すこと。<br>音が出ない＝ただ息を吐いてる人。<br><span class="sub">ふーちゃんも最初はそうでした（涙）</span>' },
+  { q:'フルートの材料で一番高級なのは？<br>① プラスチック　② 銀　③ 金', a:["金","③","3","ゴールド"], ok:'正解！！<br>金（ゴールド）です。<br>もちろんふーちゃんは持ってない。<br><span class="sub">（銀も持ってない。樹脂です、今のところ）</span>', ng:'不正解！<br>一番高いのは金製です。<br>プロ奏者が使う金のフルート、<br><span class="sub">値段を調べて震えたことがあります。</span>' },
+  { q:'アンブシュアって何のこと？<br>① 楽器の持ち方<br>② 口の形・唇の当て方<br>③ 演奏中の足の位置', a:["②","2","口","唇"], ok:'正解！！<br>口の形、唇の当て方のことです。<br>ふーちゃんが毎日悩んでることです。<br><span class="sub">（③を選んだ人、足どうするつもりだったの）</span>', ng:'不正解！<br>正解は②口の形・唇の当て方です。<br>フルートで一番大事なことのひとつ。<br><span class="sub">ふーちゃんはまだ修行中です。一生修行かも。</span>' },
+  { q:'フルートは何個のパーツに分かれる？<br>① 1個（分解不可）<br>② 2個<br>③ 3個', a:["③","3","三","みっつ"], ok:'正解！<br>3つに分解できます。<br>頭部管・胴部管・足部管です。<br><span class="sub">最初に知った時「戻る？」と心配した。戻ります。</span>', ng:'不正解！<br>正解は③3つに分解できます。<br>ケースに入れる時は毎回バラします。<br><span class="sub">毎回ちゃんと戻ります。今のところ。</span>' },
+];
+
+const jokeData = [
+  { label:"フルートあるある", icon:"🎵", text:'フルート吹いてると<br>「笛ですか？」って聞かれる。<br>「フルートです」と言うと<br><span class="sub">「横向きの笛ですね」って返ってくる。（正しい）</span>', mood:"laugh" },
+  { label:"練習あるある", icon:"📖", text:'息の練習してると<br>「過呼吸？」って心配される。<br>「フルートの練習です」と言ったら<br><span class="sub">「フルートって息いるの？」って聞かれた。（いります）</span>', mood:"think" },
+  { label:"ふーちゃんの秘密", icon:"🎀", text:'フルートの持ち方、<br>慣れるまで腕が疲れました。<br>「なんで横向きなんだ」と思った。<br><span class="sub">今は思いません。かっこいいので。</span>', mood:"laugh" },
+  { label:"衝撃の告白", icon:"😮", text:'フルートって分解できるんです。<br>3つに。<br>最初に知った時すごく心配した。<br><span class="sub">「これ元に戻る？」って。戻ります。毎回。</span>', mood:"surprise" },
+  { label:"音が出ない日", icon:"😶", text:'音が出ない日があります。<br>正確には、出るんですが<br>なんか違う日があります。<br><span class="sub">その日はフルートも困ってると思う。</span>', mood:"think" },
+  { label:"ふーちゃんの夢", icon:"🌟", text:'いつか大きなホールで吹きたい。<br>リサイタル。<br>客席に誰かいたらなお良し。<br><span class="sub">（「誰かいたら」のハードル低すぎるかも）</span>', mood:"proud" },
+  { label:"楽器の重さ", icon:"⚖️", text:'フルートは軽い楽器です。<br>450グラムくらい。<br>でも1時間持ち続けると<br><span class="sub">腕が鉛になります。これは本当のことです。</span>', mood:"think" },
+  { label:"観客の反応", icon:"👏", text:'演奏後に「音符が見えた」と言われた。<br>嬉しかった。<br>次に演奏したら「目を閉じてた」と言われた。<br><span class="sub">（寝てたのかもしれない。そっとしておいた）</span>', mood:"laugh" },
+];
+
+const tarotCards = [
+  { name:"愚者", emoji:"🌟", love:["新しい出会いの予感がフルートの第一音みたいにやってくる。怖がらずに吹いてみて。（外れても笑って）","あなたの恋は自由な即興演奏。ルールより感性を信じて。（楽譜なくて大丈夫か？という不安もある）"], work:["新しいことを始めるのに最高のタイミング。失敗しても音が出なかった初日だと思えばいい。","冒険してみて。フルートだって最初は笛と間違えられる。（それでも続けた）"], lucky:["今日は予定外のことが起きそう。でもそれが一番いい音になる日。（準備はしといて）","軽やかに行こう。荷物を持ちすぎない日。フルートのケースだけで十分。"], music:["今まで吹いたことのない曲に挑戦して。最初の一音が全部変える。（音が出なくても続けて）","即興でいい。うまくなくていい。心から出た音が一番きれい。（たぶん）"] },
+  { name:"魔術師", emoji:"🪄", love:["あなたには恋を引き寄せる力がある。フルートみたいに、ちゃんと息を吹き込めば音は出る。","今のあなたは最高の状態。好きな人に、今日話しかけてみて。（失敗したらふーちゃんに言って）"], work:["持っているスキルを全部使う時。フルートを3パートに分けて全部吹くくらいの勢いで。（それは無理）","あなたの能力、ちゃんと見てる人がいる。自信を持って。"], lucky:["何をやってもうまくいく波が来てる。フルートで例えると「今日ピッチが合う日」。","集中力が高まってる。やりたいことを今日やって。"], music:["技術が伸びる時期。練習した分だけ確実に返ってくる。（返ってくるのに時間がかかる場合もある）","あなたの音に説得力が出てきた。自分を信じて吹いて。"] },
+  { name:"女教皇", emoji:"📖", love:["直感を信じて。その人のこと、なんとなく感じてることが正しい。フルートの音程みたいに、感覚で合わせて。","焦らなくていい。静かに待つことが今の恋の正解。（ふーちゃんも待つのは得意ではない）"], work:["よく観察して。今は動くよりも情報を集める時期。楽譜をちゃんと読む時間。","直感が鋭い日。なんとなく思ったことを言ってみて。（言い方は工夫して）"], lucky:["内側の声に耳を傾けて。フルートの音みたいに、静かなところで聴こえてくるものがある。","今日は人の話をよく聞く日にすると吉。（自分も話したいのはわかる）"], music:["楽譜の行間を読む練習を。音符だけじゃない何かがある。（あるんです、ほんとに）","感受性が高まってる。音楽を聴くだけでもいい日。"] },
+  { name:"太陽", emoji:"☀️", love:["最高の日。好きな人に素直に伝えて。フルートの一番きれいな音が出る日みたいに、全力で。","明るく楽しく。難しく考えない日。"], work:["何をやってもうまくいく日。全力で動いて。","成功と喜び。努力が報われる日。（やった）"], lucky:["最高の運気。外に出ると良いことがある。フルートを持って出かけてもいい。（周囲の同意を得てから）","笑顔でいると運が寄ってくる日。"], music:["演奏が絶好調の日。録音して残して。こういう日の音を後で聴くと泣ける。（いい意味で）","人に聴かせたい日。発表会、路上、お風呂、どこでも。（お風呂は一人で）"] },
+  { name:"月", emoji:"🌕", love:["不安は不安のまま持っておいていい。霧の中でも前に進める。フルートが暗譜できた時みたいに、気づいたら出来てる。","直感と不安が混ざってる日。夢に出てきた人のことは少し気にして。"], work:["はっきりしない状況が続くかも。でも焦らない。","錯覚に気をつけて。見えてるものが全部本当じゃない日。"], lucky:["神秘的な日。論理より感覚で動いてみて。","夜の方が考えが冴える日。朝決断しなくていい。"], music:["感情的に演奏していい日。技術より気持ち優先で。","無意識にいい音が出る日。考えすぎず、ただ吹いて。"] },
+  { name:"星", emoji:"⭐", love:["希望の時期。好きな人への気持ち、諦めなくていい。フルートの音みたいに、信じて息を吹き込んで。","癒しと希望。傷ついてた心が回復してくる時。"], work:["インスピレーションに満ちた日。思いついたことをメモして。","夢に向かって動いていい日。遠すぎると思ってた目標が近く見えてくる。"], lucky:["運気がじんわりと上がってる。小さな幸せをいっぱい見つける日。","夜空を見上げると何かひらめくかも。（天気が良ければ）"], music:["音楽への愛を思い出す日。うまい下手じゃなく、好きだから吹く。それだけでいい。","ずっとやりたかった曲を今日から始めて。"] },
+  { name:"運命の輪", emoji:"🎡", love:["転機が来てる。今まで動かなかったことが急に動き出す。フルートのキーみたいに、ぱちっとはまる瞬間。","巡り合わせの日。偶然の出来事を大事にして。"], work:["チャンスの波が来てる。乗り遅れないで。","状況が変わる日。変化を怖がらず、ついていって。"], lucky:["運気の転換点。悪かった人はここから上向く。","偶然の出来事に意味がある日。見逃さないで。"], music:["音楽との運命的な出会いがある日。新しいジャンル、新しい曲、新しい先生。","今日の練習がこれからを大きく変えるかもしれない。（かもしれない、です）"] },
+  { name:"世界", emoji:"🌍", love:["完成と達成。今の恋が理想の形に近づいてる。フルートで完璧な音が出た瞬間みたいに。","一つの恋が美しく完結する時。悲しくなく、満足な終わり方。"], work:["大きなプロジェクトが完成する時。お疲れ様。本当によく頑張った。","次のステージへ進む準備ができてる。世界が広がる日。"], lucky:["最高の完成の日。やり遂げた達成感がある。","旅に出ると吉。（フルートを持って行くかは自由）"], music:["目標にしていた曲が仕上がる日。完成させて。","音楽で世界とつながる感覚がある日。あなたの音は誰かに届いてる。（ふーちゃんが保証する）"] },
+];
+const reversedPre = ["逆位置だけど大丈夫。","逆位置か〜。でも心配しないで。","逆位置ね。まあ聞いて。"];
+const tarotThemes = [
+  { key:'love', label:'💕 恋愛運' },
+  { key:'work', label:'💼 仕事運' },
+  { key:'lucky', label:'🍀 全体運' },
+  { key:'music', label:'🎵 音楽運' },
+];
+
+// ===== 診断データ =====
+const shindanData = [
+  {
+    q:'フルートの音を聞いて最初に思うことは？',
+    opts:['きれい〜','笛？','なんで横向きなの','吹いてみたい'],
+    comments:[
+      'あなたは感受性豊かなタイプ。フルートの音に素直に反応できる人。ふーちゃんと気が合いそう。',
+      'あなたは正直なタイプ。正しいか正しくないかより、感じた通りを言える人。フルートも笛の仲間なので満点。',
+      'あなたは疑問を持つタイプ。横向きの理由を知りたい人。その好奇心があればフルートは向いてる。（横向きは音孔のため）',
+      'あなたは行動派タイプ。感じたらすぐ動ける人。フルートはぜひ吹いてみて。最初は音が出なくても大丈夫。',
+    ]
+  },
+  {
+    q:'練習が続かない時、どうする？',
+    opts:['楽器を眺める','とりあえず構える','youtubeを見る','明日やる'],
+    comments:[
+      'あなたは愛情で乗り越えるタイプ。楽器を眺めるだけで充電できる人。ふーちゃんもやります。',
+      'あなたは身体が先に動くタイプ。構えたらなんとかなる精神。フルートに向いてる。（構えたら吹くしかない）',
+      'あなたはインプット型タイプ。見て学ぶ人。理論派。ただ見るだけで終わらないように。（ふーちゃんより）',
+      'あなたは正直者タイプ。「明日やる」を言える人。ふーちゃんも言います。毎日言います。',
+    ]
+  },
+  {
+    q:'「フルート吹いてます」と言ったら返ってきそうな反応は？',
+    opts:['「すごい！」','「笛？」','「横向きのやつ？」','「え、音出るの？」'],
+    comments:[
+      'あなたの周りは音楽理解者が多いタイプ。恵まれた環境。ふーちゃんがうらやましい。',
+      'あなたの周りはフルート初心者が多いタイプ。説明する機会が多い人。でも説明するのも楽しい（かもしれない）。',
+      'あなたの周りは観察眼がある人が多いタイプ。外見から入る人々。横向きで合ってるので怒らないで。',
+      'あなたの周りは素直な人が多いタイプ。素朴な疑問を投げかけてくる人々。「出ます！」と元気よく答えて。',
+    ]
+  },
+];
+
+// どう答えても「向いてます」で終わる診断
+const shindanResults = [
+  'フルート適性：★★★★★\nどう見ても向いてます。',
+  'フルート適性：★★★★☆\n向いてます。星1個は謙遜です。',
+  'フルート適性：★★★☆☆\n向いてます。星2個分はまだ伸びしろ。',
+  'フルート適性：★★★★★\n満点です。向いてます。異論は認めない。',
+];
+
+// ===== 今日のひとこと（フル） =====
+const kotobaFull = [
+  { text:'フルートは横向き。\n人生も横から見ると違う景色がある。\n知らんけど。', from:'ふーちゃん（月曜日の朝）' },
+  { text:'音が出ない日は、息の日。\nただ呼吸を確認している日。\n（意味は自分で考えて）', from:'ふーちゃん（考えた結果）' },
+  { text:'練習しない日も、\nフルートは待っている。\nけなげだと思う。', from:'ふーちゃん（楽器目線）' },
+  { text:'高い音は難しい。\nでも難しいから面白い。\n面白くない日もある。', from:'ふーちゃん（正直に言うと）' },
+  { text:'休符も音楽。\nサボりも…ちょっと違う。\nちょっとだけ違う。', from:'ふーちゃん（微妙なライン）' },
+  { text:'今日吹かなかった分は、\n明日の感動になる。\n（なるといいね）', from:'ふーちゃん（願望込み）' },
+  { text:'フルートは3つに分解できる。\n人間は分解できない。\nフルートの方が便利。', from:'ふーちゃん（比較検討）' },
+  { text:'笛と言われても、\nもう怒らない。\n（ちょっと怒ってる）', from:'ふーちゃん（成長した）' },
+  { text:'息が大事。\n生きるのも息が大事。\nフルートと人間、意外と同じ。', from:'ふーちゃん（哲学的な朝）' },
+  { text:'ピッチが合う瞬間は、\n宇宙と同期している感じがする。\n大げさかもしれない。', from:'ふーちゃん（大げさな日）' },
+  { text:'アンブシュアを制する者は\nフルートを制する。\nふーちゃんはまだ制されてる側。', from:'ふーちゃん（現実）' },
+  { text:'フルートのケースを持って歩くと\nなんかプロっぽい。\n中身は関係ない。', from:'ふーちゃん（外見重視）' },
+  { text:'上手くなりたい。\n毎日思う。\nなぜか毎日同じところで詰まる。', from:'ふーちゃん（記録）' },
+  { text:'音楽は人を繋ぐ、という。\nフルートも人を繋ぐ。\n「笛の人」という形で繋がることもある。', from:'ふーちゃん（繋がり方いろいろ）' },
+  { text:'完璧な音を目指してる。\nまだ会えてない。\nでも探し続けてる。', from:'ふーちゃん（旅の途中）' },
+];
+let kotobaIdx = 0;
+
+function renderGrid(data, onClickFn) {
+  const g = document.createElement('div'); g.className = 'grid';
+  data.forEach(d => {
+    const b = document.createElement('button'); b.className = 'act-btn';
+    b.innerHTML = `<span class="btn-icon">${d.icon}</span>${d.label}`;
+    b.onclick = () => onClickFn(d); g.appendChild(b);
+  });
+  actionArea.appendChild(g);
+}
+
+function renderQuiz() {
+  const q = quizData[Math.floor(Math.random() * quizData.length)];
+  bubble.innerHTML = q.q; setMood('think');
+  const area = document.createElement('div'); area.className = 'answer-area';
+  const inp = document.createElement('input'); inp.className = 'answer-input';
+  inp.placeholder = 'こたえを入力してね'; inp.type = 'text';
+  const btn = document.createElement('button'); btn.className = 'submit-btn'; btn.textContent = 'こたえる！';
+  const badge = document.createElement('span'); badge.className = 'result-badge'; badge.style.display = 'none';
+  let answered = false;
+  btn.onclick = () => {
+    if (answered) return; const val = inp.value.trim(); if (!val) return; answered = true;
+    const ok = q.a.some(a => val.toLowerCase().includes(a.toLowerCase()) || a.toLowerCase().includes(val.toLowerCase()));
+    bubble.innerHTML = ok ? q.ok : q.ng;
+    badge.textContent = ok ? '正解！！' : 'ざんねん...';
+    badge.className = 'result-badge ' + (ok ? 'badge-ok' : 'badge-ng');
+    badge.style.display = 'inline-block'; setMood(ok ? 'laugh' : 'think');
+    const nb = document.createElement('button'); nb.className = 'next-btn'; nb.textContent = 'つぎのもんだい！';
+    nb.onclick = () => setMode('quiz'); area.appendChild(nb);
+  };
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+  area.appendChild(inp); area.appendChild(btn); area.appendChild(badge);
+  actionArea.appendChild(area);
+}
+
+function renderTarot() {
+  setMood('mystical');
+  bubble.innerHTML = 'フルートの音色にのせて<br>カードを引いてみて♪<br><span class="sub">（当たっても外れても責任は取れません）</span>';
+  let selectedTheme = null;
+  const sec = document.createElement('div');
+  const tg = document.createElement('div'); tg.className = 'theme-grid';
+  tarotThemes.forEach(t => {
+    const b = document.createElement('button'); b.className = 'theme-btn'; b.textContent = t.label;
+    b.onclick = () => {
+      document.querySelectorAll('.theme-btn').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected'); selectedTheme = t; drawBtn.disabled = false;
+    }; tg.appendChild(b);
+  });
+  const drawBtn = document.createElement('button');
+  drawBtn.className = 'draw-btn'; drawBtn.textContent = '✨ カードを引く'; drawBtn.disabled = true;
+  drawBtn.onclick = () => {
+    drawBtn.disabled = true;
+    document.querySelectorAll('.theme-btn').forEach(x => x.disabled = true);
+    const card = rand(tarotCards);
+    const rev = Math.random() < 0.3;
+    const posStr = rev ? '逆位置' : '正位置';
+    bubble.innerHTML = 'カードを引いてる...<br><span class="sub">（フルートの音が鳴り響いています）</span>';
+    const scene = document.createElement('div'); scene.className = 'card-scene';
+    const cardEl = document.createElement('div'); cardEl.className = 'tarot-card';
+    cardEl.innerHTML = `<div class="card-face card-back"><div style="font-size:26px;color:#afa9ec;">✦</div><div style="font-size:9px;color:#7f77dd;margin-top:8px;letter-spacing:0.12em;">TAROT</div></div><div class="card-face card-front"><div class="card-emoji">${card.emoji}</div><div class="card-name">${card.name}</div>${rev?'<div class="card-rev">逆位置</div>':''}</div>`;
+    scene.appendChild(cardEl);
+    sec.appendChild(scene);
+    const rbox = document.createElement('div'); rbox.className = 'result-box';
+    rbox.innerHTML = '<div class="result-label" style="color:#aaa;">読み込み中...</div>';
+    sec.appendChild(rbox);
+    setTimeout(() => {
+      cardEl.classList.add('flipped');
+      bubble.innerHTML = `${card.emoji} ${card.name}のカードが出たよ！<br><span class="sub">フルートの音色に乗せてお届け♪</span>`;
+      setTimeout(() => {
+        let text = rand(card[selectedTheme.key] || card.lucky);
+        if (rev) text = rand(reversedPre) + 'エネルギーが内向きになってる。' + text.replace(/。$/, '。でも方向を変えれば大丈夫。');
+        rbox.innerHTML = `<div class="star-deco">✦ ✦ ✦</div><div class="result-label">🃏 ${card.name}（${posStr}）— ${selectedTheme.label}</div><div class="result-text">${text}</div>`;
+        const ag = document.createElement('button'); ag.className = 'again-btn'; ag.textContent = 'もう一度引く ✨';
+        ag.onclick = () => setMode('tarot'); sec.appendChild(ag); setMood('happy');
+      }, 400);
+    }, 900);
+  };
+  sec.appendChild(tg); sec.appendChild(drawBtn);
+  actionArea.appendChild(sec);
+}
+
+function renderShindan() {
+  setMood('think');
+  const q = shindanData[Math.floor(Math.random() * shindanData.length)];
+  bubble.innerHTML = `🎯 フルート適性診断<br><span class="sub">どう答えても向いてます（予告）</span>`;
+  const wrap = document.createElement('div');
+  const qEl = document.createElement('div'); qEl.className = 'shindan-q'; qEl.textContent = q.q;
+  wrap.appendChild(qEl);
+  const opts = document.createElement('div'); opts.className = 'shindan-opts';
+  q.opts.forEach((o, i) => {
+    const b = document.createElement('button'); b.className = 'shindan-opt'; b.textContent = o;
+    b.onclick = () => {
+      opts.querySelectorAll('.shindan-opt').forEach(x => { x.disabled = true; x.style.opacity = '0.5'; });
+      b.style.opacity = '1'; b.style.background = '#fff0f5'; b.style.borderColor = '#d4537e';
+      const res = document.createElement('div'); res.className = 'shindan-result';
+      const score = document.createElement('div'); score.className = 'shindan-score';
+      score.textContent = rand(shindanResults).split('\n')[0].replace('フルート適性：', '');
+      const comment = document.createElement('div'); comment.className = 'shindan-comment';
+      comment.textContent = q.comments[i];
+      const conclusion = document.createElement('div');
+      conclusion.style.cssText = 'margin-top:10px;font-size:13px;color:#534ab7;font-weight:700;';
+      conclusion.textContent = '→ 結論：向いてます。（どう答えても）';
+      res.appendChild(score); res.appendChild(comment); res.appendChild(conclusion);
+      wrap.appendChild(res);
+      setMood('proud');
+      bubble.innerHTML = `診断完了！<br>あなたはフルートに向いてます。<br><span class="sub">（これは毎回同じ結論です）</span>`;
+      const again = document.createElement('button'); again.className = 'next-btn'; again.textContent = '別の診断をする';
+      again.onclick = () => setMode('shindan'); again.style.marginTop = '8px';
+      wrap.appendChild(again);
+    };
+    opts.appendChild(b);
+  });
+  wrap.appendChild(opts);
+  actionArea.appendChild(wrap);
+}
+
+function renderKotoba() {
+  setMood('mystical');
+  bubble.innerHTML = '今日のひとこと🎵<br><span class="sub">フルートから学ぶ人生の知恵（知らんけど）</span>';
+  const k = kotobaFull[kotobaIdx % kotobaFull.length];
+  const card = document.createElement('div'); card.className = 'kotoba-card';
+  const main = document.createElement('div'); main.className = 'kotoba-main';
+  main.style.whiteSpace = 'pre-line'; main.textContent = k.text;
+  const from = document.createElement('div'); from.className = 'kotoba-from';
+  from.textContent = '— ' + k.from;
+  card.appendChild(main); card.appendChild(from);
+  actionArea.appendChild(card);
+  const btn = document.createElement('button'); btn.className = 'kotoba-refresh';
+  btn.textContent = '次のひとこと 🎵';
+  btn.onclick = () => {
+    kotobaIdx++;
+    refreshKotoba();
+    setMode('kotoba');
+  };
+  actionArea.appendChild(btn);
+}
+
+function setMode(mode) {
+  actionArea.innerHTML = '';
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + mode + "'")) b.classList.add('active');
+  });
+  const intros = {
+    hello:'どうも〜ふーちゃんです。<br>挨拶は大事。フルートより大事かも。<br><span class="sub">（フルートに怒られそう）</span>',
+    walk:'お散歩行こう！<br>フルートは置いてきます。<br><span class="sub">（外で吹くと何かと大変なので）</span>',
+    quiz:'フルートクイズだよ〜！<br>全問正解したらすごい。<br><span class="sub">ふーちゃんより詳しいかもしれない。</span>',
+    joke:'笑えるかは保証できないけど<br>全部実話ベースです。<br><span class="sub">（フルート人生、なかなか波乱）</span>',
+  };
+  if (mode !== 'tarot' && mode !== 'shindan' && mode !== 'kotoba') {
+    bubble.innerHTML = intros[mode] || ''; setMood('happy');
+  }
+  if (mode === 'hello') renderGrid(helloData, d => { bubble.innerHTML = d.text; setMood(d.mood); });
+  else if (mode === 'walk') renderGrid(walkData, d => { bubble.innerHTML = d.text; setMood(d.mood); });
+  else if (mode === 'quiz') renderQuiz();
+  else if (mode === 'joke') renderGrid(jokeData, d => { bubble.innerHTML = d.text; setMood(d.mood); });
+  else if (mode === 'tarot') renderTarot();
+  else if (mode === 'shindan') renderShindan();
+  else if (mode === 'kotoba') renderKotoba();
+}
+
+setMood('happy');
+</script>
+</body>
+</html>
