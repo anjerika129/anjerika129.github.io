@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>長崎貴婦人のお茶会ゲーム</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F5EDE0;
+  --deep: #1E1410;
+  --rose: #C4748A;
+  --gold: #B8963E;
+  --mist: #EAD9C8;
+  --ink: #3D2B22;
+  --accent: #8B4F6B;
+  --teal: #4A7C7E;
+  --paper: #FBF5EC;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--deep);
+  font-family: 'Shippori Mincho', serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+/* 背景装飾 */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(196,116,138,0.15) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 70%, rgba(184,150,62,0.12) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(74,124,126,0.08) 0%, transparent 60%);
+  pointer-events:none; z-index:0;
+}
+
+.app {
+  width: 100%;
+  max-width: 560px;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== SCREENS ===== */
+.screen { display:none; flex-direction:column; min-height:100vh; padding:32px 24px 48px; animation: fadeIn 0.5s ease; }
+.screen.active { display:flex; }
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ===== タイトル画面 ===== */
+#screen-title {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0;
+}
+
+.title-deco {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.title-main {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 20px rgba(184,150,62,0.3);
+}
+
+.title-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--rose);
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  margin-bottom: 48px;
+}
+
+.tea-cup {
+  font-size: 64px;
+  margin-bottom: 36px;
+  display: block;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+.menu-grid {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.menu-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(184,150,62,0.35);
+  border-radius: 4px;
+  padding: 16px 20px;
+  color: var(--cream);
+  font-family: 'Shippori Mincho', serif;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.menu-btn:hover {
+  background: rgba(184,150,62,0.12);
+  border-color: var(--gold);
+  transform: translateX(4px);
+}
+
+.menu-btn .btn-icon { font-size: 22px; flex-shrink:0; }
+.menu-btn .btn-text { }
+.menu-btn .btn-title { font-weight:600; font-size:15px; display:block; }
+.menu-btn .btn-desc { font-size:11px; color:rgba(245,237,224,0.55); letter-spacing:0.05em; margin-top:3px; display:block; }
+
+.version-note {
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:12px;
+  color:rgba(245,237,224,0.3);
+  letter-spacing:0.1em;
+}
+
+/* ===== 共通ヘッダー ===== */
+.screen-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(184,150,62,0.2);
+}
+
+.back-btn {
+  background: none;
+  border: 1px solid rgba(184,150,62,0.3);
+  border-radius: 3px;
+  padding: 6px 12px;
+  color: var(--gold);
+  font-size: 12px;
+  cursor: pointer;
+  font-family: 'Shippori Mincho',serif;
+  transition: all 0.2s;
+  flex-shrink:0;
+}
+.back-btn:hover { background:rgba(184,150,62,0.1); }
+
+.screen-title-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cream);
+  letter-spacing: 0.08em;
+}
+
+/* ===== キャラ診断 ===== */
+#screen-shindan { }
+
+.shindan-question {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(196,116,138,0.25);
+  border-radius: 4px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+}
+
+.q-label {
+  font-size:11px;
+  letter-spacing:0.15em;
+  color:var(--rose);
+  margin-bottom:10px;
+}
+
+.q-text {
+  font-size:17px;
+  color:var(--cream);
+  line-height:1.7;
+  font-weight:600;
+}
+
+.answer-grid { display:grid; gap:10px; }
+
+.answer-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(245,237,224,0.15);
+  border-radius: 4px;
+  padding: 14px 18px;
+  color: rgba(245,237,224,0.85);
+  font-family:'Shippori Mincho',serif;
+  font-size:14px;
+  cursor:pointer;
+  text-align:left;
+  transition:all 0.2s;
+  line-height:1.6;
+}
+.answer-btn:hover { background:rgba(196,116,138,0.12); border-color:var(--rose); color:var(--cream); }
+.answer-btn.selected { background:rgba(196,116,138,0.2); border-color:var(--rose); color:var(--cream); }
+
+.progress-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.progress-fill {
+  height:100%;
+  background: linear-gradient(90deg, var(--rose), var(--gold));
+  border-radius:2px;
+  transition:width 0.4s ease;
+}
+
+/* 診断結果 */
+.result-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(184,150,62,0.3);
+  border-radius:6px;
+  padding:28px 24px;
+  text-align:center;
+}
+
+.result-emoji { font-size:56px; display:block; margin-bottom:16px; }
+.result-type { font-size:12px; letter-spacing:0.18em; color:var(--gold); margin-bottom:8px; }
+.result-name { font-size:24px; font-weight:700; color:var(--cream); margin-bottom:12px; }
+.result-desc { font-size:14px; color:rgba(245,237,224,0.75); line-height:1.8; margin-bottom:20px; }
+.result-nagasaki {
+  background:rgba(184,150,62,0.1);
+  border:1px solid rgba(184,150,62,0.2);
+  border-radius:4px;
+  padding:12px 16px;
+  font-size:13px;
+  color:var(--gold);
+  line-height:1.7;
+}
+
+/* ===== クイズ ===== */
+#screen-quiz { }
+
+.quiz-score-bar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  font-size:13px;
+  color:rgba(245,237,224,0.6);
+}
+
+.score-num { color:var(--gold); font-size:18px; font-weight:600; }
+
+.quiz-card {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(74,124,126,0.3);
+  border-radius:6px;
+  padding:24px 20px;
+  margin-bottom:16px;
+}
+
+.quiz-type-badge {
+  font-size:10px;
+  letter-spacing:0.15em;
+  padding:3px 10px;
+  border-radius:20px;
+  display:inline-block;
+  margin-bottom:12px;
+}
+.badge-nagasaki { background:rgba(184,150,62,0.15); color:var(--gold); }
+.badge-bl { background:rgba(196,116,138,0.15); color:var(--rose); }
+
+.quiz-q { font-size:17px; color:var(--cream); line-height:1.7; font-weight:600; }
+
+.quiz-choices { display:grid; gap:8px; margin-top:16px; }
+
+.choice-btn {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(245,237,224,0.12);
+  border-radius:4px;
+  padding:12px 16px;
+  color:rgba(245,237,224,0.8);
+  font-family:'Shippori Mincho',serif;
+  font-size:14px;
+  cursor:pointer;
+  text-align:left;
+  transition:all 0.2s;
+}
+.choice-btn:hover:not(:disabled) { background:rgba(74,124,126,0.12); border-color:var(--teal); }
+.choice-btn.correct { background:rgba(74,124,126,0.25); border-color:var(--teal); color:var(--cream); }
+.choice-btn.wrong { background:rgba(196,116,138,0.15); border-color:var(--rose); opacity:0.7; }
+.choice-btn:disabled { cursor:default; }
+
+.quiz-feedback {
+  padding:12px 16px;
+  border-radius:4px;
+  font-size:13px;
+  line-height:1.7;
+  margin-top:8px;
+  display:none;
+}
+.quiz-feedback.show { display:block; }
+.quiz-feedback.ok { background:rgba(74,124,126,0.15); color:rgba(245,237,224,0.9); border-left:3px solid var(--teal); }
+.quiz-feedback.ng { background:rgba(196,116,138,0.1); color:rgba(245,237,224,0.8); border-left:3px solid var(--rose); }
+
+.next-quiz-btn {
+  width:100%;
+  background:rgba(184,150,62,0.12);
+  border:1px solid var(--gold);
+  border-radius:4px;
+  padding:14px;
+  color:var(--gold);
+  font-family:'Shippori Mincho',serif;
+  font-size:14px;
+  cursor:pointer;
+  transition:all 0.2s;
+  margin-top:12px;
+  display:none;
+}
+.next-quiz-btn.show { display:block; }
+.next-quiz-btn:hover { background:rgba(184,150,62,0.22); }
+
+.quiz-final {
+  text-align:center;
+  padding:32px 20px;
+}
+.final-score { font-size:52px; font-weight:700; color:var(--gold); }
+.final-label { font-size:13px; color:rgba(245,237,224,0.5); margin-bottom:16px; }
+.final-msg { font-size:15px; color:var(--cream); line-height:1.8; }
+
+/* ===== ノベルゲーム ===== */
+#screen-novel { padding:0; }
+
+.novel-scene {
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+.novel-bg {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(196,116,138,0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(184,150,62,0.15) 0%, transparent 50%),
+    var(--deep);
+  z-index:0;
+}
+
+.novel-top {
+  position:relative; z-index:1;
+  padding:20px 20px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.novel-back {
+  background:none;
+  border:1px solid rgba(184,150,62,0.3);
+  border-radius:3px;
+  padding:5px 10px;
+  color:var(--gold);
+  font-size:11px;
+  cursor:pointer;
+  font-family:'Shippori Mincho',serif;
+}
+
+.scene-indicator {
+  font-size:11px;
+  color:rgba(245,237,224,0.3);
+  letter-spacing:0.1em;
+}
+
+.novel-chars {
+  flex:1;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:20px 20px 0;
+  position:relative; z-index:1;
+  gap:8px;
+}
+
+.char-display {
+  text-align:center;
+  transition:all 0.3s;
+}
+.char-display.speaking { transform:scale(1.08); }
+.char-display.silent { opacity:0.4; transform:scale(0.95); }
+
+.char-avatar {
+  width:70px; height:70px;
+  border-radius:50%;
+  border:2px solid rgba(184,150,62,0.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:32px;
+  background:rgba(255,255,255,0.05);
+  margin:0 auto 6px;
+  transition:all 0.3s;
+}
+.char-display.speaking .char-avatar {
+  border-color:var(--gold);
+  box-shadow:0 0 16px rgba(184,150,62,0.3);
+}
+
+.char-name-tag {
+  font-size:10px;
+  color:rgba(245,237,224,0.5);
+  letter-spacing:0.08em;
+}
+
+.novel-textbox {
+  position:relative; z-index:1;
+  margin:16px 16px 20px;
+  background:rgba(10,6,4,0.85);
+  border:1px solid rgba(184,150,62,0.3);
+  border-radius:6px;
+  padding:20px 20px 16px;
+  backdrop-filter:blur(4px);
+}
+
+.novel-speaker {
+  font-size:12px;
+  font-weight:600;
+  color:var(--gold);
+  letter-spacing:0.1em;
+  margin-bottom:8px;
+}
+
+.novel-text {
+  font-size:15px;
+  color:rgba(245,237,224,0.92);
+  line-height:1.9;
+  min-height:60px;
+}
+
+.novel-choices {
+  display:grid;
+  gap:8px;
+  margin:0 16px 20px;
+  position:relative; z-index:1;
+}
+
+.novel-choice-btn {
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(184,150,62,0.3);
+  border-radius:4px;
+  padding:13px 16px;
+  color:rgba(245,237,224,0.85);
+  font-family:'Shippori Mincho',serif;
+  font-size:14px;
+  cursor:pointer;
+  text-align:left;
+  transition:all 0.2s;
+}
+.novel-choice-btn:hover { background:rgba(184,150,62,0.12); border-color:var(--gold); color:var(--cream); }
+
+.novel-tap-hint {
+  text-align:center;
+  font-size:11px;
+  color:rgba(245,237,224,0.25);
+  letter-spacing:0.15em;
+  margin:0 0 8px;
+  position:relative; z-index:1;
+  animation:blink 1.5s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:0.25}50%{opacity:0.6}}
+
+/* ===== 長崎語帳 ===== */
+#screen-gojyu { }
+
+.gojyu-grid { display:grid; gap:10px; }
+
+.gojyu-card {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(184,150,62,0.2);
+  border-radius:4px;
+  padding:16px 18px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.gojyu-card:hover { background:rgba(184,150,62,0.08); border-color:var(--gold); }
+.gojyu-card.open { border-color:var(--gold); }
+
+.gojyu-word {
+  font-size:18px;
+  font-weight:600;
+  color:var(--gold);
+  margin-bottom:4px;
+}
+
+.gojyu-read {
+  font-size:11px;
+  color:rgba(245,237,224,0.4);
+  letter-spacing:0.08em;
+  margin-bottom:8px;
+}
+
+.gojyu-mean {
+  font-size:14px;
+  color:rgba(245,237,224,0.8);
+  line-height:1.7;
+  display:none;
+}
+.gojyu-card.open .gojyu-mean { display:block; animation:fadeIn 0.3s ease; }
+
+.gojyu-example {
+  font-size:13px;
+  color:var(--rose);
+  margin-top:6px;
+  font-style:italic;
+  display:none;
+  line-height:1.6;
+}
+.gojyu-card.open .gojyu-example { display:block; }
+
+.gojyu-tag {
+  font-size:10px;
+  padding:2px 8px;
+  border-radius:20px;
+  display:inline-block;
+  margin-top:6px;
+}
+.tag-nagasaki2 { background:rgba(184,150,62,0.12); color:var(--gold); }
+.tag-bl2 { background:rgba(196,116,138,0.12); color:var(--rose); }
+
+/* ===== ボタン共通 ===== */
+.primary-btn {
+  background: rgba(184,150,62,0.15);
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: 14px 24px;
+  color: var(--gold);
+  font-family: 'Shippori Mincho', serif;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.primary-btn:hover { background:rgba(184,150,62,0.28); }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ===== タイトル画面 ===== -->
+<div id="screen-title" class="screen active">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <div class="title-deco">Nagasaki Fujin no Ochakai</div>
+    <span class="tea-cup">🫖</span>
+    <h1 class="title-main">長崎貴婦人の<br>お茶会</h1>
+    <div class="title-sub">〜 異国情緒BLゲーム 〜</div>
+
+    <div class="menu-grid">
+      <button class="menu-btn" onclick="showScreen('screen-novel')">
+        <span class="btn-icon">📖</span>
+        <span class="btn-text">
+          <span class="btn-title">お茶会ノベル</span>
+          <span class="btn-desc">選択肢で進むストーリー</span>
+        </span>
+      </button>
+      <button class="menu-btn" onclick="startShindan()">
+        <span class="btn-icon">🌹</span>
+        <span class="btn-text">
+          <span class="btn-title">貴婦人キャラ診断</span>
+          <span class="btn-desc">あなたはどのタイプ？</span>
+        </span>
+      </button>
+      <button class="menu-btn" onclick="startQuiz()">
+        <span class="btn-icon">📝</span>
+        <span class="btn-text">
+          <span class="btn-title">長崎弁×BLクイズ</span>
+          <span class="btn-desc">全10問・どれくらい知ってる？</span>
+        </span>
+      </button>
+      <button class="menu-btn" onclick="showScreen('screen-gojyu')">
+        <span class="btn-icon">📚</span>
+        <span class="btn-text">
+          <span class="btn-title">長崎語帳</span>
+          <span class="btn-desc">長崎弁＆BL用語辞典</span>
+        </span>
+      </button>
+    </div>
+    <div class="version-note">作：亜矢プロジェクト</div>
+  </div>
+</div>
+
+<!-- ===== キャラ診断 ===== -->
+<div id="screen-shindan" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" onclick="showScreen('screen-title')">← もどる</button>
+    <span class="screen-title-text">🌹 貴婦人キャラ診断</span>
+  </div>
+  <div id="shindan-content"></div>
+</div>
+
+<!-- ===== クイズ ===== -->
+<div id="screen-quiz" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" onclick="showScreen('screen-title')">← もどる</button>
+    <span class="screen-title-text">📝 長崎弁×BLクイズ</span>
+  </div>
+  <div id="quiz-content"></div>
+</div>
+
+<!-- ===== ノベル ===== -->
+<div id="screen-novel" class="screen">
+  <div class="novel-scene" id="novel-scene">
+    <div class="novel-bg"></div>
+    <div class="novel-top">
+      <button class="novel-back" onclick="showScreen('screen-title')">← メニュー</button>
+      <span class="scene-indicator" id="scene-indicator">Scene 1</span>
+    </div>
+    <div class="novel-chars" id="novel-chars"></div>
+    <div class="novel-textbox">
+      <div class="novel-speaker" id="novel-speaker"></div>
+      <div class="novel-text" id="novel-text"></div>
+    </div>
+    <div class="novel-choices" id="novel-choices"></div>
+    <div class="novel-tap-hint" id="tap-hint">タップして続ける</div>
+  </div>
+</div>
+
+<!-- ===== 語帳 ===== -->
+<div id="screen-gojyu" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" onclick="showScreen('screen-title')">← もどる</button>
+    <span class="screen-title-text">📚 長崎語帳</span>
+  </div>
+  <div class="gojyu-grid" id="gojyu-grid"></div>
+</div>
+
+</div>
+
+<script>
+// ===== 画面切替 =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // ノベルはメニューから来るたびScene 1にリセット
+  if (id === 'screen-novel') {
+    novelCurrent = 0;
+    renderNovel(0);
+  }
+}
+
+// ===== 語帳データ =====
+const gojyuData = [
+  { word:'よんにき', read:'よんにき', mean:'たいへん・すごく。強調するときに使う。', example:'「よんにきよかったばい！（すごくよかった！）」', tag:'nagasaki' },
+  { word:'〜たいね', read:'たいね', mean:'〜でしょう・〜じゃないの。確認・同意を求める語尾。', example:'「それ、あなたのたいね？」', tag:'nagasaki' },
+  { word:'じゃんがらする', read:'じゃんがらする', mean:'うずうずする・そわそわする。待ちきれない様子。', example:'「もう新刊が出るけん、じゃんがらしとるばい」', tag:'nagasaki' },
+  { word:'たまらんばい', read:'たまらんばい', mean:'たまらない・最高。感動や興奮を表す。', example:'「このカプ、たまらんばい…」', tag:'nagasaki' },
+  { word:'しょんなか', read:'しょんなか', mean:'どうしようもない・仕方がない。', example:'「きになってしょんなか（気になって仕方ない）」', tag:'nagasaki' },
+  { word:'ばってん', read:'ばってん', mean:'でも・だけど。逆接の接続詞。長崎・九州弁の代名詞。', example:'「よかとおもうばってん、まだ迷うとる」', tag:'nagasaki' },
+  { word:'推しカプ', read:'おしカプ', mean:'推しているカップリング（組み合わせ）。BL用語。', example:'「私の推しカプは攻め×受けよ」', tag:'bl' },
+  { word:'逆カプ', read:'ぎゃくカプ', mean:'攻めと受けが逆転した組み合わせ。賛否あり。', example:'「逆カプ派の方とは仲良くできないの…」', tag:'bl' },
+  { word:'年の差カプ', read:'としのさカプ', mean:'年齢差のある二人のカップリング。', example:'「年の差カプの尊さは格別よ」', tag:'bl' },
+  { word:'沼る', read:'ぬまる', mean:'ハマる・抜け出せなくなる。愛情の深みにはまること。', example:'「このCP、沼りすぎてもう戻れない」', tag:'bl' },
+  { word:'尊い', read:'とうとい', mean:'美しい・神聖・最高。好きなものへの最大の賛辞。', example:'「二人のすれ違い…尊すぎて息ができない」', tag:'bl' },
+  { word:'解釈違い', read:'かいしゃくちがい', mean:'自分のキャラ解釈と異なること。こだわりの強い表現。', example:'「この攻め、解釈違いすぎてつらい」', tag:'bl' },
+];
+
+function renderGojyu() {
+  const grid = document.getElementById('gojyu-grid');
+  grid.innerHTML = gojyuData.map((d,i) => `
+    <div class="gojyu-card" onclick="toggleGojyu(${i})" id="gojyu-${i}">
+      <div class="gojyu-word">${d.word}</div>
+      <div class="gojyu-read">${d.tag === 'nagasaki' ? '長崎弁' : 'BL用語'}</div>
+      <div class="gojyu-mean">${d.mean}</div>
+      <div class="gojyu-example">例：${d.example}</div>
+      <span class="gojyu-tag ${d.tag === 'nagasaki' ? 'tag-nagasaki2' : 'tag-bl2'}">${d.tag === 'nagasaki' ? '長崎弁' : 'BL用語'}</span>
+    </div>
+  `).join('');
+}
+
+function toggleGojyu(i) {
+  document.getElementById('gojyu-'+i).classList.toggle('open');
+}
+
+renderGojyu();
+
+// ===== 診断データ =====
+const shindanQuestions = [
+  {
+    q: '新しいBL作品を見つけたとき、まず何をする？',
+    choices: [
+      { text:'まずお茶を一杯いれて、落ち着いて最初から読む', type:'maria' },
+      { text:'友達に「これ読んで！」とすぐ連絡する', type:'okiku' },
+      { text:'作者のほかの作品も全部調べてから読む', type:'sofia' },
+      { text:'とりあえず全部読んでから感想を練る', type:'aya' },
+    ]
+  },
+  {
+    q: '推しカプがバレンタインの回を迎えた。あなたの反応は？',
+    choices: [
+      { text:'「まあ、お菓子の一粒でも渡せばよかったのに」と品よく悶える', type:'maria' },
+      { text:'「ちょっと！こっちはじゃんがらしとるとに！」と叫ぶ', type:'okiku' },
+      { text:'過去のバレンタイン回を全部見返して伏線を確認する', type:'sofia' },
+      { text:'とりあえずノートに感情を全部書き出す', type:'aya' },
+    ]
+  },
+  {
+    q: '長崎に旅行するとしたら、まず行きたい場所は？',
+    choices: [
+      { text:'グラバー園でゆっくりお茶を飲む', type:'maria' },
+      { text:'出島の商店街でにぎやかに食べ歩く', type:'okiku' },
+      { text:'図書館や博物館で歴史を調べる', type:'sofia' },
+      { text:'坂道を歩きながら写真を撮りまくる', type:'aya' },
+    ]
+  },
+  {
+    q: '好きなBLのジャンルは？',
+    choices: [
+      { text:'上品で切ない、大人の恋愛もの', type:'maria' },
+      { text:'テンポよく笑えるラブコメ', type:'okiku' },
+      { text:'設定が複雑で読み込み甲斐のある歴史もの', type:'sofia' },
+      { text:'日常のなかに突然訪れる感情、みたいなやつ', type:'aya' },
+    ]
+  },
+  {
+    q: 'お茶会のお菓子、何を持っていく？',
+    choices: [
+      { text:'カステラ。長崎の心よ', type:'maria' },
+      { text:'ちゃんぽんまんじゅうとか、話のネタになるやつ', type:'okiku' },
+      { text:'産地や製法にこだわった洋菓子', type:'sofia' },
+      { text:'自分で作ったもの。うまくなくても気持ちで', type:'aya' },
+    ]
+  },
+];
+
+const shindanResults = {
+  maria: {
+    emoji:'🌹',
+    type:'マリア夫人タイプ',
+    name:'上品な目利き貴婦人',
+    desc:'趣味も愛情表現も、すべてに品があります。感情が動いても決して乱れない。そのぶん、ふとした瞬間に見せる本気の眼差しが、まわりを一瞬で惹きつけます。「よんにきよかったわ」のひとことに重みがある。',
+    nagasaki:'あなたの長崎弁：「たまらんばい、もう」とつぶやきながら静かにページをめくるタイプ。'
+  },
+  okiku: {
+    emoji:'🍵',
+    type:'おきく様タイプ',
+    name:'にぎやか情熱の女将',
+    desc:'愛が溢れて止まらない！すぐ誰かに伝えたくなるし、感動したら隠せない。長崎弁まじりの熱いトークで、お茶会の座を常に温めているのはあなた。友達思いで、推しへの愛も一番深い。',
+    nagasaki:'あなたの長崎弁：「じゃんがらしてもう！はよ続き出してたいね！」'
+  },
+  sofia: {
+    emoji:'📖',
+    type:'ソフィアタイプ',
+    name:'知性派読書家',
+    desc:'ただ好きなだけじゃない。どうして好きなのか、この二人がなぜ惹かれ合うのか、ちゃんと言語化できる人。伏線を見つけたときの静かな興奮が最高。BL歴が長いほど深みが増す、尊いタイプ。',
+    nagasaki:'あなたの長崎弁：「ここ、解釈違いばってん…作者の意図を考えたらわかる気もする」'
+  },
+  aya: {
+    emoji:'🎵',
+    type:'亜矢タイプ',
+    name:'長崎発・感性のクリエイター',
+    desc:'感じたことをそのまま形にせずにはいられない。文章になったり、歌になったり、アプリになったり。型にはまらない発想と、長崎への愛が独自の世界をつくっている。あなたの「好き」はコンテンツになる。',
+    nagasaki:'あなたの長崎弁：「よんにきいいものみつけたけん、つくってみた」'
+  }
+};
+
+let shindanAnswers = {};
+let shindanCurrent = 0;
+
+function startShindan() {
+  shindanAnswers = {};
+  shindanCurrent = 0;
+  showScreen('screen-shindan');
+  renderShindanQ();
+}
+
+function renderShindanQ() {
+  const content = document.getElementById('shindan-content');
+  if (shindanCurrent >= shindanQuestions.length) {
+    showShindanResult(); return;
+  }
+  const q = shindanQuestions[shindanCurrent];
+  const pct = (shindanCurrent / shindanQuestions.length) * 100;
+  content.innerHTML = `
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="shindan-question">
+      <div class="q-label">Q${shindanCurrent+1} / ${shindanQuestions.length}</div>
+      <div class="q-text">${q.q}</div>
+    </div>
+    <div class="answer-grid">
+      ${q.choices.map((c,i) => `
+        <button class="answer-btn" onclick="pickShindan('${c.type}')">${c.text}</button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function pickShindan(type) {
+  shindanAnswers[type] = (shindanAnswers[type]||0)+1;
+  shindanCurrent++;
+  renderShindanQ();
+}
+
+function showShindanResult() {
+  const top = Object.entries(shindanAnswers).sort((a,b)=>b[1]-a[1])[0][0];
+  const r = shindanResults[top];
+  document.getElementById('shindan-content').innerHTML = `
+    <div class="result-card">
+      <span class="result-emoji">${r.emoji}</span>
+      <div class="result-type">${r.type}</div>
+      <div class="result-name">${r.name}</div>
+      <div class="result-desc">${r.desc}</div>
+      <div class="result-nagasaki">🗣️ ${r.nagasaki}</div>
+    </div>
+    <button class="primary-btn" onclick="startShindan()" style="margin-top:16px">もう一度診断する</button>
+    <button class="primary-btn" onclick="showScreen('screen-title')" style="margin-top:8px;background:rgba(255,255,255,0.04);border-color:rgba(245,237,224,0.2);color:rgba(245,237,224,0.5);">メニューに戻る</button>
+  `;
+}
+
+// ===== クイズデータ =====
+const quizData = [
+  { type:'nagasaki', q:'「よんにき」の意味はどれ？', choices:['ゆっくり','すごく・たいへん','静かに','少しだけ'], ans:1, hint:'「よんにきよかったばい！」→ すごく良かった！という意味ばい。' },
+  { type:'bl', q:'BL用語「沼る」の意味は？', choices:['疲れる','嫌いになる','深くハマって抜け出せない','読み終える'], ans:2, hint:'ハマりすぎて現実に戻れない状態よ。貴婦人たちは全員沼っとる。' },
+  { type:'nagasaki', q:'長崎弁「ばってん」はどういう意味？', choices:['だから','でも・だけど','そして','もちろん'], ans:1, hint:'逆接の接続詞。「よかとおもうばってん…」＝いいと思うけど…' },
+  { type:'bl', q:'「逆カプ」とは何のこと？', choices:['敵同士のカップリング','攻め受けが逆になった組み合わせ','年の差カップリング','初めて出会う二人'], ans:1, hint:'ソフィアさんが気にしてたやつよ。攻め受けが入れ替わることたいね。' },
+  { type:'nagasaki', q:'「じゃんがらする」の意味は？', choices:['ゆっくりする','うずうず・そわそわする','怒る','眠くなる'], ans:1, hint:'新刊の発売前、推しカプの展開が気になるとき、じゃんがらするよね。' },
+  { type:'bl', q:'「尊い」をBL文脈で使うとどういう意味？', choices:['値段が高い','歴史が古い','美しく神聖で最高','難しくて読めない'], ans:2, hint:'推しカプの関係性を見て心が震えるとき、思わず出る言葉よ。' },
+  { type:'nagasaki', q:'「たまらんばい」の「ばい」はどんな役割？', choices:['疑問','否定','断定・強調','丁寧'], ans:2, hint:'「ばい」は長崎・福岡弁の断定語尾。感情を強めるときによく使う。' },
+  { type:'bl', q:'「推しカプ」の「カプ」は何の略？', choices:['カプチーノ','キャプチャー','カップリング','カプセル'], ans:2, hint:'CP（カップリング）のこと。二人の組み合わせを指すのよ。' },
+  { type:'nagasaki', q:'長崎を舞台にしたヴェルディのオペラは？', choices:['椿姫','蝶々夫人','アイーダ','ナブッコ'], ans:1, hint:'プッチーニね！長崎を舞台にした有名なオペラ。亜矢さんが歌ってるやつ！' },
+  { type:'bl', q:'「解釈違い」はどんな状態？', choices:['内容が難しすぎてわからない','自分のキャラ解釈と作品の描写が合わない','好きすぎて言葉にできない','読み終えて寂しい'], ans:1, hint:'こだわりが強いほど起こりやすい。ソフィアさんがよく言うやつ。' },
+];
+
+let quizCurrent = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+function startQuiz() {
+  quizCurrent = 0;
+  quizScore = 0;
+  quizAnswered = false;
+  showScreen('screen-quiz');
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const content = document.getElementById('quiz-content');
+  if (quizCurrent >= quizData.length) {
+    showQuizFinal(); return;
+  }
+  const q = quizData[quizCurrent];
+  quizAnswered = false;
+  content.innerHTML = `
+    <div class="quiz-score-bar">
+      <span>Q${quizCurrent+1} / ${quizData.length}</span>
+      <span>得点 <span class="score-num">${quizScore}</span></span>
+    </div>
+    <div class="quiz-card">
+      <span class="quiz-type-badge ${q.type==='nagasaki'?'badge-nagasaki':'badge-bl'}">${q.type==='nagasaki'?'長崎弁':'BL用語'}</span>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-choices">
+        ${q.choices.map((c,i)=>`<button class="choice-btn" onclick="answerQuiz(${i})" id="choice-${i}">${c}</button>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="quiz-feedback"></div>
+    </div>
+    <button class="next-quiz-btn" id="next-quiz-btn" onclick="nextQuiz()">次の問題へ →</button>
+  `;
+}
+
+function answerQuiz(idx) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = quizData[quizCurrent];
+  const isCorrect = idx === q.ans;
+  if (isCorrect) quizScore++;
+
+  document.querySelectorAll('.choice-btn').forEach((btn,i) => {
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('correct');
+    else if (i === idx && !isCorrect) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('quiz-feedback');
+  fb.className = 'quiz-feedback show ' + (isCorrect ? 'ok' : 'ng');
+  fb.innerHTML = (isCorrect ? '✦ 正解！　' : '✗ 不正解…　') + q.hint;
+
+  document.getElementById('next-quiz-btn').classList.add('show');
+}
+
+function nextQuiz() {
+  quizCurrent++;
+  renderQuiz();
+}
+
+function showQuizFinal() {
+  const pct = Math.round((quizScore/quizData.length)*100);
+  let msg = '';
+  if(pct>=90) msg='満点近く！あなたは真の長崎BL貴婦人よ。よんにきすごかったばい！';
+  else if(pct>=70) msg='なかなかの実力！お茶会の常連になれる素質があるわ。';
+  else if(pct>=50) msg='まずまずね。もう少し長崎を歩いてみると、もっとわかるようになるかも。';
+  else msg='まだ入門ね。でも大丈夫。お茶会は何度でも開かれるから。';
+
+  document.getElementById('quiz-content').innerHTML = `
+    <div class="quiz-final">
+      <div style="font-size:13px;color:rgba(245,237,224,0.4);margin-bottom:8px;">最終結果</div>
+      <div class="final-score">${quizScore}<span style="font-size:24px;color:rgba(245,237,224,0.4)">/${quizData.length}</span></div>
+      <div class="final-label">正解率 ${pct}%</div>
+      <div class="final-msg">${msg}</div>
+    </div>
+    <button class="primary-btn" onclick="startQuiz()">もう一度挑戦する</button>
+    <button class="primary-btn" onclick="showScreen('screen-title')" style="margin-top:8px;background:rgba(255,255,255,0.04);border-color:rgba(245,237,224,0.2);color:rgba(245,237,224,0.5);">メニューに戻る</button>
+  `;
+}
+
+// ===== ノベルゲームデータ =====
+const novelScenes = [
+  {
+    id:0,
+    speaker:'ナレーション',
+    text:'長崎のとある午後。石畳の坂をのぼった先に、小さなお茶会の部屋がある。今日も貴婦人たちが集まっていた。',
+    chars:['maria','okiku','sofia'],
+    speaking:'',
+    next:1, choices:null
+  },
+  {
+    id:1,
+    speaker:'マリア夫人',
+    text:'ようこそ、お茶会へ。今日はね、特別なゲストがいるのよ。長崎の坂道で出会った、素敵な方。',
+    chars:['maria','okiku','sofia'],
+    speaking:'maria',
+    next:2, choices:null
+  },
+  {
+    id:2,
+    speaker:'亜矢',
+    text:'こんにちは！わたし、亜矢といいます。声楽やってて、最近AIと一緒に小説書いてるんです。よんにきじゃんがらしながらここまで来ました（笑）',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'aya',
+    next:null,
+    choices:[
+      { text:'「まあ！AIで小説を？」と驚く', goto:3 },
+      { text:'「声楽！長崎でオペラを？」と食いつく', goto:4 },
+    ]
+  },
+  {
+    id:3,
+    speaker:'ソフィア',
+    text:'AIで小説…ということは、出島アーカイブも？読みましたわ。あの設定の複雑さ、人間だけでは思いつかないような緻密さがあって。',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'sofia',
+    next:5, choices:null
+  },
+  {
+    id:4,
+    speaker:'おきく様',
+    text:'蝶々夫人！？長崎が舞台のオペラを長崎で歌うとかいうとね、たまらんばい！それって、やっぱり「ある晴れた日に」ですか！？',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'okiku',
+    next:5, choices:null
+  },
+  {
+    id:5,
+    speaker:'マリア夫人',
+    text:'ふふ。亜矢さん、ひとつお聞きしてもいいかしら。長崎のどこが、一番BLっぽいと思う？',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'maria',
+    next:null,
+    choices:[
+      { text:'「出島です。男だけの密室空間だったから」', goto:6 },
+      { text:'「坂道です。追いかけるシーンが生まれやすいから」', goto:7 },
+      { text:'「大浦天主堂です。光が美しすぎてなんでも告白できそう」', goto:8 },
+    ]
+  },
+  {
+    id:6,
+    speaker:'おきく様',
+    text:'そーそーそー！！わかっとる！！出島って、オランダ商人と日本の役人しかおらんかったもんね。そんな密室で何年も過ごしたら、ね？　じゃんがらするばい！',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'okiku',
+    next:9, choices:null
+  },
+  {
+    id:7,
+    speaker:'ソフィア',
+    text:'坂道、わかります…。追いかけるシーンって、長崎の地形が生み出すものよね。平坦な場所では生まれない、息切れと緊張感。あれは尊い。',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'sofia',
+    next:9, choices:null
+  },
+  {
+    id:8,
+    speaker:'マリア夫人',
+    text:'大浦天主堂…ふふ。あそこのステンドグラスの光の中で告白されたら、受けでも攻めでも、どちらでも泣いてしまうわね。わかるわ、よんにき。',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'maria',
+    next:9, choices:null
+  },
+  {
+    id:9,
+    speaker:'亜矢',
+    text:'長崎って、「禁じられた出会いの街」だったんだなあって、今日話してて気づきました。それがBLの空気と似てるのかも。',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'aya',
+    next:10, choices:null
+  },
+  {
+    id:10,
+    speaker:'マリア夫人',
+    text:'素敵なひとことね。亜矢さん、またいらしてね。このお茶会はいつでも開いているから。',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'maria',
+    next:null,
+    choices:[
+      { text:'「ありがとうございます。また来ます！」 → 終わり', goto:'end' }
+    ]
+  },
+  {
+    id:'end',
+    speaker:'ナレーション',
+    text:'長崎の午後は、ゆっくりと暮れていった。お茶会は、またいつか続く。\n\n 〜 おわり 〜',
+    chars:['maria','okiku','sofia','aya'],
+    speaking:'',
+    next:null, choices:null, isEnd:true
+  }
+];
+
+const charInfo = {
+  maria: { emoji:'🌹', name:'マリア夫人' },
+  okiku: { emoji:'🍵', name:'おきく様' },
+  sofia: { emoji:'📖', name:'ソフィア' },
+  aya:   { emoji:'🎵', name:'亜矢' },
+};
+
+let novelCurrent = 0;
+
+function renderNovel(sceneId) {
+  const scene = novelScenes.find(s=>s.id===sceneId);
+  if(!scene) return;
+  novelCurrent = sceneId;
+
+  document.getElementById('scene-indicator').textContent = 'Scene '+(novelScenes.indexOf(scene)+1);
+
+  // キャラ表示
+  const charsDiv = document.getElementById('novel-chars');
+  charsDiv.innerHTML = scene.chars.map(c => {
+    const info = charInfo[c];
+    const isSpeaking = scene.speaking === c;
+    return `
+      <div class="char-display ${isSpeaking?'speaking':'silent'}">
+        <div class="char-avatar">${info.emoji}</div>
+        <div class="char-name-tag">${info.name}</div>
+      </div>
+    `;
+  }).join('');
+
+  // スピーカー
+  const spk = scene.speaking ? (charInfo[scene.speaking]?.name || scene.speaker) : scene.speaker;
+  document.getElementById('novel-speaker').textContent = spk;
+  document.getElementById('novel-text').textContent = scene.text;
+
+  // 選択肢
+  const choicesDiv = document.getElementById('novel-choices');
+  const tapHint = document.getElementById('tap-hint');
+
+  if(scene.choices) {
+    choicesDiv.innerHTML = scene.choices.map(c=>`
+      <button class="novel-choice-btn" onclick="novelChoose('${c.goto}')">${c.text}</button>
+    `).join('');
+    tapHint.style.display='none';
+  } else if(scene.isEnd) {
+    choicesDiv.innerHTML = `<button class="novel-choice-btn" onclick="showScreen('screen-title')">🫖 メニューに戻る</button>`;
+    tapHint.style.display='none';
+  } else {
+    choicesDiv.innerHTML='';
+    tapHint.style.display='block';
+  }
+}
+
+function novelChoose(goto) {
+  if(goto==='end') { renderNovel('end'); return; }
+  renderNovel(parseInt(goto));
+}
+
+// ノベル画面タップで進める
+document.getElementById('novel-scene').addEventListener('click', function(e) {
+  if(e.target.classList.contains('novel-choice-btn') || e.target.classList.contains('novel-back')) return;
+  const scene = novelScenes.find(s=>s.id===novelCurrent);
+  if(scene && scene.next !== null && scene.next !== undefined && !scene.choices) {
+    renderNovel(scene.next);
+  }
+});
+
+// 初期化
+renderNovel(0);
+</script>
+</body>
+</html>
