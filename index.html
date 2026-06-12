@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -6,35 +7,54 @@
 <title>Aya's Garden</title>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-:root{--rose:#d85f7f;--pink:#ff8caf;--cream:#fffaf3;--navy:#2d2148;--lav:#f8edf5}
+:root{
+  --rose:#d85f7f;
+  --pink:#ff8caf;
+  --cream:#fffaf3;
+  --navy:#2d2148;
+  --lav:#f8edf5;
+  --gold:#e8b95a;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans JP',sans-serif;background:var(--cream);color:var(--navy);line-height:1.8}
 a{text-decoration:none;color:inherit}
-nav{position:fixed;top:0;left:0;right:0;z-index:10;background:rgba(255,250,243,.92);display:flex;justify-content:space-between;align-items:center;padding:14px 7%;border-bottom:1px solid #f3d6df}
+nav{position:fixed;top:0;left:0;right:0;z-index:10;background:rgba(255,250,243,.92);backdrop-filter:blur(12px);display:flex;justify-content:space-between;align-items:center;padding:14px 7%;border-bottom:1px solid #f3d6df}
 .logo{font-family:'Pacifico',cursive;font-size:1.5rem;color:var(--rose)}
 .nav-links{display:flex;gap:20px;list-style:none;font-weight:900;font-size:.85rem}
-.hero{min-height:88vh;background:linear-gradient(rgba(35,20,45,.28),rgba(35,20,45,.35)),url('hero-banner.png.png') center/cover no-repeat;display:flex;align-items:center;justify-content:center;text-align:center;color:white;padding:120px 20px 60px}
-.hero h1{font-family:'Pacifico',cursive;font-size:clamp(3.5rem,9vw,7rem);text-shadow:0 6px 25px rgba(0,0,0,.45)}
-.hero p{font-weight:900;font-size:1.15rem;text-shadow:0 3px 12px rgba(0,0,0,.45)}
+.hero{min-height:78vh;background:linear-gradient(rgba(35,20,45,.24),rgba(35,20,45,.42)),url('hero-banner.png.png') center/cover no-repeat;display:flex;align-items:center;justify-content:center;text-align:center;color:white;padding:120px 20px 70px}
+.hero h1{font-family:'Pacifico',cursive;font-size:clamp(3.6rem,9vw,7rem);text-shadow:0 6px 25px rgba(0,0,0,.45)}
+.hero p{font-weight:900;font-size:1.12rem;text-shadow:0 3px 12px rgba(0,0,0,.45)}
+.hero-kicker{letter-spacing:4px;font-weight:900;font-size:.8rem;margin-bottom:8px}
 .btns{margin-top:30px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
 .btn{display:inline-block;padding:13px 28px;border-radius:999px;font-weight:900;background:linear-gradient(135deg,var(--pink),#c98bed);color:white;box-shadow:0 8px 20px rgba(0,0,0,.18)}
 .btn.light{background:rgba(255,255,255,.92);color:var(--rose)}
 section{padding:76px 7%}
-h2{font-family:'Pacifico',cursive;font-size:2.5rem;color:var(--rose);margin-bottom:18px}
+h2{font-family:'Pacifico',cursive;font-size:2.7rem;color:var(--rose);margin-bottom:18px}
 .story{background:white}
-.story-box{max-width:900px;margin:auto;background:linear-gradient(135deg,#fff,#fff1f5);padding:34px;border-radius:28px;box-shadow:0 12px 30px rgba(216,95,127,.12)}
+.story-box{max-width:980px;margin:auto;background:linear-gradient(135deg,#fff,#fff1f5);padding:38px;border-radius:32px;box-shadow:0 12px 30px rgba(216,95,127,.12)}
+.story-box p{font-size:1rem}
+.map{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.map-item{background:white;border:1px solid #f6cbd8;border-radius:22px;padding:18px;text-align:center;font-weight:900;color:var(--rose)}
 .works{background:var(--lav)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px}
-.card{background:white;border:1px solid #f5cbd7;border-radius:24px;padding:24px;box-shadow:0 10px 24px rgba(216,95,127,.12);transition:.2s}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:22px}
+.card{background:white;border:1px solid #f5cbd7;border-radius:26px;padding:26px;box-shadow:0 10px 24px rgba(216,95,127,.12);transition:.2s;min-height:210px}
 .card:hover{transform:translateY(-5px)}
-.emoji{font-size:2.4rem}
+.emoji{font-size:2.5rem}
 .card h3{color:var(--rose);margin:10px 0 8px}
 .tag{display:inline-block;background:#ffe4ec;color:var(--rose);font-size:.75rem;font-weight:900;padding:4px 10px;border-radius:999px;margin-top:12px}
 .note{text-align:center;background:white}
+.note-box{max-width:780px;margin:auto}
 .letter{background:linear-gradient(135deg,#d85f7f,#b884e8);color:white;text-align:center}
-.letter-box{max-width:760px;margin:auto;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:28px;padding:36px}
+.letter-box{max-width:760px;margin:auto;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:28px;padding:40px}
 footer{text-align:center;padding:30px;color:#a88994;background:white}
-@media(max-width:650px){.nav-links{gap:10px;font-size:.72rem}nav{padding:12px 5%}.hero{min-height:78vh;background-position:center}}
+@media(max-width:650px){
+  nav{padding:12px 5%}
+  .logo{font-size:1.15rem}
+  .nav-links{gap:10px;font-size:.7rem}
+  .hero{min-height:72vh;background-position:center;padding:100px 18px 50px}
+  .hero h1{font-size:3.3rem}
+  section{padding:58px 6%}
+}
 </style>
 </head>
 
@@ -51,7 +71,7 @@ footer{text-align:center;padding:30px;color:#a88994;background:white}
 
 <div class="hero">
   <div>
-    <div style="letter-spacing:4px;font-weight:900;">MUSIC・STORY・GARDEN</div>
+    <div class="hero-kicker">MUSIC・STORY・GARDEN</div>
     <h1>Aya's Garden</h1>
     <p>音楽と物語と花が咲く場所</p>
     <p>長崎から、夢を育てる。</p>
@@ -65,32 +85,59 @@ footer{text-align:center;padding:30px;color:#a88994;background:white}
 
 <section id="story" class="story">
   <div class="story-box">
-    <h2>Story</h2>
+    <h2>Aya's Story</h2>
     <p>
-      長崎で花を育てながら、声楽・物語・AIアプリ制作を楽しんでいます。
-      日常の小さな出来事から、note連載、乙女ゲーム、音楽、ガーデニングまで。
-      現実と創作のあいだで、少しずつ「亜矢ワールド」を育てています。
+      長崎で花を育てながら、歌い、物語を書き、AIで小さなゲームやアプリを作っています。
+      日常の中で起きた小さな出来事を、note連載や音楽、ガーデニング、乙女ゲームへ。
+      Aya's Gardenは、現実と創作のあいだで育っていく、亜矢ワールドの入口です。
     </p>
+    <div class="map">
+      <div class="map-item">🌹 Garden</div>
+      <div class="map-item">🎵 Music</div>
+      <div class="map-item">📖 note</div>
+      <div class="map-item">💗 3D彼氏</div>
+      <div class="map-item">🐶 Mame</div>
+    </div>
   </div>
 </section>
 
 <section id="works" class="works">
   <h2>Works</h2>
   <div class="grid">
-    <a class="card" href="3d-kareshi-haruto-embedded.html"><div class="emoji">🌹</div><h3>3D彼氏アプリ</h3><p>ハルトと紡ぐ、亜矢ワールド全開の乙女ゲーム風アプリ。</p><span class="tag">LOVE GAME</span></a>
-    <a class="card" href="nagasaki_fujin_game.html"><div class="emoji">🫖</div><h3>長崎貴婦人のお茶会</h3><p>長崎弁・ノベル・診断が入った、異国情緒ゲーム。</p><span class="tag">NAGASAKI</span></a>
-    <a class="card" href="ongakugo.html"><div class="emoji">🎵</div><h3>どれみちゃん♡</h3><p>演奏家を育てる、ちいさな音楽育成ゲーム。</p><span class="tag">MUSIC</span></a>
-    <a class="card" href="tarot.html"><div class="emoji">💕</div><h3>長崎恋タロット</h3><p>長崎の街を舞台にした恋とタロットのアプリ。</p><span class="tag">TAROT</span></a>
-    <a class="card" href="vision-board.html"><div class="emoji">🌟</div><h3>ビジョンボード</h3><p>夢をカードにして並べる、楽しい現実創造アプリ。</p><span class="tag">DREAM</span></a>
-    <a class="card" href="uchu_oitame_game.html"><div class="emoji">🌌</div><h3>宇宙のお試しゲーム</h3><p>イライラを手放して、ご褒美を受け取るゲーム。</p><span class="tag">COSMIC</span></a>
+    <a class="card" href="3d-kareshi-haruto-embedded.html">
+      <div class="emoji">🌹</div><h3>3D彼氏アプリ</h3>
+      <p>ハルトと紡ぐ、亜矢ワールド全開の乙女ゲーム風アプリ。</p><span class="tag">LOVE GAME</span>
+    </a>
+    <a class="card" href="nagasaki_fujin_game.html">
+      <div class="emoji">🫖</div><h3>長崎貴婦人のお茶会</h3>
+      <p>長崎弁・ノベル・診断が入った、異国情緒ゲーム。</p><span class="tag">NAGASAKI</span>
+    </a>
+    <a class="card" href="ongakugo.html">
+      <div class="emoji">🎵</div><h3>どれみちゃん♡</h3>
+      <p>演奏家を育てる、ちいさな音楽育成ゲーム。</p><span class="tag">MUSIC</span>
+    </a>
+    <a class="card" href="tarot.html">
+      <div class="emoji">💕</div><h3>長崎恋タロット</h3>
+      <p>長崎の街を舞台にした恋とタロットのアプリ。</p><span class="tag">TAROT</span>
+    </a>
+    <a class="card" href="vision-board.html">
+      <div class="emoji">🌟</div><h3>ビジョンボード</h3>
+      <p>夢をカードにして並べる、楽しい現実創造アプリ。</p><span class="tag">DREAM</span>
+    </a>
+    <a class="card" href="uchu_oitame_game.html">
+      <div class="emoji">🌌</div><h3>宇宙のお試しゲーム</h3>
+      <p>イライラを手放して、ご褒美を受け取るゲーム。</p><span class="tag">COSMIC</span>
+    </a>
   </div>
 </section>
 
 <section id="note" class="note">
-  <h2>Latest note</h2>
-  <p>長崎を舞台にした物語・音楽・日々のことをnoteで綴っています🌸</p>
-  <br>
-  <a class="btn" href="https://note.com/anjerika129" target="_blank">📖 noteを読む</a>
+  <div class="note-box">
+    <h2>Latest note</h2>
+    <p>長崎を舞台にした物語・音楽・日々のことをnoteで綴っています🌸</p>
+    <br>
+    <a class="btn" href="https://note.com/anjerika129" target="_blank">📖 noteを読む</a>
+  </div>
 </section>
 
 <section id="letter" class="letter">
@@ -105,3 +152,4 @@ footer{text-align:center;padding:30px;color:#a88994;background:white}
 <footer>© 2026 Aya's Garden</footer>
 </body>
 </html>
+```
