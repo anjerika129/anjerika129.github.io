@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aya's Garden</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Noto+Serif+JP:wght@500;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -12,16 +12,13 @@
   --pink:#ff8caf;
   --cream:#fffaf3;
   --navy:#2d2148;
-  --lav:#f8edf5;
-  --gold:#e8b95a;
-  --brown:#5a3b43;
 }
+
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
   font-family:'Noto Sans JP',sans-serif;
-  background:
-    radial-gradient(circle at top left,#ffe5ef 0,#fffaf3 32%,#fff7fb 100%);
+  background:linear-gradient(180deg,#fffaf3,#fff1f6);
   color:var(--navy);
   line-height:1.8;
 }
@@ -31,87 +28,68 @@ nav{
   position:fixed;
   top:0;left:0;right:0;
   z-index:10;
-  background:rgba(255,250,243,.82);
-  backdrop-filter:blur(16px);
+  background:rgba(255,250,243,.88);
+  backdrop-filter:blur(14px);
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:14px 7%;
-  border-bottom:1px solid rgba(216,95,127,.18);
+  border-bottom:1px solid #f3d6df;
 }
 .logo{
   font-family:'Pacifico',cursive;
-  font-size:1.55rem;
+  font-size:1.5rem;
   color:var(--rose);
 }
 .nav-links{
   display:flex;
-  gap:20px;
+  gap:18px;
   list-style:none;
+  font-size:.82rem;
   font-weight:900;
-  font-size:.85rem;
 }
-.nav-links a:hover{color:var(--rose)}
 
 .hero{
   min-height:88vh;
+  background:
+    linear-gradient(rgba(255,230,238,.22),rgba(255,250,243,.35)),
+    url('hero-banner.png.png') center/cover no-repeat;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:125px 20px 80px;
-  position:relative;
-  overflow:hidden;
+  padding:120px 20px 70px;
 }
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(rgba(45,33,72,.15),rgba(216,95,127,.18)),
-    url('hero-banner.png.png') center/cover no-repeat;
-  opacity:.95;
-}
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle at center,rgba(255,255,255,.08),rgba(255,250,243,.58));
-}
-.hero-inner{
-  position:relative;
-  z-index:1;
-  max-width:900px;
-  background:rgba(255,255,255,.18);
-  border:1px solid rgba(255,255,255,.38);
+.hero-box{
+  background:rgba(255,255,255,.22);
+  border:1px solid rgba(255,255,255,.45);
   backdrop-filter:blur(8px);
-  border-radius:38px;
-  padding:48px 32px;
-  box-shadow:0 24px 70px rgba(90,59,67,.18);
+  border-radius:36px;
+  padding:44px 34px;
+  box-shadow:0 20px 60px rgba(90,59,67,.18);
 }
 .hero-kicker{
+  color:white;
   letter-spacing:5px;
   font-weight:900;
-  font-size:.78rem;
-  color:white;
-  text-shadow:0 3px 14px rgba(0,0,0,.28);
-  margin-bottom:10px;
+  font-size:.75rem;
+  text-shadow:0 3px 12px rgba(0,0,0,.35);
 }
 .hero h1{
   font-family:'Pacifico',cursive;
-  font-size:clamp(3.7rem,9vw,7.5rem);
   color:white;
+  font-size:clamp(3.7rem,9vw,7rem);
   line-height:1.05;
-  text-shadow:0 8px 28px rgba(0,0,0,.38);
+  text-shadow:0 8px 25px rgba(0,0,0,.35);
 }
 .hero p{
   color:white;
   font-weight:900;
-  font-size:1.12rem;
   text-shadow:0 3px 12px rgba(0,0,0,.35);
 }
+
 .btns{
-  margin-top:30px;
+  margin-top:28px;
   display:flex;
   gap:14px;
   justify-content:center;
@@ -119,17 +97,15 @@ nav{
 }
 .btn{
   display:inline-block;
-  padding:13px 28px;
+  padding:13px 26px;
   border-radius:999px;
-  font-weight:900;
   background:linear-gradient(135deg,var(--pink),#c98bed);
   color:white;
+  font-weight:900;
   box-shadow:0 10px 25px rgba(216,95,127,.25);
-  transition:.2s;
 }
-.btn:hover{transform:translateY(-3px)}
 .btn.light{
-  background:rgba(255,255,255,.94);
+  background:white;
   color:var(--rose);
 }
 
@@ -140,39 +116,34 @@ section{padding:82px 7%}
 }
 h2{
   font-family:'Pacifico',cursive;
-  font-size:2.9rem;
   color:var(--rose);
-  line-height:1.2;
+  font-size:2.8rem;
 }
-.section-head p{
-  color:#8f7380;
-  font-weight:700;
-}
+.section-head p{color:#8f7380;font-weight:700}
 
 .story-box{
   max-width:980px;
   margin:auto;
-  background:rgba(255,255,255,.8);
-  border:1px solid rgba(216,95,127,.18);
-  padding:42px;
-  border-radius:36px;
-  box-shadow:0 18px 50px rgba(216,95,127,.13);
+  background:rgba(255,255,255,.82);
+  border:1px solid #f4cbd8;
+  border-radius:34px;
+  padding:40px;
+  box-shadow:0 18px 48px rgba(216,95,127,.13);
 }
-.story-box p{font-size:1rem}
 .map{
-  margin-top:28px;
+  margin-top:26px;
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
   gap:14px;
 }
 .map-item{
-  background:linear-gradient(135deg,#fff,#fff0f5);
-  border:1px solid #f6cbd8;
-  border-radius:24px;
-  padding:18px;
+  background:#fff;
+  border:1px solid #f4cbd8;
+  border-radius:22px;
+  padding:16px;
   text-align:center;
-  font-weight:900;
   color:var(--rose);
+  font-weight:900;
 }
 
 .works{
@@ -186,70 +157,68 @@ h2{
 .card{
   position:relative;
   overflow:hidden;
-  background:rgba(255,255,255,.86);
+  background:white;
   border:1px solid rgba(216,95,127,.22);
-  border-radius:32px;
-  min-height:330px;
+  border-radius:30px;
+  min-height:345px;
   box-shadow:0 18px 45px rgba(216,95,127,.15);
   transition:.25s;
 }
 .card:hover{
-  transform:translateY(-8px) scale(1.015);
+  transform:translateY(-8px);
   box-shadow:0 28px 65px rgba(216,95,127,.23);
 }
 .card-top{
-  height:132px;
+  height:180px;
+  overflow:hidden;
   background:linear-gradient(135deg,#ffd3df,#f7e5ff,#fff4cc);
 }
-.card:nth-child(2) .card-top{background:linear-gradient(135deg,#5a3b43,#d9a86c)}
-.card:nth-child(3) .card-top{background:linear-gradient(135deg,#ffd6ef,#d9c7ff,#c7f4ff)}
-.card:nth-child(4) .card-top{background:linear-gradient(135deg,#2d2148,#7b4ea3,#ff8caf)}
-.card:nth-child(5) .card-top{background:linear-gradient(135deg,#fff0b8,#ffd5e5,#c9f0dd)}
-.card:nth-child(6) .card-top{background:linear-gradient(135deg,#1d244d,#6f5fd8,#ffb7d5)}
+.card-top img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 .emoji{
   position:absolute;
-  top:88px;
-  left:26px;
-  width:74px;
-  height:74px;
+  top:142px;
+  left:24px;
+  width:68px;
+  height:68px;
   display:grid;
   place-items:center;
-  font-size:2.35rem;
   background:white;
-  border-radius:26px;
+  border-radius:23px;
+  font-size:2.1rem;
   box-shadow:0 12px 28px rgba(0,0,0,.14);
 }
 .card-body{
-  padding:58px 26px 26px;
+  padding:48px 24px 24px;
 }
 .card h3{
   color:var(--rose);
   margin-bottom:8px;
-  font-size:1.16rem;
 }
 .card p{
   color:#5d4a61;
-  font-size:.93rem;
+  font-size:.92rem;
 }
 .tag{
   display:inline-block;
+  margin-top:14px;
   background:linear-gradient(135deg,#ffe4ec,#fff4cc);
   color:var(--rose);
-  font-size:.72rem;
+  font-size:.7rem;
   font-weight:900;
-  padding:5px 12px;
+  padding:5px 11px;
   border-radius:999px;
-  margin-top:16px;
 }
 
 .note{
   background:white;
   text-align:center;
 }
-.note-box{
-  max-width:780px;
-  margin:auto;
-}
+.note-box{max-width:760px;margin:auto}
 
 .letter{
   background:linear-gradient(135deg,#d85f7f,#b884e8);
@@ -261,26 +230,26 @@ h2{
   margin:auto;
   background:rgba(255,255,255,.18);
   border:1px solid rgba(255,255,255,.35);
-  border-radius:32px;
-  padding:44px;
+  border-radius:30px;
+  padding:42px;
 }
 .letter h2{color:white}
 
 footer{
   text-align:center;
-  padding:34px;
-  color:#a88994;
+  padding:32px;
   background:white;
+  color:#a88994;
 }
 
 @media(max-width:650px){
   nav{padding:12px 5%}
   .logo{font-size:1.15rem}
   .nav-links{gap:10px;font-size:.68rem}
-  .hero{min-height:78vh;padding:105px 18px 58px}
-  .hero-inner{padding:36px 22px;border-radius:28px}
-  .hero h1{font-size:3.4rem}
-  section{padding:62px 6%}
+  .hero{min-height:78vh;padding:100px 18px 55px}
+  .hero-box{padding:34px 22px;border-radius:28px}
+  .hero h1{font-size:3.3rem}
+  section{padding:60px 6%}
   h2{font-size:2.35rem}
 }
 </style>
@@ -299,7 +268,7 @@ footer{
 </nav>
 
 <div class="hero">
-  <div class="hero-inner">
+  <div class="hero-box">
     <div class="hero-kicker">MUSIC・STORY・GARDEN</div>
     <h1>Aya's Garden</h1>
     <p>音楽と物語と花が咲く場所</p>
@@ -340,12 +309,15 @@ footer{
   </div>
 
   <div class="grid">
+
     <a class="card" href="3d-kareshi-haruto-embedded.html">
-      <div class="card-top"></div>
+      <div class="card-top">
+        <img src="haruto-cover.jpg" alt="3D彼氏アプリ">
+      </div>
       <div class="emoji">🌹</div>
       <div class="card-body">
         <h3>3D彼氏アプリ</h3>
-        <p>ハルトと紡ぐ、亜矢ワールド全開の乙女ゲーム風アプリ。</p>
+        <p>ハルトと紡ぐ、リアルすぎる恋愛体験。あなたの選択で未来が変わる。</p>
         <span class="tag">LOVE GAME</span>
       </div>
     </a>
@@ -399,6 +371,7 @@ footer{
         <span class="tag">COSMIC</span>
       </div>
     </a>
+
   </div>
 </section>
 
